@@ -6,6 +6,7 @@ import passoff.chess.TestUtilities;
 
 public class BishopMoveTests {
 
+
     @Test
     public void bishopMoveUntilEdge() {
         TestUtilities.validateMoves("""
