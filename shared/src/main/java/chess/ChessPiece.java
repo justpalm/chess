@@ -55,37 +55,43 @@ public class ChessPiece<E> implements PieceMoveCalculator<E> {
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
-//        if (type == ChessPiece.PieceType.KING) {
-//            calculate = new KingMovesCalculator();
-//        }
-//
-//        if (type == ChessPiece.PieceType.KNIGHT) {
-//            calculate = new KnightMovesCalculator();
-//        }
-//
-//        if (type == ChessPiece.PieceType.QUEEN) {
-//            calculate = new QueenMocesCalculator();
-//        }
+        if (type == ChessPiece.PieceType.KING) {
+            KingMovesCalculator<E> calculate = new KingMovesCalculator<E>();
+            return calculate.pieceMoves(board, myPosition);
+        }
+
+        if (type == ChessPiece.PieceType.QUEEN) {
+            QueenMovesCalculator<E> calculate = new QueenMovesCalculator<E>();
+            return calculate.pieceMoves(board, myPosition);
+        }
+
+        if (type == ChessPiece.PieceType.KNIGHT) {
+            KnightMovesCalculator<E> calculate = new KnightMovesCalculator<E>();
+            return calculate.pieceMoves(board, myPosition);
+        }
+
 
         if (type == ChessPiece.PieceType.BISHOP) {
             BishopMovesCalculator<E> calculate = new BishopMovesCalculator<E>();
             return calculate.pieceMoves(board, myPosition);
         }
 
-//        if (type == ChessPiece.PieceType.ROOK) {
-//            calculate = new RookMovesCalculator();
-//        }
-//
-//        if (type == ChessPiece.PieceType.PAWN) {
-//            calculate = new PawnMovesCalculator();
-//        }
+        if (type == ChessPiece.PieceType.ROOK) {
+            RookMovesCalculator<E> calculate = new RookMovesCalculator<E>();
+            return calculate.pieceMoves(board, myPosition);
+        }
+
+        if (type == ChessPiece.PieceType.PAWN) {
+            PawnMovesCalculator<E> calculate = new PawnMovesCalculator<E>();
+            return calculate.pieceMoves(board, myPosition);
+        }
 
 
-        //        ChessPiece piece = board.getPiece(myPosition);
-//        if (piece.getPieceType() == PieceType.BISHOP) {
-//            return List.of(new ChessMove(new ChessPosition(5,4), new ChessPosition(1,8), null));
-//        }
-//        return List.of();
+        ChessPiece piece = board.getPiece(myPosition);
+        if (piece.getPieceType() == PieceType.BISHOP) {
+            return List.of(new ChessMove(new ChessPosition(5,4), new ChessPosition(1,8), null));
+        }
+
         else{
             return null;
         }
