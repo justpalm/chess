@@ -3,6 +3,7 @@ package chess;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.
 
 /**
  * Represents a single chess piece
@@ -10,7 +11,7 @@ import java.util.Objects;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessPiece {
+public class ChessPiece implements PieceMoveCalculator{
 
     private final ChessGame.TeamColor pieceColor;
     private final PieceType type;
@@ -54,11 +55,47 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        ChessPiece piece = board.getPiece(myPosition);
-        if (piece.getPieceType() == PieceType.BISHOP) {
-            return List.of(new ChessMove(new ChessPosition(5,4), new ChessPosition(1,8), null));
+        PieceMoveCalculator calculate;
+
+        if (type == ChessPiece.PieceType.KING) {
+            calculate = new KingMovesCalculator();
         }
-        return List.of();
+
+        if (type == ChessPiece.PieceType.KNIGHT) {
+            calculate = new KnightMovesCalculator();
+        }
+
+        if (type == ChessPiece.PieceType.QUEEN) {
+            calculate = new QueenMocesCalculator();
+        }
+
+        if (type == ChessPiece.PieceType.BISHOP) {
+            calculate = new BishopMovesCalculator();
+        }
+
+        if (type == ChessPiece.PieceType.ROOK) {
+            calculate = new RookMovesCalculator();
+        }
+
+        if (type == ChessPiece.PieceType.PAWN) {
+            calculate = new PawnMovesCalculator();
+        }
+
+
+
+
+
+
+
+
+
+
+        //        ChessPiece piece = board.getPiece(myPosition);
+//        if (piece.getPieceType() == PieceType.BISHOP) {
+//            return List.of(new ChessMove(new ChessPosition(5,4), new ChessPosition(1,8), null));
+//        }
+//        return List.of();
+//    }
     }
 
     @Override

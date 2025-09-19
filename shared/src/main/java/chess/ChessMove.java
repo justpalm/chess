@@ -68,32 +68,3 @@ public class ChessMove {
         return Objects.hash(startPosition, endPosition, promotionPiece);
     }
 }
-
-
-//
-//    @Override
-//    public boolean equals(ChessMove o) {
-//
-//    if (o == this) {
-//        return true;
-//    }
-//
-//
-//    if (!(o instanceof ChessMove)) {
-//        return false;
-//    }
-//
-//    ChessMove c = (ChessMove) o;
-//
-//    if (startPosition.toString() == startPosition.c.toString()
-//    && endPosition.toString() == endPosition.c.toString()) {
-//        return true;
-//    }
-//
-//
-//    ) {
-//
-//
-//
-//        }
-//}
