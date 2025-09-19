@@ -17,7 +17,7 @@ public class QueenMovesCalculator<E> implements PieceMoveCalculator<E> {
             int col = myPosition.getColumn();
 
             boolean n = true;
-            //Check Up Left Side
+            //Check Bottom Left Side
             // Go up a row, minus a column
             while (n) {
                 //If out of bounds, invalid and STOP.
@@ -49,7 +49,7 @@ public class QueenMovesCalculator<E> implements PieceMoveCalculator<E> {
             col = myPosition.getColumn();
 
 
-            //Check Up Right Side
+            //Check Bottom Right Side
             while (n) {
                 //If out of bounds, invalid and STOP.
                 row -= 1;
@@ -79,7 +79,7 @@ public class QueenMovesCalculator<E> implements PieceMoveCalculator<E> {
             col = myPosition.getColumn();
 
 
-            //Check Bottom Right Side
+            //Check Up Right Side
             while (n) {
                 //If out of bounds, invalid and STOP.
                 row += 1;
@@ -109,7 +109,7 @@ public class QueenMovesCalculator<E> implements PieceMoveCalculator<E> {
             row = myPosition.getRow();
             col = myPosition.getColumn();
 
-            //Check Bottom Left Side
+            //Check Up Left Side
             while (n) {
                 //If out of bounds, invalid and STOP.
                 row += 1;
@@ -143,7 +143,6 @@ public class QueenMovesCalculator<E> implements PieceMoveCalculator<E> {
             //Check Straight Left
             while (n) {
                 //If out of bounds, invalid and STOP.
-                row += 1;
                 col -= 1;
 
                 if (row > 8 || col > 8 || row < 1 || col < 1) {
@@ -173,6 +172,62 @@ public class QueenMovesCalculator<E> implements PieceMoveCalculator<E> {
 
             //Check Straight Right
 
+            while (n) {
+                //If out of bounds, invalid and STOP.
+                col += 1;
+
+                if (row > 8 || col > 8 || row < 1 || col < 1) {
+                    break;
+                }
+
+                ChessPosition new_pos = new ChessPosition(row, col);
+
+                if (board.getPiece(new_pos) != null) {
+                    //If Enemy piece, Valid and STOP.
+                    if (board.getPiece(new_pos).getTeamColor() != color) {
+                        possible_moves.add(new ChessMove(myPosition, new_pos, null));
+                        break;
+                    }
+                    //If Friendly pawn Invalid and STOP.
+                    else {
+                        break;
+                    }
+                } else {
+                    possible_moves.add(new ChessMove(myPosition, new_pos, null));
+                }
+            }
+
+
+            //Reset
+            row = myPosition.getRow();
+            col = myPosition.getColumn();
+
+            //Check Straight Down
+
+            while (n) {
+                //If out of bounds, invalid and STOP.
+                row -= 1;
+
+                if (row > 8 || col > 8 || row < 1 || col < 1) {
+                    break;
+                }
+
+                ChessPosition new_pos = new ChessPosition(row, col);
+
+                if (board.getPiece(new_pos) != null) {
+                    //If Enemy piece, Valid and STOP.
+                    if (board.getPiece(new_pos).getTeamColor() != color) {
+                        possible_moves.add(new ChessMove(myPosition, new_pos, null));
+                        break;
+                    }
+                    //If Friendly pawn Invalid and STOP.
+                    else {
+                        break;
+                    }
+                } else {
+                    possible_moves.add(new ChessMove(myPosition, new_pos, null));
+                }
+            }
 
             //Reset
             row = myPosition.getRow();
@@ -180,11 +235,30 @@ public class QueenMovesCalculator<E> implements PieceMoveCalculator<E> {
 
             //Check Straight Up
 
-            //Reset
-            row = myPosition.getRow();
-            col = myPosition.getColumn();
+            while (n) {
+                //If out of bounds, invalid and STOP.
+                row += 1;
 
-            //Check Straight Down
+                if (row > 8 || col > 8 || row < 1 || col < 1) {
+                    break;
+                }
+
+                ChessPosition new_pos = new ChessPosition(row, col);
+
+                if (board.getPiece(new_pos) != null) {
+                    //If Enemy piece, Valid and STOP.
+                    if (board.getPiece(new_pos).getTeamColor() != color) {
+                        possible_moves.add(new ChessMove(myPosition, new_pos, null));
+                        break;
+                    }
+                    //If Friendly pawn Invalid and STOP.
+                    else {
+                        break;
+                    }
+                } else {
+                    possible_moves.add(new ChessMove(myPosition, new_pos, null));
+                }
+            }
 
 
         }
