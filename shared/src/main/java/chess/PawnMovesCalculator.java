@@ -7,8 +7,8 @@ public class PawnMovesCalculator<E> implements PieceMoveCalculator<E> {
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
 
-        ChessPiece<E> piece = board.getPiece(myPosition);
-        Collection<ChessMove> possible_moves = new ArrayList<ChessMove>();
+        ChessPiece piece = board.getPiece(myPosition);
+        Collection<ChessMove> possible_moves = new ArrayList<>();
         ChessGame.TeamColor color = piece.getTeamColor();
 
         int move = 0;
