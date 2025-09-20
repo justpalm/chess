@@ -17,24 +17,21 @@ public class PawnMovesCalculator<E> implements PieceMoveCalculator<E> {
         if (color == ChessGame.TeamColor.WHITE) {
             int promotion_check = 1;
             move = 1;
-
         }
 
         //Black is at the top, moving down. They subtract  rows (-)
         if (color == ChessGame.TeamColor.BLACK) {
             int promotion_check = 8;
             move = -1;
-
         }
 
-
-
+        //Initiate Pawn
         if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
 
             int row = myPosition.getRow();
             int col = myPosition.getColumn();
 
-            //If Initial move & White
+            //If Initial Move & White
             if (row == 2 && piece.getTeamColor() == ChessGame.TeamColor.WHITE) {
                 //Check Double Move
 
@@ -42,13 +39,13 @@ public class PawnMovesCalculator<E> implements PieceMoveCalculator<E> {
                 row += move;
 
                 ChessPosition new_pos = new ChessPosition(row, col);
-                ChessPosition checking_piece = new ChessPosition((row-move), col);
+                ChessPosition checking_piece = new ChessPosition((row - move), col);
                 //If no piece, can move
                 if (board.getPiece(new_pos) == null && board.getPiece(checking_piece) == null) {
                     possible_moves.add(new ChessMove(myPosition, new_pos, null));
                 }
 
-                //If there's a piece, we add nothing
+                //If there's a piece, not a move
 
                 //Reset
                 row = myPosition.getRow();
@@ -64,7 +61,7 @@ public class PawnMovesCalculator<E> implements PieceMoveCalculator<E> {
 
 
                 ChessPosition new_pos = new ChessPosition(row, col);
-                ChessPosition checking_piece = new ChessPosition((row-move), col);
+                ChessPosition checking_piece = new ChessPosition((row - move), col);
                 //If no piece in that space and in front, can move
                 if (board.getPiece(new_pos) == null && board.getPiece(checking_piece) == null) {
                     possible_moves.add(new ChessMove(myPosition, new_pos, null));
@@ -89,18 +86,26 @@ public class PawnMovesCalculator<E> implements PieceMoveCalculator<E> {
 
                 //If no piece, can move
                 if (board.getPiece(new_pos) == null) {
-                    possible_moves.add(new ChessMove(myPosition, new_pos, null));
-                }
+                    if (row == 1 || row == 8) {
+                        possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.QUEEN));
+                        possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.KNIGHT));
+                        possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.ROOK));
+                        possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.BISHOP));
+                    } else {
+                        possible_moves.add(new ChessMove(myPosition, new_pos, null));
 
-                //If there's a piece, we add nothing
+                        //If there's a piece, we add nothing
+                    }
+                }
             }
+
 
             //Reset
             row = myPosition.getRow();
             col = myPosition.getColumn();
 
 
-            //Check sideways Right
+            //Check Sideways Right
 
             col += 1;
             row += move;
@@ -113,12 +118,19 @@ public class PawnMovesCalculator<E> implements PieceMoveCalculator<E> {
                 if (board.getPiece(new_pos) != null) {
                     //If Enemy piece, Valid.
                     if (board.getPiece(new_pos).getTeamColor() != color) {
-                        possible_moves.add(new ChessMove(myPosition, new_pos, null));
+                        //Check for promotion
+                        if (row == 1 || row == 8) {
+                            possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.QUEEN));
+                            possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.KNIGHT));
+                            possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.ROOK));
+                            possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.BISHOP));
+                        } else {
+                            possible_moves.add(new ChessMove(myPosition, new_pos, null));
+                        }
+                        //If Friendly pawn, Invalid. So nothing
                     }
-                    //If Friendly pawn, Invalid. So nothing
                 }
             }
-
 
             //Reset
             row = myPosition.getRow();
@@ -126,7 +138,6 @@ public class PawnMovesCalculator<E> implements PieceMoveCalculator<E> {
 
 
             //Check sideways Left
-
             col -= 1;
             row += move;
 
@@ -134,11 +145,18 @@ public class PawnMovesCalculator<E> implements PieceMoveCalculator<E> {
 
                 ChessPosition new_pos = new ChessPosition(row, col);
 
-
                 if (board.getPiece(new_pos) != null) {
                     //If Enemy piece, Valid.
                     if (board.getPiece(new_pos).getTeamColor() != color) {
-                        possible_moves.add(new ChessMove(myPosition, new_pos, null));
+                        //Check for promotion
+                        if (row == 1 || row == 8) {
+                            possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.QUEEN));
+                            possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.KNIGHT));
+                            possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.ROOK));
+                            possible_moves.add(new ChessMove(myPosition, new_pos, ChessPiece.PieceType.BISHOP));
+                        } else {
+                            possible_moves.add(new ChessMove(myPosition, new_pos, null));
+                        }
                     }
                     //If Friendly pawn, Invalid. So nothing
                 }
@@ -148,150 +166,4 @@ public class PawnMovesCalculator<E> implements PieceMoveCalculator<E> {
         }
         return possible_moves;
     }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        if (piece.getPieceType() == ChessPiece.PieceType.PAWN) {
-//
-//            int row = myPosition.getRow();
-//            int col = myPosition.getColumn();
-//
-//            boolean n = true;
-//            //Check Up Left Side
-//            // Go up a row, minus a column
-//            while (n) {
-//                //If out of bounds, invalid and STOP.
-//                row -= 1;
-//                col -= 1;
-//                if (row > 8 || col > 8 || row < 1 || col < 1) {
-//                    break;
-//                }
-//
-//                ChessPosition new_pos = new ChessPosition(row, col);
-//
-//                if (board.getPiece(new_pos) != null) {
-//                    //If Enemy piece, Valid and STOP.
-//                    if (board.getPiece(new_pos).getTeamColor() != color) {
-//                        possible_moves.add(new ChessMove(myPosition, new_pos, null));
-//                        break;
-//                    }
-//                    //If Friendly pawn Invalid and STOP.
-//                    else {
-//                        break;
-//                    }
-//                } else {
-//                    possible_moves.add(new ChessMove(myPosition, new_pos, null));
-//                }
-//            }
-//
-//            //Reset
-//            row = myPosition.getRow();
-//            col = myPosition.getColumn();
-//
-//
-//            //Check Up Right Side
-//            while (n) {
-//                //If out of bounds, invalid and STOP.
-//                row -= 1;
-//                col += 1;
-//                if (row > 8 || col > 8 || row < 1 || col < 1) {
-//                    break;
-//                }
-//
-//                ChessPosition new_pos = new ChessPosition(row, col);
-//
-//                if (board.getPiece(new_pos) != null) {
-//                    //If Enemy piece, Valid and STOP.
-//                    if (board.getPiece(new_pos).getTeamColor() != color) {
-//                        possible_moves.add(new ChessMove(myPosition, new_pos, null));
-//                        break;
-//                    }
-//                    //If Friendly pawn Invalid and STOP.
-//                    else {
-//                        break;
-//                    }
-//                } else {
-//                    possible_moves.add(new ChessMove(myPosition, new_pos, null));
-//                }
-//            }
-//            //Reset
-//            row = myPosition.getRow();
-//            col = myPosition.getColumn();
-//
-//
-//            //Check Bottom Right Side
-//            while (n) {
-//                //If out of bounds, invalid and STOP.
-//                row += 1;
-//                col += 1;
-//
-//                if (row > 8 || col > 8 || row < 1 || col < 1) {
-//                    break;
-//                }
-//
-//                ChessPosition new_pos = new ChessPosition(row, col);
-//
-//                if (board.getPiece(new_pos) != null) {
-//                    //If Enemy piece, Valid and STOP.
-//                    if (board.getPiece(new_pos).getTeamColor() != color) {
-//                        possible_moves.add(new ChessMove(myPosition, new_pos, null));
-//                        break;
-//                    }
-//                    //If Friendly pawn Invalid and STOP.
-//                    else {
-//                        break;
-//                    }
-//                } else {
-//                    possible_moves.add(new ChessMove(myPosition, new_pos, null));
-//                }
-//            }
-//            //Reset
-//            row = myPosition.getRow();
-//            col = myPosition.getColumn();
-//
-//            //Check Bottom Left Side
-//            while (n) {
-//                //If out of bounds, invalid and STOP.
-//                row += 1;
-//                col -= 1;
-//
-//                if (row > 8 || col > 8 || row < 1 || col < 1) {
-//                    break;
-//                }
-//
-//                ChessPosition new_pos = new ChessPosition(row, col);
-//
-//                if (board.getPiece(new_pos) != null) {
-//                    //If Enemy piece, Valid and STOP.
-//                    if (board.getPiece(new_pos).getTeamColor() != color) {
-//                        possible_moves.add(new ChessMove(myPosition, new_pos, null));
-//                        break;
-//                    }
-//                    //If Friendly pawn Invalid and STOP.
-//                    else {
-//                        break;
-//                    }
-//                } else {
-//                    possible_moves.add(new ChessMove(myPosition, new_pos, null));
-//                }
-//            }
-//
-//
-//        }
-//
-//        return possible_moves;
-//    }
-//}
+}
