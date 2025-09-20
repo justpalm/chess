@@ -259,10 +259,7 @@ public class QueenMovesCalculator<E> implements PieceMoveCalculator<E> {
                     possible_moves.add(new ChessMove(myPosition, new_pos, null));
                 }
             }
-
-
         }
-
         return possible_moves;
     }
 }
