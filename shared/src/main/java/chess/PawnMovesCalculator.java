@@ -15,13 +15,11 @@ public class PawnMovesCalculator<E> implements PieceMoveCalculator<E> {
 
         //White is at the bottom, moving up. They add rows (+)
         if (color == ChessGame.TeamColor.WHITE) {
-            int promotion_check = 1;
             move = 1;
         }
 
         //Black is at the top, moving down. They subtract  rows (-)
         if (color == ChessGame.TeamColor.BLACK) {
-            int promotion_check = 8;
             move = -1;
         }
 
