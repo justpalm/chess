@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -25,17 +26,13 @@ public class ChessMove {
      * @return ChessPosition of starting location
      */
     public ChessPosition getStartPosition() {
-        return startPosition;
-
-    }
-
+        return startPosition; }
     /**
      * @return ChessPosition of ending location
      */
     public ChessPosition getEndPosition() {
         return endPosition;
     }
-
 
     /**
      * Gets the type of piece to promote a pawn to if pawn promotion is part of this
@@ -45,13 +42,6 @@ public class ChessMove {
      */
     public ChessPiece.PieceType getPromotionPiece() {
         return promotionPiece;
-
-    }
-
-
-    @Override
-    public String toString() {
-        return String.format("%s%s", startPosition, endPosition);
     }
 
     @Override
@@ -66,5 +56,10 @@ public class ChessMove {
     @Override
     public int hashCode() {
         return Objects.hash(startPosition, endPosition, promotionPiece);
+    }
+
+    @Override
+    public String toString() {
+        return String.format ("%s%s", startPosition, endPosition);
     }
 }
