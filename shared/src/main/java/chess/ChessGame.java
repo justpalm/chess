@@ -215,6 +215,7 @@ public boolean isInCheckmate(TeamColor teamColor) {
             //I think from this we could just gather the list from above,
             //And say that "Hey, here are all the illegal moves that can't be made
             //We'll also have to say 'hey, if the King moves does that change things
+
     }
     return false;
 
@@ -229,8 +230,6 @@ public boolean isInCheckmate(TeamColor teamColor) {
  */
 public boolean isInStalemate(TeamColor teamColor) {
 
-    boolean state = false;
-
     ChessPiece King = new ChessPiece(teamColor, ChessPiece.PieceType.KING);
     Collection<ChessMove> KingMoves = new ArrayList<>();
 
@@ -240,8 +239,7 @@ public boolean isInStalemate(TeamColor teamColor) {
 
     else {
     KingMoves = King.pieceMoves(game_board, BlackKing);
-        }
-
+    }
 
     if (!isInCheck(teamColor)) {
         for (int row = 1; row < 9; row++) {
@@ -251,21 +249,13 @@ public boolean isInStalemate(TeamColor teamColor) {
                     ChessPiece new_piece = game_board.getPiece(new_position);
                     Collection<ChessMove> new_piece_moves = new_piece.pieceMoves(game_board, new_position);
                     for (ChessMove new_piece_move : new_piece_moves) {
-                        if (CurrentTeam != TeamColor.WHITE) {
-                            if (new_piece_move.getEndPosition() == WhiteKing) {
-                            }
-                        }
-                        if (CurrentTeam != TeamColor.BLACK) {
-                            if (new_piece_move.getEndPosition() == BlackKing) {
-
-                            }
-                        }
+                        KingMoves.remove(new_piece_move);
                     }
                 }
             }
         }
     }
-    return state;
+    return KingMoves.isEmpty();
 }
 
 /**
