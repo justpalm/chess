@@ -85,13 +85,6 @@ public class ChessPiece {
             return calculator.pieceMoves(board, myPosition);
         }
 
-
-
-
-
-
-
-
         else{return null;}
     }
 

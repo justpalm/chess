@@ -1,6 +1,8 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -10,7 +12,7 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessGame {
-
+    private TeamColor OppositeTeam;
     private TeamColor CurrentTeam;
     ChessBoard game_board;
     ChessPosition WhiteKing;
@@ -36,15 +38,18 @@ public class ChessGame {
     public void setTeamTurn(TeamColor team) {
         if (CurrentTeam == null) {
             CurrentTeam = TeamColor.WHITE;
+            OppositeTeam = TeamColor.BLACK;
             return;
         }
 
         if (CurrentTeam == TeamColor.WHITE) {
             CurrentTeam = TeamColor.BLACK;
+            OppositeTeam = TeamColor.WHITE;
         }
 
         if (CurrentTeam == TeamColor.BLACK) {
             CurrentTeam = TeamColor.WHITE;
+            OppositeTeam = TeamColor.BLACK;
         }
     }
 
@@ -64,11 +69,39 @@ public class ChessGame {
      * startPosition
      */
 
-public Collection<ChessMove> check_check(ChessPiece piece, Collection<ChessMove> og_valid_moves) {
-        ChessBoard copy_of_old = game_board;
+    private Collection<ChessMove> check_check(ChessPiece piece, Collection<ChessMove> og_valid_moves, ChessBoard copy_of_old) {
+
+        Collection<ChessMove> new_valid_moves = new ArrayList<>();
 
 
+        for (ChessMove move : og_valid_moves) {
+            ChessBoard new_old = copy_of_old;
+            new_old.addPiece(move.getEndPosition(), piece);
+            new_old.addPiece(move.getStartPosition(), null);
 
+            for (int row = 1; row < 9; row++) {
+                for (int col = 1; col < 9; col++) {
+                    ChessPosition new_position = new ChessPosition(row, col);
+                    if (new_old.getPiece(new_position) != null) {
+                        ChessPiece new_piece = new_old.getPiece(new_position);
+                        Collection<ChessMove> new_piece_moves = new_piece.pieceMoves(new_old, new_position);
+                        for (ChessMove new_piece_move : new_piece_moves) {
+                            if (CurrentTeam != TeamColor.WHITE) {
+                                if (new_piece_move.getEndPosition() != WhiteKing) {
+                                    new_valid_moves.add(move);
+                                }
+                            }
+                            if (CurrentTeam != TeamColor.BLACK) {
+                                if (new_piece_move.getEndPosition() != BlackKing) {
+                                    new_valid_moves.add(move);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    return new_valid_moves;
     }
 // Make a copy of the old board, and then on the old board, move the piece
 // From there, have it run through all the piece calculator stuff
@@ -79,21 +112,18 @@ public Collection<ChessMove> check_check(ChessPiece piece, Collection<ChessMove>
 
 
 public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        if (game_board.getPiece(startPosition) != null) {
-            ChessPiece piece = game_board.getPiece(startPosition);
-            Collection<ChessMove> og_valid_moves = piece.pieceMoves(game_board, startPosition);
-            Collection<ChessMove> new_valid_moves = check_check(piece, og_valid_moves)) {
+    if (game_board.getPiece(startPosition) != null) {
+        ChessPiece piece = game_board.getPiece(startPosition);
+        Collection<ChessMove> og_valid_moves = piece.pieceMoves(game_board, startPosition);
+        ChessBoard copy_of_old = game_board;
+        Collection<ChessMove> new_valid_moves = check_check(piece, og_valid_moves, copy_of_old);
 
-            }
-
-
-
-
-            return piece.pieceMoves(game_board, startPosition);}
-        else {
+        return new_valid_moves;
+        else{
             return null;
         }
     }
+}
 
 /**
  * Makes a move in a chess game
@@ -104,12 +134,18 @@ public Collection<ChessMove> validMoves(ChessPosition startPosition) {
 
 
 public void makeMove(ChessMove move) throws InvalidMoveException {
-//    if (validMoves(move))
-//        do
-//    else:
-//        throw exception
-//
-//
+    Collection<ChessMove> valid_moves = validMoves(move.getStartPosition());
+
+    if (valid_moves.contains(move)) {
+
+        game_board.addPiece(move.getEndPosition(), game_board.getPiece(move.getStartPosition()));
+        game_board.addPiece(move.getStartPosition(), null);
+
+    }
+    else {
+        throw new InvalidMoveException("Invalid move");
+    }
+
 }
 
 /**
