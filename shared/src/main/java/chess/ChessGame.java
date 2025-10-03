@@ -45,11 +45,13 @@ public class ChessGame {
         if (CurrentTeam == TeamColor.WHITE) {
             CurrentTeam = TeamColor.BLACK;
             OppositeTeam = TeamColor.WHITE;
+            return;
         }
 
         if (CurrentTeam == TeamColor.BLACK) {
             CurrentTeam = TeamColor.WHITE;
             OppositeTeam = TeamColor.BLACK;
+            return;
         }
     }
 
@@ -70,6 +72,7 @@ public class ChessGame {
             //Make a copy of the
             ChessBoard copy_of_og_board = game_board;
 
+            //move the piece according to the move
             copy_of_og_board.addPiece(move.getEndPosition(), piece);
             copy_of_og_board.addPiece(move.getStartPosition(), null);
 
@@ -208,9 +211,7 @@ public boolean isInCheck(TeamColor teamColor) {
 
 public boolean isInCheckmate(TeamColor teamColor) {
     if (isInCheck(teamColor)) {
-        if (isInStalemate(teamColor)) {
-            return true;
-        }
+        return helper_isInStalemate(teamColor);
 
             //I think from this we could just gather the list from above,
             //And say that "Hey, here are all the illegal moves that can't be made
@@ -218,6 +219,42 @@ public boolean isInCheckmate(TeamColor teamColor) {
 
     }
     return false;
+
+}
+
+
+private boolean helper_isInStalemate(TeamColor teamColor) {
+
+    //I had to create this for checking checkmate, as a checkmate is a stalemeate but also already
+    //In check. So, this is the slightly modifiend function. Couldn't think of a more elegant way to do it.
+
+
+    ChessPiece King = new ChessPiece(teamColor, ChessPiece.PieceType.KING);
+    Collection<ChessMove> KingMoves = new ArrayList<>();
+
+    if (teamColor == TeamColor.WHITE) {
+        KingMoves = King.pieceMoves(game_board, WhiteKing);
+    }
+    else {
+        KingMoves = King.pieceMoves(game_board, BlackKing);
+    }
+
+//    if (!isInCheck(teamColor)) {
+        for (int row = 1; row < 9; row++) {
+            for (int col = 1; col < 9; col++) {
+                ChessPosition new_position = new ChessPosition(row, col);
+                if (game_board.getPiece(new_position) != null & game_board.getPiece(new_position).getTeamColor() == OppositeTeam) {
+                    ChessPiece new_piece = game_board.getPiece(new_position);
+                    Collection<ChessMove> new_piece_moves = new_piece.pieceMoves(game_board, new_position);
+                    for (ChessMove new_piece_move : new_piece_moves) {
+                        KingMoves.remove(new_piece_move);
+                    }
+                }
+            }
+        }
+//    }
+    return KingMoves.isEmpty();
+
 
 }
 
