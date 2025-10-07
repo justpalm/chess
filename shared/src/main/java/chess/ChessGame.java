@@ -2,7 +2,6 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -56,8 +55,6 @@ public class ChessGame {
         //Go through every move in the valid set to see the hypotheticals of moving that piece
         for (ChessMove move : og_valid_moves) {
 
-            //Setting variable
-            boolean move_is_valid = true;
 
             ChessPosition hypo_white_king = new ChessPosition(WhiteKing.getRow(), WhiteKing.getColumn());
             ChessPosition hypo_black_king = new ChessPosition(BlackKing.getRow(), BlackKing.getColumn());
@@ -177,12 +174,18 @@ public class ChessGame {
             //Do the move by adding and removing whatever pieces we have to
             ChessPiece moving_piece = game_board.getPiece(move.getStartPosition());
 
-            game_board.addPiece(move.getEndPosition(), moving_piece);
-            game_board.addPiece(move.getStartPosition(), null);
-
             if (moving_piece.getTeamColor() != CurrentTeam) {
                 throw new InvalidMoveException("Invalid move requested");
             }
+
+            //If there is a promotion
+            if (move.getPromotionPiece() != null) {
+                moving_piece = new ChessPiece(CurrentTeam, move.getPromotionPiece());
+            }
+
+            game_board.addPiece(move.getEndPosition(), moving_piece);
+            game_board.addPiece(move.getStartPosition(), null);
+
 
 
             //This is to check to update our King Position
