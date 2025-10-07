@@ -9,10 +9,11 @@ import java.util.Objects;
  * Note: You can add to this class, but you may not alter
  * signature of the existing methods.
  */
-public class ChessBoard {
+public class ChessBoard implements Cloneable{
 
 
-    ChessPiece [][] squares = new ChessPiece[8][8];
+    ChessPiece[][] squares = new ChessPiece[8][8];
+
     public ChessBoard() {
     }
 
@@ -23,7 +24,7 @@ public class ChessBoard {
      * @param piece    the piece to add
      */
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        squares[position.getRow()-1][position.getColumn()-1] = piece;
+        squares[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
     /**
@@ -34,7 +35,9 @@ public class ChessBoard {
      * position
      */
     public ChessPiece getPiece(ChessPosition position) {
-        return squares[position.getRow()-1][position.getColumn()-1];}
+        return squares[position.getRow() - 1][position.getColumn() - 1];
+    }
+
     /**
      * Sets the board to the default starting board
      * (How the game of chess normally starts)
@@ -54,13 +57,13 @@ public class ChessBoard {
         int n = 0;
         while (n < 8) {
             squares[1][n] = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
-            n ++;
+            n++;
         }
 
         n = 0;
         while (n < 8) {
             squares[6][n] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.PAWN);
-            n ++;
+            n++;
         }
 
         squares[7][0] = new ChessPiece(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.ROOK);
@@ -85,5 +88,19 @@ public class ChessBoard {
     @Override
     public int hashCode() {
         return Arrays.deepHashCode(squares);
+    }
+
+    @Override
+    public ChessBoard clone() {
+        try {
+            ChessBoard copy = (ChessBoard) super.clone();
+            copy.squares = new ChessPiece[squares.length][];
+            for (int i = 0; i < squares.length; i++) {
+                copy.squares[i] = squares[i].clone();
+            }
+            return copy;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }
