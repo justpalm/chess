@@ -6,11 +6,11 @@ import java.util.Collection;
 
 public interface AuthDAO {
 
-    public String createAuth() throws DataAccessException;
+    public String createAuth(UserData userData) throws DataAccessException;
 
-    public String getAuth() throws DataAccessException;
+    public AuthData getAuth(String authToken) throws DoesNotExistException;
 
-    public void deleteAuths() throws DataAccessException;
+    public void deleteAuthTokens() throws DataAccessException;
 
 
 

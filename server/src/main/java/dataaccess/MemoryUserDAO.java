@@ -19,7 +19,7 @@ public class MemoryUserDAO implements UserDAO {
         UserData u = new UserData(username, password, email);
 
         if (users.containsKey(username)) {
-            return users.get(u.username());
+            throw new AlreadyExistsException("The user " + username + " already exists");
         }
         else {
             users.put(u.username(), u);
@@ -28,9 +28,8 @@ public class MemoryUserDAO implements UserDAO {
     }
 
     @Override
-    public UserData clearUsers() {
-        return null;
+    public void clearUsers() {
+        users.clear();
     }
-
 
 }
