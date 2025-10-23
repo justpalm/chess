@@ -2,7 +2,7 @@ package service;
 
 import dataaccess.MemoryUserDAO;
 
-import dataaccess.exceptions.;
+import dataaccess.exceptions.*;
 import jdk.jfr.Registered;
 import org.eclipse.jetty.server.Authentication;
 
