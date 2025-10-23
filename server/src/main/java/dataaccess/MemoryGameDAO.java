@@ -2,6 +2,8 @@ package dataaccess;
 
 
 import chess.ChessGame;
+import dataaccess.exceptions.AlreadyExistsException;
+import dataaccess.exceptions.DoesNotExistException;
 import model.GameData;
 
 import java.util.HashMap;
@@ -51,15 +53,8 @@ public class MemoryGameDAO implements GameDAO {
                 if (Objects.equals(the_game.whiteUsername(), "")){
                     the_game.new_user_white(new_username);
                 }
-
             }
-
-
-
         }
-
-
-
     }
 
     public HashMap<Integer, ChessGame> listGame() {

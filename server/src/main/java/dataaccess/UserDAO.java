@@ -1,5 +1,7 @@
 package dataaccess;
 
+import dataaccess.exceptions.AlreadyExistsException;
+import dataaccess.exceptions.DataAccessException;
 import model.*;
 
 public interface UserDAO {

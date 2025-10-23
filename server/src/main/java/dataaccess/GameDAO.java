@@ -1,6 +1,8 @@
 package dataaccess;
 
 import chess.ChessGame;
+import dataaccess.exceptions.AlreadyExistsException;
+import dataaccess.exceptions.DoesNotExistException;
 import model.*;
 
 public interface GameDAO {

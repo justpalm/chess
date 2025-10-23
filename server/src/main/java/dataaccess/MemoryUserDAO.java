@@ -1,5 +1,7 @@
 package dataaccess;
 
+import dataaccess.exceptions.AlreadyExistsException;
+import dataaccess.exceptions.DataAccessException;
 import model.*;
 
 import java.util.HashMap;
@@ -10,7 +12,7 @@ public class MemoryUserDAO implements UserDAO {
 
 
     @Override
-    public UserData getUser(String username) throws DataAccessException {
+    public UserData getUser(String username) {
         return users.get(username);
     }
 
