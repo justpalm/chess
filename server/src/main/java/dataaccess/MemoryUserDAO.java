@@ -1,10 +1,11 @@
 package dataaccess;
 
-import dataaccess.exceptions.AlreadyExistsException;
-import dataaccess.exceptions.DataAccessException;
+import dataaccess.exceptions.AlreadyTakenException;
 import model.*;
+import service.RequestsandResults.*;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class MemoryUserDAO implements UserDAO {
 
@@ -12,16 +13,16 @@ public class MemoryUserDAO implements UserDAO {
 
 
     @Override
-    public UserData getUser(String username) {
-        return users.get(username);
+    public UserData getUser(RegisterRequest registerRequest) {
+        return users.get(registerRequest.username());
     }
 
     @Override
-    public UserData createUser(String username, String password, String email) throws AlreadyExistsException {
-        UserData u = new UserData(username, password, email);
+    public UserData createUser(RegisterRequest registerRequest) throws AlreadyTakenException {
+        UserData u = new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email());
 
-        if (users.containsKey(username)) {
-            throw new AlreadyExistsException("The user " + username + " already exists");
+        if (users.containsKey(registerRequest.username())) {
+            throw new AlreadyTakenException("The user " + registerRequest.username() + " already exists");
         }
         else {
             users.put(u.username(), u);
@@ -30,8 +31,27 @@ public class MemoryUserDAO implements UserDAO {
     }
 
     @Override
-    public void clearUsers() {
-        users.clear();
+    public void clearUsers() {users.clear();}
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MemoryUserDAO that = (MemoryUserDAO) o;
+        return Objects.equals(users, that.users);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(users);
+    }
+
+    @Override
+    public String toString() {
+        return "MemoryUserDAO{" +
+                "users=" + users +
+                '}';
+    }
 }

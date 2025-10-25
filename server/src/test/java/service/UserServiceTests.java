@@ -1,32 +1,55 @@
 package service;
 
-import dataaccess.*;
+import dataaccess.MemoryAuthDAO;
+import dataaccess.MemoryGameDAO;
+import dataaccess.MemoryUserDAO;
+import dataaccess.UserDAO;
 import dataaccess.exceptions.*;
 import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.UserService;
+import service.RequestsandResults.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 public class UserServiceTests {
 
-    private final UserService service = new UserService();
+    MemoryUserDAO memoryUserData = new MemoryUserDAO();
+    MemoryAuthDAO memoryAuthData = new MemoryAuthDAO();
+    MemoryGameDAO memoryGameData = new MemoryGameDAO();
+
+    private final MainService service = new MainService();
+//    private final UserService service = new UserService(memoryUserData, memoryAuthData, memoryGameData);
 
     @BeforeEach
     void clear() throws DataAccessException {
+
+        memoryUserData = new MemoryUserDAO();
+        memoryAuthData = new MemoryAuthDAO();
+        memoryGameData = new MemoryGameDAO();
+
         service.clear();
     }
 
 
     @Test
-    void registerUsers() throws DataAccessException {
+    void registerUsers() throws AlreadyTakenException, BadRequestException {
 
-        UserService.RegisterRequest request = new UserService.RegisterRequest("Hey", "Password");
+        //
 
+        var user = new UserData("Hey", "password", "email");
+        memoryUserData.createUser(user);
+
+        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
         service.register(request);
+
+
+        assertEquals(memoryUserData, service.getUserDAO());
+
+
+
+        
 
 
 

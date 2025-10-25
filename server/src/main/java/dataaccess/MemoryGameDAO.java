@@ -2,7 +2,7 @@ package dataaccess;
 
 
 import chess.ChessGame;
-import dataaccess.exceptions.AlreadyExistsException;
+import dataaccess.exceptions.AlreadyTakenException;
 import dataaccess.exceptions.DoesNotExistException;
 import model.GameData;
 
@@ -15,7 +15,7 @@ public class MemoryGameDAO implements GameDAO {
 
 
     @Override
-    public void createGame(String game_name) throws AlreadyExistsException {
+    public void createGame(String game_name) throws AlreadyTakenException {
     int game_id = games.size() + 1;
     String whiteUsername = "";
     String blackUsername = "";
@@ -57,7 +57,24 @@ public class MemoryGameDAO implements GameDAO {
         }
     }
 
-    public HashMap<Integer, ChessGame> listGame() {
+    public void clearGames() {games.clear();}
+
+    public HashMap<Integer, GameData> listGame() {
         return games;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        MemoryGameDAO that = (MemoryGameDAO) o;
+        return Objects.equals(games, that.games);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(games);
     }
 }

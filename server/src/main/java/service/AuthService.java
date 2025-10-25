@@ -1,26 +1,29 @@
 package service;
 
-import dataaccess.*;
-
-import dataaccess.exceptions.*;
-import model.UserData;
-import service.RequestsandResults.*;
+import dataaccess.MemoryAuthDAO;
+import dataaccess.MemoryGameDAO;
+import dataaccess.MemoryUserDAO;
+import dataaccess.exceptions.AlreadyTakenException;
+import dataaccess.exceptions.BadRequestException;
+import service.RequestsandResults.RegisterRequest;
+import service.RequestsandResults.RegisterResult;
 
 import java.util.Objects;
 
 
-public class UserService {
+public class AuthService {
 
     private final MemoryUserDAO MemoryUserData;
     private final MemoryAuthDAO MemoryAuthData;
     private final MemoryGameDAO MemoryGameData;
 
-    public UserService(MemoryUserDAO memoryUserData, MemoryAuthDAO memoryAuthData, MemoryGameDAO memoryGameData) {
+    public AuthService(MemoryUserDAO memoryUserData, MemoryAuthDAO memoryAuthData, MemoryGameDAO memoryGameData) {
 
         this.MemoryUserData = memoryUserData;
         this.MemoryAuthData = memoryAuthData;
         this.MemoryGameData = memoryGameData;
     }
+
 
     public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException {
 
@@ -36,8 +39,8 @@ public class UserService {
 
         try {
             MemoryUserData.createUser(registerRequest);
-        } catch (AlreadyTakenException e) {
-            throw new AlreadyTakenException("User ");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         String new_authToken;
@@ -66,5 +69,6 @@ public class UserService {
 //
 //
 //    }
+
 
 

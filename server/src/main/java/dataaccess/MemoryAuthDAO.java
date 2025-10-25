@@ -1,7 +1,7 @@
 package dataaccess;
 
-import dataaccess.exceptions.DataAccessException;
-import dataaccess.exceptions.DoesNotExistException;
+import dataaccess.exceptions.*;
+import dataaccess.exceptions.*;
 import model.*;
 
 import java.util.HashMap;
@@ -12,13 +12,14 @@ public class MemoryAuthDAO implements AuthDAO{
     final private HashMap<String, AuthData> authTokens = new HashMap<>();
 
     @Override
-    public String createAuth(UserData userData) throws DataAccessException {
+    public String createAuth(String username) throws DataAccessException {
         String authToken = UUID.randomUUID().toString();
-        AuthData new_authdata = new AuthData(authToken, userData.username());
+        AuthData new_authdata = new AuthData(authToken, username);
         authTokens.put(authToken, new_authdata);
 
         return authToken;
     }
+
 
     @Override
     public AuthData getAuth(String authToken) throws DoesNotExistException {
@@ -32,7 +33,7 @@ public class MemoryAuthDAO implements AuthDAO{
     }
 
     @Override
-    public void deleteAuthTokens() throws DataAccessException {
+    public void clearAuthTokens() throws DataAccessException {
     authTokens.clear();
     }
 }

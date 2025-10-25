@@ -1,14 +1,15 @@
 package dataaccess;
 
-import dataaccess.exceptions.AlreadyExistsException;
+import dataaccess.exceptions.AlreadyTakenException;
 import dataaccess.exceptions.DataAccessException;
 import model.*;
+import service.RequestsandResults.RegisterRequest;
 
 public interface UserDAO {
 
-    public UserData getUser(String username) throws DataAccessException;
+    public UserData getUser(RegisterRequest registerRequest) throws DataAccessException;
 
-    public UserData createUser(String username, String password, String email) throws AlreadyExistsException;
+    public UserData createUser(RegisterRequest registerRequest) throws AlreadyTakenException;
 
     public void clearUsers();
 
