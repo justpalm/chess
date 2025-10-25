@@ -3,7 +3,7 @@ package dataaccess;
 
 import chess.ChessGame;
 import dataaccess.exceptions.AlreadyTakenException;
-import dataaccess.exceptions.DoesNotExistException;
+import dataaccess.exceptions.UnauthorizedException;
 import model.GameData;
 
 import java.util.HashMap;
@@ -27,9 +27,9 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     @Override
-    public GameData getGame(int game_id) throws DoesNotExistException {
+    public GameData getGame(int game_id) throws UnauthorizedException {
         if (games.get(game_id) == null) {
-            throw new DoesNotExistException("This games does not exists");
+            throw new UnauthorizedException("This games does not exists");
         }
 
         else {
@@ -39,12 +39,12 @@ public class MemoryGameDAO implements GameDAO {
 
 
     @Override
-    public void joinGame(String new_username, ChessGame.TeamColor playerColor, int game_id) throws DoesNotExistException {
+    public void joinGame(String new_username, ChessGame.TeamColor playerColor, int game_id) throws UnauthorizedException{
 
         //Make sure you get the user from the service
 
         if (games.get(game_id) == null) {
-            throw new DoesNotExistException("This games does not exists");
+            throw new UnauthorizedException("This games does not exists");
         }
 
         else {

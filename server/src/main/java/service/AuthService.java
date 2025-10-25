@@ -33,12 +33,12 @@ public class AuthService {
             throw new BadRequestException("Fields not filled correctly.");
         }
 
-        if (this.MemoryUserData.getUser(registerRequest) != null) {
+        if (this.MemoryUserData.getUser(registerRequest.username()) != null) {
             throw new AlreadyTakenException("User already exists with this username");
         }
 
         try {
-            MemoryUserData.createUser(registerRequest);
+            MemoryUserData.createUser(registerRequest.username(), registerRequest.password(), registerRequest.email());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

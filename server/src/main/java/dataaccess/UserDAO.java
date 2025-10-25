@@ -7,9 +7,9 @@ import service.RequestsandResults.RegisterRequest;
 
 public interface UserDAO {
 
-    public UserData getUser(RegisterRequest registerRequest) throws DataAccessException;
+    public UserData getUser(String username) throws DataAccessException;
 
-    public UserData createUser(RegisterRequest registerRequest) throws AlreadyTakenException;
+    public UserData createUser(String username, String password, String email) throws AlreadyTakenException;
 
     public void clearUsers();
 

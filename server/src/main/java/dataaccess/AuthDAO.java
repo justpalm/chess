@@ -1,15 +1,14 @@
 package dataaccess;
 
 import dataaccess.exceptions.*;
-import model.*;
 
 public interface AuthDAO {
 
     public String createAuth (String username) throws DataAccessException;
 
-    public AuthData getAuth(String authToken) throws DoesNotExistException;
+    public String getAuthToken(String authToken) throws UnauthorizedException;
 
-    public void clearAuthTokens() throws DataAccessException;
+    public void clearAuthTokens();
 
 
 

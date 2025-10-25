@@ -4,6 +4,7 @@ import dataaccess.*;
 
 import dataaccess.exceptions.AlreadyTakenException;
 import dataaccess.exceptions.BadRequestException;
+import dataaccess.exceptions.UnauthorizedException;
 import service.RequestsandResults.*;
 
 
@@ -43,9 +44,27 @@ public class MainService {
 
 
     public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException {
+
+        if (registerRequest.password() == null | registerRequest.username() == null | registerRequest.email() == null) {
+            throw new BadRequestException("1 or more fields not filled");
+        }
+
         return this.userService.register(registerRequest);
+
     }
 
+    public LoginResult login(LoginRequest loginRequest) throws AlreadyTakenException, UnauthorizedException, BadRequestException {
+
+       if (loginRequest.username() == null | loginRequest.username() == null) {
+           throw new BadRequestException("1 or more fields not filled");
+       }
+
+       return this.userService.login(loginRequest);
+
+
+
+
+    }
 
 //    public LoginResult login(LoginRequest loginRequest) throws
 

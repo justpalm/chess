@@ -13,16 +13,16 @@ public class MemoryUserDAO implements UserDAO {
 
 
     @Override
-    public UserData getUser(RegisterRequest registerRequest) {
-        return users.get(registerRequest.username());
+    public UserData getUser(String username) {
+        return users.get(username);
     }
 
     @Override
-    public UserData createUser(RegisterRequest registerRequest) throws AlreadyTakenException {
-        UserData u = new UserData(registerRequest.username(), registerRequest.password(), registerRequest.email());
+    public UserData createUser(String username, String password, String email) throws AlreadyTakenException {
+        UserData u = new UserData(username, password, email);
 
-        if (users.containsKey(registerRequest.username())) {
-            throw new AlreadyTakenException("The user " + registerRequest.username() + " already exists");
+        if (users.containsKey(username)) {
+            throw new AlreadyTakenException("The user " + username + " already exists");
         }
         else {
             users.put(u.username(), u);

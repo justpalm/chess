@@ -25,35 +25,116 @@ public class UserServiceTests {
     @BeforeEach
     void clear() throws DataAccessException {
 
-        memoryUserData = new MemoryUserDAO();
-        memoryAuthData = new MemoryAuthDAO();
-        memoryGameData = new MemoryGameDAO();
+        memoryUserData.clearUsers();
+        memoryAuthData.clearAuthTokens();
+        memoryGameData.clearGames();
 
         service.clear();
     }
 
 
+
     @Test
-    void registerUsers() throws AlreadyTakenException, BadRequestException {
+    void clearTest() throws AlreadyTakenException, BadRequestException{
 
-        //
+        RegisterRequest request = new RegisterRequest("Megan Hoopes", "estarbien", "megoonoopes");
 
-        var user = new UserData("Hey", "password", "email");
-        memoryUserData.createUser(user);
-
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
         service.register(request);
 
 
+        AlreadyTakenException exception = assertThrows(
+                AlreadyTakenException.class,
+                () -> service.register(request) // Example call
+        );
+    }
+
+
+
+    @Test
+    void registerUsersTest() throws AlreadyTakenException, BadRequestException {
+
+        //
+
+        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+
+        memoryUserData.createUser(request.username(), request.password(), request.email());
+
+        service.register(request);
+
         assertEquals(memoryUserData, service.getUserDAO());
+    }
 
 
+    @Test
+    void registerUsersBadRequest() {
 
-        
+        RegisterRequest request= new RegisterRequest(null, null, "palmerjustins");
+
+        BadRequestException exception = assertThrows(
+                BadRequestException.class,
+                () -> service.register(request) // Example call
+        );
+    }
+
+    @Test
+    void registerUserAlreadyTaken() throws AlreadyTakenException, BadRequestException {
+
+        RegisterRequest request = new RegisterRequest("Megan Hoopes", "estarbien", "megoonoopes");
+
+        service.register(request);
+
+
+        AlreadyTakenException exception = assertThrows(
+                AlreadyTakenException.class,
+                () -> service.register(request) // Example call
+        );
+    }
+
+    @Test
+    void loginTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException {
+
+        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+
+        memoryUserData.createUser(request.username(), request.password(), request.email());
+
+        service.register(request);
+
+
+        LoginRequest loginRequest = new LoginRequest("Hey", "Password");
+
+        LoginResult loginResult = service.login(loginRequest);
+
+        assertEquals(loginRequest.username(), loginResult.username());
 
 
 
 
     }
 
-}
+
+
+
+
+
+
+
+
+//
+//
+//    @Test
+//    void registerUsers () {}
+//
+//    @Test
+//    void registerUsers () {}
+
+
+
+
+
+
+
+
+
+
+
+    }

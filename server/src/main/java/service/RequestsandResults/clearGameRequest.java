@@ -1,4 +1,4 @@
 package service.RequestsandResults;
 
-public class clearGameRequest {
+public record clearGameRequest () {
 }

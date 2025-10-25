@@ -1,4 +1,4 @@
 package service.RequestsandResults;
 
-public class listGameResult {
+public record listGameResult () {
 }

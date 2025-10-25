@@ -1,4 +1,4 @@
 package service.RequestsandResults;
 
-public class LogoutRequest {
+public record LogoutRequest() {
 }
