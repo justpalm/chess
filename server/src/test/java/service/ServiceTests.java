@@ -89,18 +89,24 @@ public class ServiceTests {
     @Test
     void loginTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest register_request = new RegisterRequest("Hey", "Password", "email");
 
-        memoryUserData.createUser(request.username(), request.password(), request.email());
+        service.register(register_request);
 
-        service.login(request.username(), request.equals());
+        LoginRequest loginRequest = new LoginRequest(register_request.username(), register_request.password());
 
-
-        LoginRequest loginRequest = new LoginRequest("Hey", "Password");
+        service.login(loginRequest);
 
         LoginResult loginResult = service.login(loginRequest);
 
         assertEquals(loginRequest.username(), loginResult.username());
+
+        UnauthorizedException exception = assertThrows(
+                UnauthorizedException.class,
+                () -> memoryAuthData.getAuthToken(loginResult.authToken()) // Example call
+        );
+
+
 
     }
 
@@ -134,11 +140,11 @@ public class ServiceTests {
         service.register(request);
 
 
-        LoginRequest loginRequest = new LoginRequest("Hey", "Password");
+        LoginRequest loginRequest = new LoginRequest("Hey", "Pass");
 
-        LoginResult loginResult = service.login(loginRequest);
-
-        assertEquals(loginRequest.username(), loginResult.username());
+        UnauthorizedException exception = assertThrows(
+                UnauthorizedException.class,
+                () -> service.login(loginRequest));
 
         }
 
@@ -150,20 +156,33 @@ public class ServiceTests {
         memoryUserData.createUser(request.username(), request.password(), request.email());
 
 
-        service.register(request);
+        RegisterResult registerResult = service.register(request);
 
 
-        LoginRequest loginRequest = new LoginRequest("Hey", "Password");
 
-        LoginResult loginResult = service.login(loginRequest);
+        LogoutRequest logoutRequest = new LogoutRequest(registerResult.authToken());
+
+        try {
+            service.logout(logoutRequest);
+        } catch UnauthorizedException {
+
+        }
+
+
+
 
         MemoryAuthDAO Test = service.getAuthDAO();
 
         System.out.println(Test);
-        System.out.println(loginResult.username());
+        System.out.println(logResult.username());
         System.out.println(loginResult.authToken());
 
     }
+
+
+
+
+
 
 
 }

@@ -62,12 +62,16 @@ public class MainService {
 
        return this.userService.login(loginRequest);
 
-
-
-
     }
 
-//    public LoginResult login(LoginRequest loginRequest) throws
+    public LogoutResult logout(LogoutRequest logoutRequest) throws UnauthorizedException, BadRequestException {
+
+        if (logoutRequest.authToken() != null) {
+            throw new BadRequestException("1 or more fields not filled");
+        }
+
+        return this.userService.logout(logoutRequest);
+    }
 
 }
 
