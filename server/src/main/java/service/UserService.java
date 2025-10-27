@@ -74,7 +74,7 @@ public class UserService {
 
 //        // Get new authToken
 //        try {
-//            authToken = this.MemoryAuthData.createAuth(loginRequest.username());
+            authToken = this.MemoryAuthData.createAuth(loginRequest.username());
 //        } catch (DataAccessException e) {
 //            throw new UnauthorizedException("");
 //        }
