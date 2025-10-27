@@ -4,6 +4,7 @@ import dataaccess.*;
 
 import dataaccess.exceptions.AlreadyTakenException;
 import dataaccess.exceptions.BadRequestException;
+import dataaccess.exceptions.DataAccessException;
 import dataaccess.exceptions.UnauthorizedException;
 import service.RequestsandResults.*;
 
@@ -53,7 +54,7 @@ public class MainService {
 
     }
 
-    public LoginResult login(LoginRequest loginRequest) throws AlreadyTakenException, UnauthorizedException, BadRequestException {
+    public LoginResult login(LoginRequest loginRequest) throws AlreadyTakenException, UnauthorizedException, BadRequestException, DataAccessException {
 
        if (loginRequest.username() == null | loginRequest.username() == null) {
            throw new BadRequestException("1 or more fields not filled");

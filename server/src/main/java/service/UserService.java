@@ -3,6 +3,7 @@ package service;
 import dataaccess.*;
 
 import dataaccess.exceptions.*;
+import model.UserData;
 import service.RequestsandResults.*;
 
 import java.util.Objects;
@@ -30,12 +31,8 @@ public class UserService {
             throw new BadRequestException("Fields not filled correctly.");
         }
 
-        if (this.MemoryUserData.getUser(registerRequest.username()) != null) {
-            throw new AlreadyTakenException("User already exists with this username");
-        }
-
         try {
-            MemoryUserData.createUser(registerRequest.username(), registerRequest.password(),registerRequest.email());
+            MemoryUserData.createUser(registerRequest.username(), registerRequest.password(), registerRequest.email());
         } catch (AlreadyTakenException e) {
             throw new AlreadyTakenException("Username taken");
         }
@@ -49,7 +46,6 @@ public class UserService {
 
         return (new RegisterResult(registerRequest.username(), new_authToken));
     }
-
 
 
 //    public void clear() {
@@ -66,33 +62,46 @@ public class UserService {
 
         //Check if user exists
         if (this.MemoryUserData.getUser(loginRequest.username()) == null) {
-            throw new BadRequestException("User does not exist");
+            throw new UnauthorizedException("User does not exist");
         }
 
+//      //Check password exists
         String authToken;
-
-        try {
-            authToken = this.MemoryAuthData.createAuth(loginRequest.username());
-        } catch (UnauthorizedException e) {
-            throw new UnauthorizedException("AuthToken not accepted ");
+        var login_user = this.MemoryUserData.getUser(loginRequest.username());
+        if (login_user.password() != loginRequest.password()) {
+            throw new UnauthorizedException("Password incorrect");
         }
+
+//        // Get new authToken
+//        try {
+//            authToken = this.MemoryAuthData.createAuth(loginRequest.username());
+//        } catch (DataAccessException e) {
+//            throw new UnauthorizedException("");
+//        }
 
         LoginResult loginResult = new LoginResult(loginRequest.username(), authToken);
 
         return loginResult;
     }
 
+    public LogoutResult logout(LogoutRequest logoutRequest) throws UnauthorizedException {
 
+        try {
+            this.MemoryAuthData.deleteAuthToken(logoutRequest.authToken());
+        } catch (UnauthorizedException e) {
+            throw new UnauthorizedException("authToken does not exist"); //I am not sure what kind of auth stuff this is, but it is here.
+        }
 
-
-
-
-
-
-
-
+        return new LogoutResult();
 
     }
+}
+
+
+
+
+
+
 
 
 

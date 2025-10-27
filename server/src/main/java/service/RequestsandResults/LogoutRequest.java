@@ -1,4 +1,4 @@
 package service.RequestsandResults;
 
-public record LogoutRequest() {
+public record LogoutRequest(String username, String authToken) {
 }

@@ -8,6 +8,8 @@ public interface AuthDAO {
 
     public String getAuthToken(String authToken) throws UnauthorizedException;
 
+    public void deleteAuthToken(String authToken) throws UnauthorizedException;
+
     public void clearAuthTokens();
 
 

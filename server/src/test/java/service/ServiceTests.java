@@ -3,9 +3,7 @@ package service;
 import dataaccess.MemoryAuthDAO;
 import dataaccess.MemoryGameDAO;
 import dataaccess.MemoryUserDAO;
-import dataaccess.UserDAO;
 import dataaccess.exceptions.*;
-import model.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.RequestsandResults.*;
@@ -13,7 +11,7 @@ import service.RequestsandResults.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class UserServiceTests {
+public class ServiceTests {
 
     MemoryUserDAO memoryUserData = new MemoryUserDAO();
     MemoryAuthDAO memoryAuthData = new MemoryAuthDAO();
@@ -33,9 +31,8 @@ public class UserServiceTests {
     }
 
 
-
     @Test
-    void clearTest() throws AlreadyTakenException, BadRequestException{
+    void clearTest() throws AlreadyTakenException, BadRequestException {
 
         RegisterRequest request = new RegisterRequest("Megan Hoopes", "estarbien", "megoonoopes");
 
@@ -47,7 +44,6 @@ public class UserServiceTests {
                 () -> service.register(request) // Example call
         );
     }
-
 
 
     @Test
@@ -68,7 +64,7 @@ public class UserServiceTests {
     @Test
     void registerUsersBadRequest() {
 
-        RegisterRequest request= new RegisterRequest(null, null, "palmerjustins");
+        RegisterRequest request = new RegisterRequest(null, null, "palmerjustins");
 
         BadRequestException exception = assertThrows(
                 BadRequestException.class,
@@ -91,7 +87,45 @@ public class UserServiceTests {
     }
 
     @Test
-    void loginTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException {
+    void loginTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
+
+        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+
+        memoryUserData.createUser(request.username(), request.password(), request.email());
+
+        service.login(request.username(), request.equals());
+
+
+        LoginRequest loginRequest = new LoginRequest("Hey", "Password");
+
+        LoginResult loginResult = service.login(loginRequest);
+
+        assertEquals(loginRequest.username(), loginResult.username());
+
+    }
+
+    @Test
+    void loginBadRequestTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
+
+        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+
+        memoryUserData.createUser(request.username(), request.password(), request.email());
+
+        service.register(request);
+
+
+        LoginRequest loginRequest = new LoginRequest("", "");
+
+        BadRequestException exception = assertThrows(
+                BadRequestException.class,
+                () -> service.login(loginRequest)
+        );
+    }
+    @Test
+    void loginUnauthorizedTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
+
+        //I'm not sure how best to factor in this one/
+
 
         RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
 
@@ -106,10 +140,34 @@ public class UserServiceTests {
 
         assertEquals(loginRequest.username(), loginResult.username());
 
+        }
+
+    @Test
+    void logoutPositiveTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
+
+        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+
+        memoryUserData.createUser(request.username(), request.password(), request.email());
 
 
+        service.register(request);
+
+
+        LoginRequest loginRequest = new LoginRequest("Hey", "Password");
+
+        LoginResult loginResult = service.login(loginRequest);
+
+        MemoryAuthDAO Test = service.getAuthDAO();
+
+        System.out.println(Test);
+        System.out.println(loginResult.username());
+        System.out.println(loginResult.authToken());
 
     }
+
+
+}
+
 
 
 
@@ -137,4 +195,3 @@ public class UserServiceTests {
 
 
 
-    }
