@@ -12,16 +12,14 @@ public class UserService {
 
     private final MemoryUserDAO memoryUserData;
     private final MemoryAuthDAO memoryAuthData;
-    private final MemoryGameDAO memoryGameData;
 
-    public UserService(MemoryUserDAO memoryUserData, MemoryAuthDAO memoryAuthData, MemoryGameDAO memoryGameData) {
+    public UserService(MemoryUserDAO memoryUserData, MemoryAuthDAO memoryAuthData) {
 
         this.memoryUserData = memoryUserData;
         this.memoryAuthData = memoryAuthData;
-        this.memoryGameData = memoryGameData;
     }
 
-    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException, UnauthorizedException {
+    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, UnauthorizedException {
         try {
             memoryUserData.createUser(registerRequest.username(), registerRequest.password(), registerRequest.email());
         } catch (AlreadyTakenException e ) {
@@ -33,19 +31,13 @@ public class UserService {
         return (new RegisterResult(registerRequest.username(), newAuthToken));
     }
 
-
-//    public void clear() {
-//        MemoryUserData.clearUsers();
-//    }
-//}
-
-    public LoginResult login(LoginRequest loginRequest) throws BadRequestException, UnauthorizedException, DataAccessException {
+    public LoginResult login(LoginRequest loginRequest) throws UnauthorizedException {
 
         //Check if user exists
         memoryUserData.getUser(loginRequest.username());
 
 
-//      //Check password is valid
+     //Check password is valid
         String authToken;
         var loginUser = this.memoryUserData.getUser(loginRequest.username());
         if (!Objects.equals(loginUser.password(), loginRequest.password())) {
@@ -74,10 +66,5 @@ public class UserService {
     }
 }
 
-
-//    public void logout(LogoutRequest logoutRequest) {
-//
-//
-//    }
 
 

@@ -2,9 +2,7 @@ package dataaccess;
 
 
 import chess.ChessGame;
-import dataaccess.exceptions.AlreadyTakenException;
-import dataaccess.exceptions.BadRequestException;
-import dataaccess.exceptions.UnauthorizedException;
+import dataaccess.exceptions.*;
 import model.GameData;
 
 import java.util.*;
@@ -17,14 +15,12 @@ public class MemoryGameDAO implements GameDAO {
     @Override
     public String createGame(String gameName) {
     String gameId = String.valueOf(games.size() + 1);
-    String whiteUsername = null;
-    String blackUsername = null;
 
-    GameData newGame = new GameData(gameId, gameName, whiteUsername, blackUsername, new ChessGame());
+    GameData newGame = new GameData(gameId, gameName, null, null, new ChessGame());
 
     games.put(gameId, newGame);
 
-    return String.valueOf(gameId);
+    return gameId;
     }
 
     @Override
@@ -68,18 +64,10 @@ public class MemoryGameDAO implements GameDAO {
 
     public void clearGames() {games.clear();}
 
-    public HashMap<String, GameData> listGame() {
-        return games;
-    }
 
+    public Collection<GameData> listGames() {
 
-    public Collection<GameData> listGames() throws UnauthorizedException, BadRequestException{
-
-        Collection<GameData> returnGames = new ArrayList<GameData>();
-
-        returnGames = games.values();
-
-        return returnGames;
+        return games.values();
     }
 
 

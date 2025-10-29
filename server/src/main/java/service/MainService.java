@@ -15,16 +15,16 @@ public class MainService {
 
     private final GameService gameService;
     private final UserService userService;
-    private MemoryUserDAO memoryUserDAO;
-    private MemoryAuthDAO memoryAuthDAO;
-    private MemoryGameDAO memoryGameDAO;
+    private final MemoryUserDAO memoryUserDAO;
+    private final MemoryAuthDAO memoryAuthDAO;
+    private final MemoryGameDAO memoryGameDAO;
 
 
     public MainService() {
         this.memoryUserDAO = new MemoryUserDAO();
         this.memoryAuthDAO = new MemoryAuthDAO();
         this.memoryGameDAO = new MemoryGameDAO();
-        this.userService = new UserService(memoryUserDAO, memoryAuthDAO, memoryGameDAO);
+        this.userService = new UserService(memoryUserDAO, memoryAuthDAO);
         this.gameService = new GameService(memoryUserDAO, memoryAuthDAO, memoryGameDAO);
     }
 
