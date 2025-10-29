@@ -10,7 +10,7 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition oldPosition) {
 
 
-        Collection<ChessMove> possible_moves = new ArrayList<>();
+        Collection<ChessMove> possibleMoves = new ArrayList<>();
         ChessPiece piece = board.getPiece(oldPosition);
         ChessGame.TeamColor color = piece.getTeamColor();
 
@@ -32,12 +32,12 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(chessPosition) == null) {
                 chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possible_moves.add(chessMove);
+                possibleMoves.add(chessMove);
             }
             else {
                 if (board.getPiece(chessPosition).getTeamColor() != color) {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
         }
@@ -56,12 +56,12 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(chessPosition) == null) {
                 chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possible_moves.add(chessMove);
+                possibleMoves.add(chessMove);
             }
             else {
                 if (board.getPiece(chessPosition).getTeamColor() != color) {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
         }
@@ -81,12 +81,12 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(chessPosition) == null) {
                 chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possible_moves.add(chessMove);
+                possibleMoves.add(chessMove);
             }
             else {
                 if (board.getPiece(chessPosition).getTeamColor() != color) {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
         }
@@ -106,12 +106,12 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(chessPosition) == null) {
                 chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possible_moves.add(chessMove);
+                possibleMoves.add(chessMove);
             }
             else {
                 if (board.getPiece(chessPosition).getTeamColor() != color) {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
         }
@@ -131,12 +131,12 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(chessPosition) == null) {
                 chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possible_moves.add(chessMove);
+                possibleMoves.add(chessMove);
             }
             else {
                 if (board.getPiece(chessPosition).getTeamColor() != color) {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
         }
@@ -156,12 +156,12 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(chessPosition) == null) {
                 chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possible_moves.add(chessMove);
+                possibleMoves.add(chessMove);
             }
             else {
                 if (board.getPiece(chessPosition).getTeamColor() != color) {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
         }
@@ -180,12 +180,12 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(chessPosition) == null) {
                 chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possible_moves.add(chessMove);
+                possibleMoves.add(chessMove);
             }
             else {
                 if (board.getPiece(chessPosition).getTeamColor() != color) {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
         }
@@ -204,16 +204,16 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(chessPosition) == null) {
                 chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possible_moves.add(chessMove);
+                possibleMoves.add(chessMove);
             }
             else {
                 if (board.getPiece(chessPosition).getTeamColor() != color) {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
         }
-        return possible_moves;
+        return possibleMoves;
     }
 }
 

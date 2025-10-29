@@ -58,7 +58,8 @@ public class MainService {
 
     }
 
-    public LoginResult login(LoginRequest loginRequest) throws AlreadyTakenException, UnauthorizedException, BadRequestException, DataAccessException {
+    public LoginResult login(LoginRequest loginRequest)
+            throws UnauthorizedException, BadRequestException, DataAccessException {
 
         if (loginRequest.username() == null | loginRequest.password() == null) {
             throw new BadRequestException("Error: 1 or more fields not filled");

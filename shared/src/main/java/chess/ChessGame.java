@@ -48,12 +48,12 @@ public class ChessGame {
         BLACK
     }
 
-    private Collection<ChessMove> checkCheck(ChessPiece piece, Collection<ChessMove> og_valid_moves) {
+    private Collection<ChessMove> checkCheck(ChessPiece piece, Collection<ChessMove> ogValidMoves) {
 
         Collection<ChessMove> newValidMoves = new ArrayList<>();
 
         //Go through every move in the valid set to see the hypotheticals of moving that piece
-        for (ChessMove move : og_valid_moves) {
+        for (ChessMove move : ogValidMoves) {
 
 
             ChessPosition hypoWhiteKing = new ChessPosition(whiteKing.getRow(), whiteKing.getColumn());
@@ -103,20 +103,20 @@ public class ChessGame {
         for (int row = 1; row < 9; row++) {
             for (int col = 1; col < 9; col++) {
 
-                ChessPosition new_position = new ChessPosition(row, col);
-                ChessPiece enemy_piece = copyBoard.getPiece(new_position);
+                ChessPosition chessPosition = new ChessPosition(row, col);
+                ChessPiece enemyPiece = copyBoard.getPiece(chessPosition);
 
-                if (enemy_piece != null) {
-                    if (enemy_piece.getTeamColor() != teamColor) {
-                        Collection<ChessMove> enemy_piece_moves = enemy_piece.pieceMoves(copyBoard, new_position);
-                        for (ChessMove enemy_piece_move : enemy_piece_moves) {
+                if (enemyPiece != null) {
+                    if (enemyPiece.getTeamColor() != teamColor) {
+                        Collection<ChessMove> enemyPieceMoves = enemyPiece.pieceMoves(copyBoard, chessPosition);
+                        for (ChessMove enemyPieceMove : enemyPieceMoves) {
                             if (teamColor == TeamColor.WHITE) {
-                                if (enemy_piece_move.getEndPosition().equals(hypoWhiteKing)) {
+                                if (enemyPieceMove.getEndPosition().equals(hypoWhiteKing)) {
                                     state = true;
                                 }
                             }
                             if (teamColor == TeamColor.BLACK) {
-                                if (enemy_piece_move.getEndPosition().equals(hypoBlackKing)) {
+                                if (enemyPieceMove.getEndPosition().equals(hypoBlackKing)) {
                                     state = true;
                                 }
                             }
@@ -166,9 +166,9 @@ public class ChessGame {
 
 
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        Collection<ChessMove> valid_moves = validMoves(move.getStartPosition());
+        Collection<ChessMove> validedMoves = validMoves(move.getStartPosition());
 
-        if (valid_moves.contains(move)) {
+        if (validedMoves.contains(move)) {
 
 //            if (game_board.getPiece(move.getStartPosition()) != null) {
             //Do the move by adding and removing whatever pieces we have to
@@ -191,12 +191,13 @@ public class ChessGame {
             //This is to check to update our King Position
             ChessPiece pieceMoved = chessBoard.getPiece(move.getEndPosition());
             if (pieceMoved != null) {
-                if (pieceMoved.getPieceType() == ChessPiece.PieceType.KING)
+                if (pieceMoved.getPieceType() == ChessPiece.PieceType.KING) {
                     if (currentTeam == TeamColor.WHITE) {
                         whiteKing = move.getEndPosition();
                     } else {
                         blackKing = move.getEndPosition();
                     }
+                }
             }
             if (currentTeam == TeamColor.WHITE) {
                 setTeamTurn(TeamColor.BLACK);
@@ -227,15 +228,15 @@ public class ChessGame {
 
                 if (enemyPiece != null) {
                     if (enemyPiece.getTeamColor() != teamColor) {
-                        Collection<ChessMove> enemy_piece_moves = enemyPiece.pieceMoves(chessBoard, newPosition);
-                        for (ChessMove enemy_piece_move : enemy_piece_moves) {
+                        Collection<ChessMove> enemyPieceMoves = enemyPiece.pieceMoves(chessBoard, newPosition);
+                        for (ChessMove enemyPieceMove : enemyPieceMoves) {
                             if (teamColor == TeamColor.WHITE) {
-                                if (enemy_piece_move.getEndPosition().equals(whiteKing)) {
+                                if (enemyPieceMove.getEndPosition().equals(whiteKing)) {
                                     state = true;
                                 }
                             }
                             if (teamColor == TeamColor.BLACK) {
-                                if (enemy_piece_move.getEndPosition().equals(blackKing)) {
+                                if (enemyPieceMove.getEndPosition().equals(blackKing)) {
                                     state = true;
                                 }
                             }
@@ -373,7 +374,8 @@ public class ChessGame {
             return false;
         }
         ChessGame chessGame = (ChessGame) o;
-        return currentTeam == chessGame.currentTeam && Objects.equals(chessBoard, chessGame.chessBoard) && Objects.equals(whiteKing, chessGame.whiteKing) && Objects.equals(blackKing, chessGame.blackKing);
+        return currentTeam == chessGame.currentTeam && Objects.equals(chessBoard, chessGame.chessBoard)
+                && Objects.equals(whiteKing, chessGame.whiteKing) && Objects.equals(blackKing, chessGame.blackKing);
     }
 
     @Override

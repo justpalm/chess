@@ -200,9 +200,9 @@ public class ServiceTests {
         //First Game assertion
         assertEquals(1, service.getGameDAO().size());
 
-        GameData new_game = service.getGameDAO().getGame("1");
+        GameData newGame = service.getGameDAO().getGame("1");
 
-        assertEquals("new_game", new_game.gameName());
+        assertEquals("new_game", newGame.gameName());
 
         //Second Assertion
         createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game_2");
@@ -211,9 +211,9 @@ public class ServiceTests {
 
         assertEquals(2, service.getGameDAO().size());
 
-        new_game = service.getGameDAO().getGame("2");
+        newGame = service.getGameDAO().getGame("2");
 
-        assertEquals("new_game_2", new_game.gameName());
+        assertEquals("new_game_2", newGame.gameName());
 
     }
 

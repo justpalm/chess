@@ -18,7 +18,7 @@ public class MemoryUserDAO implements UserDAO {
             throw new UnauthorizedException("Error: User does not exist");
         }
 
-        else return users.get(username);
+        else {return users.get(username);}
     }
 
     @Override

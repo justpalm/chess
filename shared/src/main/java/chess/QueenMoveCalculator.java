@@ -8,7 +8,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition oldPosition) {
 
 
-        Collection<ChessMove> possible_moves = new ArrayList<>();
+        Collection<ChessMove> possibleMoves = new ArrayList<>();
         ChessPiece piece = board.getPiece(oldPosition);
         ChessGame.TeamColor color = piece.getTeamColor();
 
@@ -35,14 +35,14 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
                     if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
                         chessMove = new ChessMove(oldPosition, chessPosition, null);
-                        possible_moves.add(chessMove);
+                        possibleMoves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
             else {
@@ -68,14 +68,14 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
                     if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
                         chessMove = new ChessMove(oldPosition, chessPosition, null);
-                        possible_moves.add(chessMove);
+                        possibleMoves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
             else {
@@ -101,14 +101,14 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
                     if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
                         chessMove = new ChessMove(oldPosition, chessPosition, null);
-                        possible_moves.add(chessMove);
+                        possibleMoves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
             else {
@@ -135,14 +135,14 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
                     if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
                         chessMove = new ChessMove(oldPosition, chessPosition, null);
-                        possible_moves.add(chessMove);
+                        possibleMoves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
             else {
@@ -173,14 +173,14 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
                     if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
                         chessMove = new ChessMove(oldPosition, chessPosition, null);
-                        possible_moves.add(chessMove);
+                        possibleMoves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
             else {
@@ -208,14 +208,14 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
                     if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
                         chessMove = new ChessMove(oldPosition, chessPosition, null);
-                        possible_moves.add(chessMove);
+                        possibleMoves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
             else {
@@ -244,14 +244,14 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
                     if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
                         chessMove = new ChessMove(oldPosition, chessPosition, null);
-                        possible_moves.add(chessMove);
+                        possibleMoves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
             else {
@@ -281,14 +281,14 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
                     if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
                         chessMove = new ChessMove(oldPosition, chessPosition, null);
-                        possible_moves.add(chessMove);
+                        possibleMoves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
                     chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possible_moves.add(chessMove);
+                    possibleMoves.add(chessMove);
                 }
             }
             else {
@@ -296,7 +296,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
             }
         }
 
-        return possible_moves;
+        return possibleMoves;
     }
 
 
