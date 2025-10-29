@@ -1,4 +1,4 @@
 package service.RequestsandResults;
 
-public record joinGameRequest() {
+public record JoinGameResult() {
 }

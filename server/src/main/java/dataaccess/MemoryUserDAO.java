@@ -1,6 +1,7 @@
 package dataaccess;
 
 import dataaccess.exceptions.AlreadyTakenException;
+import dataaccess.exceptions.UnauthorizedException;
 import model.*;
 import service.RequestsandResults.*;
 
@@ -13,16 +14,21 @@ public class MemoryUserDAO implements UserDAO {
 
 
     @Override
-    public UserData getUser(String username) {
-        return users.get(username);
+    public UserData getUser(String username) throws UnauthorizedException {
+        if (users.get(username) == null) {
+            throw new UnauthorizedException("Error: User does not exist");
+        }
+
+        else return users.get(username);
     }
 
     @Override
     public UserData createUser(String username, String password, String email) throws AlreadyTakenException {
+
         UserData u = new UserData(username, password, email);
 
         if (users.containsKey(username)) {
-            throw new AlreadyTakenException("The user " + username + " already exists");
+            throw new AlreadyTakenException("Error: The user " + username + " already exists");
         }
         else {
             users.put(u.username(), u);

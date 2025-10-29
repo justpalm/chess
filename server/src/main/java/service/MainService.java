@@ -8,9 +8,12 @@ import dataaccess.exceptions.DataAccessException;
 import dataaccess.exceptions.UnauthorizedException;
 import service.RequestsandResults.*;
 
+import java.util.Objects;
+
 
 public class MainService {
 
+    private final GameService gameService;
     private final UserService userService;
     private MemoryUserDAO memoryUserDAO;
     private MemoryAuthDAO memoryAuthDAO;
@@ -22,7 +25,8 @@ public class MainService {
         this.memoryAuthDAO = new MemoryAuthDAO();
         this.memoryGameDAO = new MemoryGameDAO();
         this.userService = new UserService(memoryUserDAO, memoryAuthDAO, memoryGameDAO);
-        }
+        this.gameService = new GameService(memoryUserDAO, memoryAuthDAO, memoryGameDAO);
+    }
 
 
     public MemoryUserDAO getUserDAO() {
@@ -44,10 +48,10 @@ public class MainService {
     }
 
 
-    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException {
+    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException, UnauthorizedException {
 
         if (registerRequest.password() == null | registerRequest.username() == null | registerRequest.email() == null) {
-            throw new BadRequestException("1 or more fields not filled");
+            throw new BadRequestException("Error: 1 or more fields not filled");
         }
 
         return this.userService.register(registerRequest);
@@ -56,22 +60,50 @@ public class MainService {
 
     public LoginResult login(LoginRequest loginRequest) throws AlreadyTakenException, UnauthorizedException, BadRequestException, DataAccessException {
 
-       if (loginRequest.username() == null | loginRequest.username() == null) {
-           throw new BadRequestException("1 or more fields not filled");
-       }
+        if (loginRequest.username() == null | loginRequest.password() == null) {
+            throw new BadRequestException("Error: 1 or more fields not filled");
+        }
 
-       return this.userService.login(loginRequest);
+        return this.userService.login(loginRequest);
 
     }
 
     public LogoutResult logout(LogoutRequest logoutRequest) throws UnauthorizedException, BadRequestException {
 
-        if (logoutRequest.authToken() != null) {
-            throw new BadRequestException("1 or more fields not filled");
+        if (logoutRequest.authToken() == null) {
+            throw new BadRequestException("Error: 1 or more fields not filled");
         }
 
-        return this.userService.logout(logoutRequest);
+        return this.userService.logout(logoutRequest.authToken());
     }
 
+    public CreateGameResult createGame(CreateGameRequest createGameRequest) throws BadRequestException, UnauthorizedException {
+        if (Objects.equals(createGameRequest.authToken(), "") | Objects.equals(createGameRequest.gameName(), "")) {
+            throw new BadRequestException("Error: 1 or more fields not filled correctly.");
+        }
+
+        return gameService.create_game(createGameRequest);
+
+    }
+
+    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException {
+        if (Objects.equals(joinGameRequest.authToken(), "") | Objects.equals(joinGameRequest.playerColor(), null)
+                | Objects.equals(joinGameRequest.gameID(), "")) {
+            throw new BadRequestException("Error: 1 or more fields not filled correctly.");
+        }
+
+        return gameService.join_game(joinGameRequest);
+
+
+    }
 }
+
+
+
+
+
+
+//    public
+//
+//}
 

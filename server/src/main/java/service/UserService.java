@@ -22,27 +22,14 @@ public class UserService {
         this.MemoryGameData = memoryGameData;
     }
 
-    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException {
-
-        //Checking for missing fields
-        if (Objects.equals(registerRequest.username(), "")
-                | Objects.equals(registerRequest.password(), "")
-                | Objects.equals(registerRequest.email(), "")) {
-            throw new BadRequestException("Fields not filled correctly.");
-        }
-
+    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException, UnauthorizedException {
         try {
             MemoryUserData.createUser(registerRequest.username(), registerRequest.password(), registerRequest.email());
-        } catch (AlreadyTakenException e) {
-            throw new AlreadyTakenException("Username taken");
+        } catch (AlreadyTakenException e ) {
+            throw new AlreadyTakenException(e.getMessage());
         }
-
         String new_authToken;
-        try {
-            new_authToken = MemoryAuthData.createAuth(registerRequest.username());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        new_authToken = MemoryAuthData.createAuth(registerRequest.username());
 
         return (new RegisterResult(registerRequest.username(), new_authToken));
     }
@@ -54,55 +41,39 @@ public class UserService {
 //}
 
     public LoginResult login(LoginRequest loginRequest) throws BadRequestException, UnauthorizedException, DataAccessException {
-        //Checking for missing fields
-        if (Objects.equals(loginRequest.username(), "")
-                | Objects.equals(loginRequest.password(), "")) {
-            throw new BadRequestException("Fields not filled correctly.");
-        }
 
         //Check if user exists
-        if (this.MemoryUserData.getUser(loginRequest.username()) == null) {
-            throw new UnauthorizedException("User does not exist");
-        }
+        MemoryUserData.getUser(loginRequest.username());
 
-//      //Check password exists
+
+//      //Check password is valid
         String authToken;
         var login_user = this.MemoryUserData.getUser(loginRequest.username());
-        if (login_user.password() != loginRequest.password()) {
-            throw new UnauthorizedException("Password incorrect");
+        if (!Objects.equals(login_user.password(), loginRequest.password())) {
+            throw new UnauthorizedException("Error: Password incorrect");
         }
 
-//        // Get new authToken
-//        try {
+        // Get new authToken
+        try {
             authToken = this.MemoryAuthData.createAuth(loginRequest.username());
-//        } catch (DataAccessException e) {
-//            throw new UnauthorizedException("");
-//        }
+        } catch (UnauthorizedException e) {
+            throw new UnauthorizedException(e.getMessage());
+        }
 
-        LoginResult loginResult = new LoginResult(loginRequest.username(), authToken);
-
-        return loginResult;
+        return new LoginResult(loginRequest.username(), authToken);
     }
 
-    public LogoutResult logout(LogoutRequest logoutRequest) throws UnauthorizedException {
+    public LogoutResult logout(String authToken) throws UnauthorizedException {
 
         try {
-            this.MemoryAuthData.deleteAuthToken(logoutRequest.authToken());
+            this.MemoryAuthData.deleteAuthToken(authToken);
         } catch (UnauthorizedException e) {
-            throw new UnauthorizedException("authToken does not exist"); //I am not sure what kind of auth stuff this is, but it is here.
+            throw new UnauthorizedException(e.getMessage()); //I am not sure what kind of auth stuff this is, but it is here.
         }
 
         return new LogoutResult();
-
     }
 }
-
-
-
-
-
-
-
 
 
 //    public void logout(LogoutRequest logoutRequest) {

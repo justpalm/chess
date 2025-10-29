@@ -1,12 +1,8 @@
 package service;
 
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
-import dataaccess.exceptions.AlreadyTakenException;
-import dataaccess.exceptions.BadRequestException;
-import service.RequestsandResults.RegisterRequest;
-import service.RequestsandResults.RegisterResult;
+import dataaccess.*;
+import dataaccess.exceptions.*;
+import service.RequestsandResults.*;
 
 import java.util.Objects;
 
@@ -25,50 +21,61 @@ public class GameService {
     }
 
 
-    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException {
+    public CreateGameResult create_game(CreateGameRequest createGameRequest) throws BadRequestException, UnauthorizedException {
 
-        if (Objects.equals(registerRequest.username(), "")
-                | Objects.equals(registerRequest.password(), "")
-                | Objects.equals(registerRequest.email(), "")) {
-            throw new BadRequestException("Fields not filled correctly.");
-        }
 
-        if (this.MemoryUserData.getUser(registerRequest.username()) != null) {
-            throw new AlreadyTakenException("User already exists with this username");
-        }
 
+
+        //Checks
         try {
-            MemoryUserData.createUser(registerRequest.username(), registerRequest.password(), registerRequest.email());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+            MemoryAuthData.getAuthToken(createGameRequest.authToken());
+        } catch (BadRequestException e) {
+            throw new BadRequestException(e.getMessage());
         }
 
-        String new_authToken;
-        try {
-            new_authToken = MemoryAuthData.createAuth(registerRequest.username());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        String new_game_id = MemoryGameData.createGame(createGameRequest.gameName());
 
-        return (new RegisterResult(registerRequest.username(), new_authToken));
-    }
+        CreateGameResult createGameResult = new CreateGameResult(new_game_id);
+
+        return createGameResult;
 
     }
 
+    public JoinGameResult join_game(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException {
 
-//    public void clear() {
-//        MemoryUserData.clearUsers();
-//    }
-//}
+        //Checks null
 
-//    public LoginResult login(LoginRequest loginRequest) {
-//
-//
-//    }
-//    public void logout(LogoutRequest logoutRequest) {
-//
-//
-//    }
+        //Checks AuthToken validity
+        MemoryAuthData.getAuthToken(joinGameRequest.authToken());
+
+        //Tries to join game
+        MemoryGameData.joinGame(joinGameRequest.authToken(), joinGameRequest.playerColor(), joinGameRequest.gameID());
+
+
+        return new JoinGameResult();
+
+
+
+
+
+
+
+
+
+
+
+    }
+
+}
+
+
+
+
+
+
+
+
+
 
 
 

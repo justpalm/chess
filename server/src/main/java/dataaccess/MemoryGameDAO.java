@@ -3,6 +3,7 @@ package dataaccess;
 
 import chess.ChessGame;
 import dataaccess.exceptions.AlreadyTakenException;
+import dataaccess.exceptions.BadRequestException;
 import dataaccess.exceptions.UnauthorizedException;
 import model.GameData;
 
@@ -11,25 +12,26 @@ import java.util.Objects;
 
 public class MemoryGameDAO implements GameDAO {
 
-    final private HashMap<Integer, GameData> games = new HashMap<>();
+    final private HashMap<String, GameData> games = new HashMap<>();
 
 
     @Override
-    public void createGame(String game_name) throws AlreadyTakenException {
-    int game_id = games.size() + 1;
+    public String createGame(String game_name) {
+    String game_id = String.valueOf(games.size() + 1);
     String whiteUsername = "";
     String blackUsername = "";
 
-    GameData new_game = new GameData(game_id, whiteUsername, blackUsername, game_name, new ChessGame());
+    GameData new_game = new GameData(game_id, game_name, whiteUsername, blackUsername, new ChessGame());
 
     games.put(game_id, new_game);
 
+    return String.valueOf(game_id);
     }
 
     @Override
     public GameData getGame(int game_id) throws UnauthorizedException {
         if (games.get(game_id) == null) {
-            throw new UnauthorizedException("This games does not exists");
+            throw new UnauthorizedException("Error: This games does not exists");
         }
 
         else {
@@ -37,29 +39,37 @@ public class MemoryGameDAO implements GameDAO {
         }
     }
 
-
     @Override
-    public void joinGame(String new_username, ChessGame.TeamColor playerColor, int game_id) throws UnauthorizedException{
-
-        //Make sure you get the user from the service
-
+    public void joinGame(String new_username, ChessGame.TeamColor playerColor, String game_id) throws UnauthorizedException, BadRequestException {
         if (games.get(game_id) == null) {
-            throw new UnauthorizedException("This games does not exists");
+            throw new UnauthorizedException("Error: This games does not exists");
         }
 
         else {
             GameData the_game= games.get(game_id);
             if (playerColor == ChessGame.TeamColor.WHITE) {
-                if (Objects.equals(the_game.whiteUsername(), "")){
+                if (Objects.equals(the_game.whiteUsername(), "")) {
                     the_game.new_user_white(new_username);
+                } else {
+                    throw new UnauthorizedException("Error: Username already filled");
                 }
             }
+
+            if (playerColor == ChessGame.TeamColor.BLACK) {
+                if (Objects.equals(the_game.blackUsername(), "")) {
+                    the_game.new_user_black(new_username);
+                } else {
+                    throw new UnauthorizedException("Error: Username already filled");
+                }
+            }
+
         }
     }
 
+
     public void clearGames() {games.clear();}
 
-    public HashMap<Integer, GameData> listGame() {
+    public HashMap<String, GameData> listGame() {
         return games;
     }
 
@@ -76,5 +86,9 @@ public class MemoryGameDAO implements GameDAO {
     @Override
     public int hashCode() {
         return Objects.hashCode(games);
+    }
+
+    public int size() {
+        return games.size();
     }
 }

@@ -4,7 +4,7 @@ import chess.ChessGame;
 
 import java.util.Objects;
 
-public record GameData (int gameID, String whiteUsername, String blackUsername, String gameName, ChessGame game){
+public record GameData (String gameID,  String gameName, String whiteUsername, String blackUsername, ChessGame game){
 
     public GameData new_user_white(String new_white_username) {
         //Make sure you are checking for open space outside the model
