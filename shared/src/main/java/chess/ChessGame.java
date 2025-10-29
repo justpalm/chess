@@ -229,11 +229,11 @@ public class ChessGame {
     {Collection<ChessMove> enemyPieceMoves = enemyPiece.pieceMoves(chessBoard, newPosition);
         for (ChessMove enemyPieceMove : enemyPieceMoves) {
             if (teamColor == TeamColor.WHITE) {
-                if (enemyPieceMove.getEndPosition().equals(whiteKing)) {state = true;};
+                if (enemyPieceMove.getEndPosition().equals(whiteKing)) {state = true;}
             }
-            if (teamColor == TeamColor.BLACK) if (enemyPieceMove.getEndPosition().equals(blackKing)) {
+            if (teamColor == TeamColor.BLACK) {if (enemyPieceMove.getEndPosition().equals(blackKing)) {
                 state = true;
-            }
+            }}
         }
         return state;
     }
