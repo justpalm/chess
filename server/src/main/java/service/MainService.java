@@ -79,7 +79,7 @@ public class MainService {
         if (Objects.equals(createGameRequest.authToken(), null) | Objects.equals(createGameRequest.gameName(), null)) {
             throw new BadRequestException("Error: 1 or more fields not filled correctly.");
         }
-        return gameService.create_game(createGameRequest);
+        return gameService.createGame(createGameRequest);
 
     }
 
@@ -93,7 +93,7 @@ public class MainService {
 
 
 
-        return gameService.join_game(joinGameRequest);
+        return gameService.joinGame(joinGameRequest);
     }
 
 
@@ -104,13 +104,4 @@ public class MainService {
         return gameService.listGames(listGamesRequest);
     }
 }
-
-
-
-
-
-
-//    public
-//
-//}
 

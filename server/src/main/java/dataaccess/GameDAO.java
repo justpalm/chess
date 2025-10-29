@@ -8,11 +8,11 @@ import model.*;
 public interface GameDAO {
 
 
-    public String createGame (String game_name);
+    public String createGame (String gameName);
 
-    public GameData getGame(String game_id) throws UnauthorizedException;
+    public GameData getGame(String gameId) throws UnauthorizedException;
 
-    public void joinGame (String new_username, ChessGame.TeamColor playerColor, String game_id) throws AlreadyTakenException, UnauthorizedException;
+    public void joinGame (String newUsername, ChessGame.TeamColor playerColor, String gameId) throws AlreadyTakenException, UnauthorizedException;
     //It's void because this result is empty
 
 

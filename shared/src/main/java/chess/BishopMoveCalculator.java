@@ -6,20 +6,20 @@ import java.util.Collection;
 public class BishopMoveCalculator implements PieceMoveCalculator {
 
     @Override
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition old_position) {
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition oldPosition) {
 
         boolean n = true;
 
 
         Collection<ChessMove> possible_moves = new ArrayList<>();
-        ChessPiece piece = board.getPiece(old_position);
+        ChessPiece piece = board.getPiece(oldPosition);
         ChessGame.TeamColor color = piece.getTeamColor();
 
         //Set Values
-        int row = old_position.getRow();
-        int col = old_position.getColumn();
-        ChessPosition new_position;
-        ChessMove new_move;
+        int row = oldPosition.getRow();
+        int col = oldPosition.getColumn();
+        ChessPosition chessPosition;
+        ChessMove chessMove;
 
 
         //Check left UP LOOP (minus a column, up a row)
@@ -29,21 +29,21 @@ public class BishopMoveCalculator implements PieceMoveCalculator {
 
             if (row < 9 && col < 9 && row > 0 && col > 0) {
 
-                new_position = new ChessPosition(row, col);
+                chessPosition = new ChessPosition(row, col);
 
 
-                if (board.getPiece(new_position) != null) {
-                    if (board.getPiece(new_position).getTeamColor() != color) { //enemy
+                if (board.getPiece(chessPosition) != null) {
+                    if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
-                        new_move = new ChessMove(old_position, new_position, null);
-                        possible_moves.add(new_move);
+                        chessMove = new ChessMove(oldPosition, chessPosition, null);
+                        possible_moves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                    chessMove = new ChessMove(oldPosition, chessPosition, null);
+                    possible_moves.add(chessMove);
                 }
             }
             else {
@@ -51,8 +51,8 @@ public class BishopMoveCalculator implements PieceMoveCalculator {
             }
         }
         //Reset
-        row = old_position.getRow();
-        col = old_position.getColumn();
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
 
         //Check right UP
@@ -63,22 +63,22 @@ public class BishopMoveCalculator implements PieceMoveCalculator {
 
             if (row < 9 && col < 9 && row > 0 && col > 0) {
 
-                new_position = new ChessPosition(row, col);
+                chessPosition = new ChessPosition(row, col);
 
 
 
-                if (board.getPiece(new_position) != null) {
-                    if (board.getPiece(new_position).getTeamColor() != color) { //enemy
+                if (board.getPiece(chessPosition) != null) {
+                    if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
-                        new_move = new ChessMove(old_position, new_position, null);
-                        possible_moves.add(new_move);
+                        chessMove = new ChessMove(oldPosition, chessPosition, null);
+                        possible_moves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                    chessMove = new ChessMove(oldPosition, chessPosition, null);
+                    possible_moves.add(chessMove);
                 }
             }
             else {
@@ -87,8 +87,8 @@ public class BishopMoveCalculator implements PieceMoveCalculator {
         }
 
         //Reset
-        row = old_position.getRow();
-        col = old_position.getColumn();
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
 
         //Check left DOWN
@@ -99,22 +99,22 @@ public class BishopMoveCalculator implements PieceMoveCalculator {
 
             if (row < 9 && col < 9 && row > 0 && col > 0) {
 
-                new_position = new ChessPosition(row, col);
+                chessPosition = new ChessPosition(row, col);
 
 
 
-                if (board.getPiece(new_position) != null) {
-                    if (board.getPiece(new_position).getTeamColor() != color) { //enemy
+                if (board.getPiece(chessPosition) != null) {
+                    if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
-                        new_move = new ChessMove(old_position, new_position, null);
-                        possible_moves.add(new_move);
+                        chessMove = new ChessMove(oldPosition, chessPosition, null);
+                        possible_moves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                    chessMove = new ChessMove(oldPosition, chessPosition, null);
+                    possible_moves.add(chessMove);
                 }
             }
             else {
@@ -123,8 +123,8 @@ public class BishopMoveCalculator implements PieceMoveCalculator {
         }
 
         //Reset
-        row = old_position.getRow();
-        col = old_position.getColumn();
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
 
         //Check right DOWN
@@ -136,22 +136,22 @@ public class BishopMoveCalculator implements PieceMoveCalculator {
 
             if (row < 9 && col < 9 && row > 0 && col > 0) {
 
-                new_position = new ChessPosition(row, col);
+                chessPosition = new ChessPosition(row, col);
 
 
 
-                if (board.getPiece(new_position) != null) {
-                    if (board.getPiece(new_position).getTeamColor() != color) { //enemy
+                if (board.getPiece(chessPosition) != null) {
+                    if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
 
-                        new_move = new ChessMove(old_position, new_position, null);
-                        possible_moves.add(new_move);
+                        chessMove = new ChessMove(oldPosition, chessPosition, null);
+                        possible_moves.add(chessMove);
                         break;
                     } else { //friend
                         break;
                     }
                 } else {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                    chessMove = new ChessMove(oldPosition, chessPosition, null);
+                    possible_moves.add(chessMove);
                 }
             }
             else {

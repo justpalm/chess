@@ -10,27 +10,27 @@ import java.util.Objects;
 
 public class UserService {
 
-    private final MemoryUserDAO MemoryUserData;
-    private final MemoryAuthDAO MemoryAuthData;
-    private final MemoryGameDAO MemoryGameData;
+    private final MemoryUserDAO memoryUserData;
+    private final MemoryAuthDAO memoryAuthData;
+    private final MemoryGameDAO memoryGameData;
 
     public UserService(MemoryUserDAO memoryUserData, MemoryAuthDAO memoryAuthData, MemoryGameDAO memoryGameData) {
 
-        this.MemoryUserData = memoryUserData;
-        this.MemoryAuthData = memoryAuthData;
-        this.MemoryGameData = memoryGameData;
+        this.memoryUserData = memoryUserData;
+        this.memoryAuthData = memoryAuthData;
+        this.memoryGameData = memoryGameData;
     }
 
     public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException, UnauthorizedException {
         try {
-            MemoryUserData.createUser(registerRequest.username(), registerRequest.password(), registerRequest.email());
+            memoryUserData.createUser(registerRequest.username(), registerRequest.password(), registerRequest.email());
         } catch (AlreadyTakenException e ) {
             throw new AlreadyTakenException(e.getMessage());
         }
-        String new_authToken;
-        new_authToken = MemoryAuthData.createAuth(registerRequest.username());
+        String newAuthToken;
+        newAuthToken = memoryAuthData.createAuth(registerRequest.username());
 
-        return (new RegisterResult(registerRequest.username(), new_authToken));
+        return (new RegisterResult(registerRequest.username(), newAuthToken));
     }
 
 
@@ -42,19 +42,19 @@ public class UserService {
     public LoginResult login(LoginRequest loginRequest) throws BadRequestException, UnauthorizedException, DataAccessException {
 
         //Check if user exists
-        MemoryUserData.getUser(loginRequest.username());
+        memoryUserData.getUser(loginRequest.username());
 
 
 //      //Check password is valid
         String authToken;
-        var login_user = this.MemoryUserData.getUser(loginRequest.username());
-        if (!Objects.equals(login_user.password(), loginRequest.password())) {
+        var loginUser = this.memoryUserData.getUser(loginRequest.username());
+        if (!Objects.equals(loginUser.password(), loginRequest.password())) {
             throw new UnauthorizedException("Error: Password incorrect");
         }
 
         // Get new authToken
         try {
-            authToken = this.MemoryAuthData.createAuth(loginRequest.username());
+            authToken = this.memoryAuthData.createAuth(loginRequest.username());
         } catch (UnauthorizedException e) {
             throw new UnauthorizedException(e.getMessage());
         }
@@ -65,7 +65,7 @@ public class UserService {
     public LogoutResult logout(String authToken) throws UnauthorizedException {
 
         try {
-            this.MemoryAuthData.deleteAuthToken(authToken);
+            this.memoryAuthData.deleteAuthToken(authToken);
         } catch (UnauthorizedException e) {
             throw new UnauthorizedException(e.getMessage()); //I am not sure what kind of auth stuff this is, but it is here.
         }

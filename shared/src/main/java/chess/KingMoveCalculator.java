@@ -5,206 +5,204 @@ import java.util.Collection;
 
 public class KingMoveCalculator implements PieceMoveCalculator{
     @Override
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition old_position) {
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition oldPosition) {
 
-        Collection<ChessMove> possible_moves = new ArrayList<>();
-        ChessPiece piece = board.getPiece(old_position);
+        Collection<ChessMove> possibleMoves = new ArrayList<>();
+        ChessPiece piece = board.getPiece(oldPosition);
         ChessGame.TeamColor color = piece.getTeamColor();
 
 
 
         //Set Values
-        int row = old_position.getRow();
-        int col = old_position.getColumn();
+        int row = oldPosition.getRow();
+        int col = oldPosition.getColumn();
 
-        ChessMove new_move;
-        ChessPosition new_position;
+        ChessMove newMove;
+        ChessPosition newPosition;
 
 
         //Check Up
         row += 1;
 
-        new_position = new ChessPosition(row, col);
+        newPosition = new ChessPosition(row, col);
 
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(new_position) == null) {
-                new_move = new ChessMove(old_position, new_position, null);
-                possible_moves.add(new_move);
+            if (board.getPiece(newPosition) == null) {
+                newMove = new ChessMove(oldPosition, newPosition, null);
+                possibleMoves.add(newMove);
             }
             else {
-                if (board.getPiece(new_position).getTeamColor() != color) {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                if (board.getPiece(newPosition).getTeamColor() != color) {
+                    newMove = new ChessMove(oldPosition, newPosition, null);
+                    possibleMoves.add(newMove);
                 }
             }
         }
 
         //Reset
-        row = old_position.getRow();
-        col = old_position.getColumn();
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
         //Check Right Up
         row += 1;
         col += 1;
 
-        new_position = new ChessPosition(row, col);
+        newPosition = new ChessPosition(row, col);
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(new_position) == null) {
-                new_move = new ChessMove(old_position, new_position, null);
-                possible_moves.add(new_move);
+            if (board.getPiece(newPosition) == null) {
+                newMove = new ChessMove(oldPosition, newPosition, null);
+                possibleMoves.add(newMove);
             }
             else {
-                if (board.getPiece(new_position).getTeamColor() != color) {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                if (board.getPiece(newPosition).getTeamColor() != color) {
+                    newMove = new ChessMove(oldPosition, newPosition, null);
+                    possibleMoves.add(newMove);
                 }
             }
         }
 
 
         //Reset
-        row = old_position.getRow();
-        col = old_position.getColumn();
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
         //Check Right
         col += 1;
 
-        new_position = new ChessPosition(row, col);
+        newPosition = new ChessPosition(row, col);
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(new_position) == null) {
-                new_move = new ChessMove(old_position, new_position, null);
-                possible_moves.add(new_move);
+            if (board.getPiece(newPosition) == null) {
+                newMove = new ChessMove(oldPosition, newPosition, null);
+                possibleMoves.add(newMove);
             }
             else {
-                if (board.getPiece(new_position).getTeamColor() != color) {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                if (board.getPiece(newPosition).getTeamColor() != color) {
+                    newMove = new ChessMove(oldPosition, newPosition, null);
+                    possibleMoves.add(newMove);
                 }
             }
         }
 
 
         //Reset
-        row = old_position.getRow();
-        col = old_position.getColumn();
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
         //Check Down Right
         col += 1;
         row -= 1;
 
-        new_position = new ChessPosition(row, col);
+        newPosition = new ChessPosition(row, col);
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(new_position) == null) {
-                new_move = new ChessMove(old_position, new_position, null);
-                possible_moves.add(new_move);
+            if (board.getPiece(newPosition) == null) {
+                newMove = new ChessMove(oldPosition, newPosition, null);
+                possibleMoves.add(newMove);
             }
             else {
-                if (board.getPiece(new_position).getTeamColor() != color) {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                if (board.getPiece(newPosition).getTeamColor() != color) {
+                    newMove = new ChessMove(oldPosition, newPosition, null);
+                    possibleMoves.add(newMove);
                 }
             }
         }
 
 
         //Reset
-        row = old_position.getRow();
-        col = old_position.getColumn();
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
         //Check Down
         row -= 1;
 
-        new_position = new ChessPosition(row, col);
+        newPosition = new ChessPosition(row, col);
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(new_position) == null) {
-                new_move = new ChessMove(old_position, new_position, null);
-                possible_moves.add(new_move);
+            if (board.getPiece(newPosition) == null) {
+                newMove = new ChessMove(oldPosition, newPosition, null);
+                possibleMoves.add(newMove);
             }
             else {
-                if (board.getPiece(new_position).getTeamColor() != color) {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                if (board.getPiece(newPosition).getTeamColor() != color) {
+                    newMove = new ChessMove(oldPosition, newPosition, null);
+                    possibleMoves.add(newMove);
                 }
             }
         }
 
 
         //Reset
-        row = old_position.getRow();
-        col = old_position.getColumn();
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
         //Check Down Left
         row -= 1;
         col -= 1;
 
-        new_position = new ChessPosition(row, col);
+        newPosition = new ChessPosition(row, col);
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(new_position) == null) {
-                new_move = new ChessMove(old_position, new_position, null);
-                possible_moves.add(new_move);
+            if (board.getPiece(newPosition) == null) {
+                newMove = new ChessMove(oldPosition, newPosition, null);
+                possibleMoves.add(newMove);
             }
             else {
-                if (board.getPiece(new_position).getTeamColor() != color) {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                if (board.getPiece(newPosition).getTeamColor() != color) {
+                    newMove = new ChessMove(oldPosition, newPosition, null);
+                    possibleMoves.add(newMove);
                 }
             }
         }
 
         //Reset
-        row = old_position.getRow();
-        col = old_position.getColumn();
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
         //Check Left
         col -= 1;
 
-        new_position = new ChessPosition(row, col);
+        newPosition = new ChessPosition(row, col);
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(new_position) == null) {
-                new_move = new ChessMove(old_position, new_position, null);
-                possible_moves.add(new_move);
+            if (board.getPiece(newPosition) == null) {
+                newMove = new ChessMove(oldPosition, newPosition, null);
+                possibleMoves.add(newMove);
             }
             else {
-                if (board.getPiece(new_position).getTeamColor() != color) {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                if (board.getPiece(newPosition).getTeamColor() != color) {
+                    newMove = new ChessMove(oldPosition, newPosition, null);
+                    possibleMoves.add(newMove);
                 }
             }
         }
 
         //Reset
-        row = old_position.getRow();
-        col = old_position.getColumn();
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
 
         //Check Left Up
         row += 1;
         col -= 1;
 
-        new_position = new ChessPosition(row, col);
+        newPosition = new ChessPosition(row, col);
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(new_position) == null) {
-                new_move = new ChessMove(old_position, new_position, null);
-                possible_moves.add(new_move);
+            if (board.getPiece(newPosition) == null) {
+                newMove = new ChessMove(oldPosition, newPosition, null);
+                possibleMoves.add(newMove);
             }
             else {
-                if (board.getPiece(new_position).getTeamColor() != color) {
-                    new_move = new ChessMove(old_position, new_position, null);
-                    possible_moves.add(new_move);
+                if (board.getPiece(newPosition).getTeamColor() != color) {
+                    newMove = new ChessMove(oldPosition, newPosition, null);
+                    possibleMoves.add(newMove);
                 }
             }
         }
-
-
-        return possible_moves;
+        return possibleMoves;
     }
 }
 
