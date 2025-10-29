@@ -106,8 +106,8 @@ public class ServiceTests {
         assertEquals(loginRequest.username(), loginResult.username());
 
         //Verifying creation of authToken
-        BadRequestException exception = assertThrows(
-                BadRequestException.class,
+        UnauthorizedException exception = assertThrows(
+                UnauthorizedException .class,
                 () -> memoryAuthData.getAuthToken(loginResult.authToken()) // Example call
         );
     }
@@ -149,14 +149,20 @@ public class ServiceTests {
     @Test
     void logoutPositiveTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
+
+        //Create User
         RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
-                RegisterResult registerResult = service.register(request);
+        RegisterResult registerResult = service.register(request);
 
 
 
         LogoutRequest logoutRequest = new LogoutRequest(registerResult.authToken());
 
         service.logout(logoutRequest);
+
+        UnauthorizedException exception= assertThrows(
+                UnauthorizedException.class,
+                () -> service.getAuthDAO().getAuthToken(registerResult.authToken()));
 
         }
 
@@ -224,8 +230,8 @@ public class ServiceTests {
 
         //Create Game with Invalid AuthToken
         CreateGameRequest createGameRequest = new CreateGameRequest("ajsdahjfhdf", "new_game");
-        BadRequestException exception = assertThrows(
-                BadRequestException.class,
+        UnauthorizedException exception = assertThrows(
+                UnauthorizedException.class,
                 () -> service.createGame(createGameRequest));
     }
 
@@ -239,7 +245,7 @@ public class ServiceTests {
         String authToken = registerResult.authToken();
 
         //Create Game with Invalid AuthToken
-        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "");
+        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), null);
         BadRequestException exception = assertThrows(
                 BadRequestException.class,
                 () -> service.createGame(createGameRequest));
@@ -325,8 +331,8 @@ public class ServiceTests {
         joinGameRequest = new JoinGameRequest(registerResult.authToken(), ChessGame.TeamColor.WHITE, "1");
 
         JoinGameRequest finalJoinGameRequest = joinGameRequest;
-        UnauthorizedException exception = assertThrows(
-                UnauthorizedException.class,
+        AlreadyTakenException exception = assertThrows(
+                AlreadyTakenException.class,
                 () -> service.joinGame(finalJoinGameRequest));
     }
 
@@ -357,8 +363,8 @@ public class ServiceTests {
         joinGameRequest = new JoinGameRequest(registerResult.authToken(), ChessGame.TeamColor.BLACK, "1");
 
         JoinGameRequest finalJoinGameRequest = joinGameRequest;
-        UnauthorizedException exception = assertThrows(
-                UnauthorizedException.class,
+        AlreadyTakenException exception = assertThrows(
+                AlreadyTakenException.class,
                 () -> service.joinGame(finalJoinGameRequest));
 
 
