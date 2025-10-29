@@ -75,7 +75,7 @@ public class ServiceTests {
     @Test
     void registerUserAlreadyTaken() throws AlreadyTakenException, BadRequestException, UnauthorizedException {
 
-        RegisterRequest request = new RegisterRequest("Megan Hoopes", "estarbien", "megoonoopes");
+        RegisterRequest request = new RegisterRequest("Justin Palmer", "hello", "new_email");
 
         service.register(request);
 

@@ -77,7 +77,8 @@ public class BishopMoveCalculator implements PieceMoveCalculator {
         return possibleMoves;
     }
 
-    private boolean bishopMoving(ChessBoard board, ChessPosition oldPosition, int row, int col, Collection<ChessMove> possibleMoves, ChessGame.TeamColor color) {
+    private boolean bishopMoving(ChessBoard board,
+    ChessPosition oldPosition, int row, int col, Collection<ChessMove> possibleMoves, ChessGame.TeamColor color) {
         ChessPosition chessPosition;
         ChessMove chessMove;
         if (row < 9 && col < 9 && row > 0 && col > 0) {

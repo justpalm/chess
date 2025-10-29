@@ -229,10 +229,10 @@ public class ChessGame {
     {Collection<ChessMove> enemyPieceMoves = enemyPiece.pieceMoves(chessBoard, newPosition);
         for (ChessMove enemyPieceMove : enemyPieceMoves) {
             if (teamColor == TeamColor.WHITE) {
-                if (enemyPieceMove.getEndPosition().equals(whiteKing)) state = true;
+                if (enemyPieceMove.getEndPosition().equals(whiteKing)) {state = true;};
             }
             if (teamColor == TeamColor.BLACK) if (enemyPieceMove.getEndPosition().equals(blackKing)) {
-                state = true;
+                {state = true;}
             }
         }
         return state;
@@ -265,10 +265,10 @@ public class ChessGame {
         if (isInCheck(teamColor)) {
             return false;
         }
-        return CheckColors(teamColor);
+        return checkColors(teamColor);
     }
 
-    private boolean CheckColors(TeamColor teamColor) {
+    private boolean checkColors(TeamColor teamColor) {
         if (teamColor == TeamColor.WHITE) {
             if (!validMoves(whiteKing).isEmpty()) {
                 return false;
@@ -294,7 +294,7 @@ public class ChessGame {
 
     public boolean helperIsInStalemate(TeamColor teamColor) {
 
-        return CheckColors(teamColor);
+        return checkColors(teamColor);
     }
 
 
