@@ -17,8 +17,8 @@ public class MemoryGameDAO implements GameDAO {
     @Override
     public String createGame(String game_name) {
     String game_id = String.valueOf(games.size() + 1);
-    String whiteUsername = "";
-    String blackUsername = "";
+    String whiteUsername = null;
+    String blackUsername = null;
 
     GameData new_game = new GameData(game_id, game_name, whiteUsername, blackUsername, new ChessGame());
 
@@ -47,7 +47,7 @@ public class MemoryGameDAO implements GameDAO {
         GameData the_game = games.get(game_id);
 
         if (playerColor == ChessGame.TeamColor.WHITE) {
-            if (Objects.equals(the_game.whiteUsername(), "")) {
+            if (Objects.equals(the_game.whiteUsername(), null)) {
                 the_game = the_game.new_user_white(new_username);
             } else {
                 throw new AlreadyTakenException("Error: Username already filled");
@@ -55,7 +55,7 @@ public class MemoryGameDAO implements GameDAO {
         }
 
         if (playerColor == ChessGame.TeamColor.BLACK) {
-            if (Objects.equals(the_game.blackUsername(), "")) {
+            if (Objects.equals(the_game.blackUsername(), null)) {
                 the_game = the_game.new_user_black(new_username);
             } else {
                 throw new AlreadyTakenException("Error: Username already filled");
