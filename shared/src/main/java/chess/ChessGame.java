@@ -232,7 +232,7 @@ public class ChessGame {
                 if (enemyPieceMove.getEndPosition().equals(whiteKing)) {state = true;};
             }
             if (teamColor == TeamColor.BLACK) if (enemyPieceMove.getEndPosition().equals(blackKing)) {
-                {state = true;}
+                state = true;
             }
         }
         return state;

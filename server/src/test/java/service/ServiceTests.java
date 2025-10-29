@@ -21,7 +21,7 @@ public class ServiceTests {
 //    private final UserService service = new UserService(memoryUserData, memoryAuthData, memoryGameData);
 
     @BeforeEach
-    void clear() throws DataAccessException {
+    void clear() {
 
         memoryUserData.clearUsers();
         memoryAuthData.clearAuthTokens();
