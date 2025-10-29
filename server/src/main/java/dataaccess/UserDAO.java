@@ -1,10 +1,8 @@
 package dataaccess;
 
 import dataaccess.exceptions.AlreadyTakenException;
-import dataaccess.exceptions.DataAccessException;
 import dataaccess.exceptions.UnauthorizedException;
 import model.*;
-import service.RequestsandResults.RegisterRequest;
 
 public interface UserDAO {
 

@@ -3,8 +3,7 @@ package service;
 import dataaccess.*;
 
 import dataaccess.exceptions.*;
-import model.UserData;
-import service.RequestsandResults.*;
+import service.requestsandresults.*;
 
 import java.util.Objects;
 

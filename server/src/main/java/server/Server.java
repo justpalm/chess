@@ -5,12 +5,9 @@ import dataaccess.exceptions.AlreadyTakenException;
 import dataaccess.exceptions.BadRequestException;
 import dataaccess.exceptions.DataAccessException;
 import dataaccess.exceptions.UnauthorizedException;
-import io.javalin.*;
-import service.RequestsandResults.*;
-import model.*;
+import service.requestsandresults.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import io.javalin.http.Handler;
 import service.MainService;
 
 import java.util.HashSet;
@@ -69,7 +66,7 @@ public class Server {
     private void createGame(Context ctx) throws UnauthorizedException, BadRequestException {
         try {
             CreateGameRequest createGameRequest = new Gson().fromJson(ctx.body(), CreateGameRequest.class);
-            createGameRequest = createGameRequest.new_authToken(ctx.header("Authorization"));
+            createGameRequest = createGameRequest.newAuthToken(ctx.header("Authorization"));
             CreateGameResult createGameResult = mainService.createGame(createGameRequest);
             ctx.json(new Gson().toJson(createGameResult));
         } catch (Exception e) {
@@ -80,7 +77,7 @@ public class Server {
     private void joinGame(Context ctx) throws UnauthorizedException, BadRequestException {
         try {
             JoinGameRequest joinGameRequest = new Gson().fromJson(ctx.body(), JoinGameRequest.class);
-            joinGameRequest = joinGameRequest.new_authToken(ctx.header("Authorization"));
+            joinGameRequest = joinGameRequest.newAuthToken(ctx.header("Authorization"));
             JoinGameResult joinGameResult = mainService.joinGame(joinGameRequest);
             ctx.json(new Gson().toJson(joinGameResult));
         } catch (Exception e) {

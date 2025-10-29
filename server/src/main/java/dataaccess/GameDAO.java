@@ -2,11 +2,8 @@ package dataaccess;
 
 import chess.ChessGame;
 import dataaccess.exceptions.AlreadyTakenException;
-import dataaccess.exceptions.BadRequestException;
-import dataaccess.exceptions.UnauthorizedException;
 import dataaccess.exceptions.UnauthorizedException;
 import model.*;
-import service.RequestsandResults.JoinGameResult;
 
 public interface GameDAO {
 

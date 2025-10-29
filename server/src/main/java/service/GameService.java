@@ -2,7 +2,7 @@ package service;
 
 import dataaccess.*;
 import dataaccess.exceptions.*;
-import service.RequestsandResults.*;
+import service.requestsandresults.*;
 
 
 public class GameService {

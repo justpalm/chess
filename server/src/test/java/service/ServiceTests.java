@@ -6,7 +6,7 @@ import dataaccess.exceptions.*;
 import model.GameData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import service.RequestsandResults.*;
+import service.requestsandresults.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -306,7 +306,7 @@ public class ServiceTests {
     }
 
     @Test
-    void joinGameNegativeNoSpace_White() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
+    void joinGameNegativeNoSpaceWhite() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Create User
         RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
@@ -338,7 +338,7 @@ public class ServiceTests {
 
 
     @Test
-    void joinGameNegativeNoSpace_Black() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
+    void joinGameNegativeNoSpaceBlack() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Create User
         RegisterRequest request = new RegisterRequest("Hey", "Password", "email");

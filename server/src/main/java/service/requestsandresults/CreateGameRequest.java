@@ -1,8 +1,8 @@
-package service.RequestsandResults;
+package service.requestsandresults;
 
 public record CreateGameRequest(String authToken, String gameName) {
 
-    public CreateGameRequest new_authToken (String authToken) {
+    public CreateGameRequest newAuthToken(String authToken) {
         return new CreateGameRequest(authToken, this.gameName);
     }
 }

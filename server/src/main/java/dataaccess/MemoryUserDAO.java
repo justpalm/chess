@@ -3,7 +3,6 @@ package dataaccess;
 import dataaccess.exceptions.AlreadyTakenException;
 import dataaccess.exceptions.UnauthorizedException;
 import model.*;
-import service.RequestsandResults.*;
 
 import java.util.HashMap;
 import java.util.Objects;

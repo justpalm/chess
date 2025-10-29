@@ -11,15 +11,15 @@ import java.util.Objects;
  * signature of the existing methods.
  */
 public class ChessGame {
-    private TeamColor CurrentTeam;
-    ChessBoard game_board = new ChessBoard();
+    private TeamColor currentTeam;
+    ChessBoard chessBoard = new ChessBoard();
     ChessPosition WhiteKing;
     ChessPosition BlackKing;
 
 
     public ChessGame() {
-        game_board.resetBoard();
-        CurrentTeam = TeamColor.WHITE;
+        chessBoard.resetBoard();
+        currentTeam = TeamColor.WHITE;
         WhiteKing = new ChessPosition(1,4);
         BlackKing = new ChessPosition(8,5);
     }
@@ -28,7 +28,7 @@ public class ChessGame {
      * @return Which team's turn it is
      */
     public TeamColor getTeamTurn() {
-        return CurrentTeam;
+        return currentTeam;
     }
 
     /**
@@ -37,7 +37,7 @@ public class ChessGame {
      * @param team the team whose turn it is
      */
     public void setTeamTurn(TeamColor team) {
-        CurrentTeam = team;
+        currentTeam = team;
     }
 
     /**
@@ -48,7 +48,7 @@ public class ChessGame {
         BLACK
     }
 
-    private Collection<ChessMove> check_check(ChessPiece piece, Collection<ChessMove> og_valid_moves) {
+    private Collection<ChessMove> checkCheck(ChessPiece piece, Collection<ChessMove> og_valid_moves) {
 
         Collection<ChessMove> new_valid_moves = new ArrayList<>();
 
@@ -59,7 +59,7 @@ public class ChessGame {
             ChessPosition hypo_white_king = new ChessPosition(WhiteKing.getRow(), WhiteKing.getColumn());
             ChessPosition hypo_black_king = new ChessPosition(BlackKing.getRow(), BlackKing.getColumn());
             //Make a copy of the board
-            ChessBoard copy_of_og_board = game_board.clone();
+            ChessBoard copy_of_og_board = chessBoard.clone();
 
             //move the piece according to the move on the HYPOTHETICAL board
             copy_of_og_board.addPiece(move.getEndPosition(), piece);
@@ -78,7 +78,7 @@ public class ChessGame {
 
             }
 
-            if (!helper_isInCheck(copy_of_og_board, piece.getTeamColor(), hypo_white_king, hypo_black_king)) {
+            if (!helperIsInCheck(copy_of_og_board, piece.getTeamColor(), hypo_white_king, hypo_black_king)) {
                 new_valid_moves.add(move);
             }
         }
@@ -95,7 +95,7 @@ public class ChessGame {
 // If any of those new moves don't mess with the King, return og
 // If it does put the Same teams color in check, return edited.
 
-    private boolean helper_isInCheck(ChessBoard copy_board, TeamColor teamColor, ChessPosition hypo_white_king, ChessPosition hypo_black_king) {
+    private boolean helperIsInCheck(ChessBoard copy_board, TeamColor teamColor, ChessPosition hypo_white_king, ChessPosition hypo_black_king) {
         boolean state = false;
         //This just lets me check for checks on other hypothetical boards.
 
@@ -142,15 +142,15 @@ public class ChessGame {
         //If that position has a piece
         Collection<ChessMove> new_valid_moves = new ArrayList<>();
 
-        ChessPiece piece_in_question = game_board.getPiece(startPosition);
+        ChessPiece piece_in_question = chessBoard.getPiece(startPosition);
 
         if (piece_in_question != null) {
             //Make a piece object
-            ChessPiece piece = game_board.getPiece(startPosition);
+            ChessPiece piece = chessBoard.getPiece(startPosition);
             //Here's the old valid moves
-            Collection<ChessMove> og_valid_moves = piece.pieceMoves(game_board, startPosition);
+            Collection<ChessMove> og_valid_moves = piece.pieceMoves(chessBoard, startPosition);
             //Here are the new valid moves.
-            new_valid_moves = check_check(piece, og_valid_moves);
+            new_valid_moves = checkCheck(piece, og_valid_moves);
         }
 
         //Return the valid move list
@@ -172,33 +172,33 @@ public class ChessGame {
 
 //            if (game_board.getPiece(move.getStartPosition()) != null) {
             //Do the move by adding and removing whatever pieces we have to
-            ChessPiece moving_piece = game_board.getPiece(move.getStartPosition());
+            ChessPiece moving_piece = chessBoard.getPiece(move.getStartPosition());
 
-            if (moving_piece.getTeamColor() != CurrentTeam) {
+            if (moving_piece.getTeamColor() != currentTeam) {
                 throw new InvalidMoveException("Invalid move requested");
             }
 
             //If there is a promotion
             if (move.getPromotionPiece() != null) {
-                moving_piece = new ChessPiece(CurrentTeam, move.getPromotionPiece());
+                moving_piece = new ChessPiece(currentTeam, move.getPromotionPiece());
             }
 
-            game_board.addPiece(move.getEndPosition(), moving_piece);
-            game_board.addPiece(move.getStartPosition(), null);
+            chessBoard.addPiece(move.getEndPosition(), moving_piece);
+            chessBoard.addPiece(move.getStartPosition(), null);
 
 
 
             //This is to check to update our King Position
-            ChessPiece piece_moved = game_board.getPiece(move.getEndPosition());
+            ChessPiece piece_moved = chessBoard.getPiece(move.getEndPosition());
             if (piece_moved != null) {
                 if (piece_moved.getPieceType() == ChessPiece.PieceType.KING)
-                    if (CurrentTeam == TeamColor.WHITE) {
+                    if (currentTeam == TeamColor.WHITE) {
                         WhiteKing = move.getEndPosition();
                     } else {
                         BlackKing = move.getEndPosition();
                     }
             }
-            if (CurrentTeam == TeamColor.WHITE) {
+            if (currentTeam == TeamColor.WHITE) {
                 setTeamTurn(TeamColor.BLACK);
             } else {
                 setTeamTurn(TeamColor.WHITE);
@@ -223,11 +223,11 @@ public class ChessGame {
             for (int col = 1; col < 9; col++) {
 
                 ChessPosition new_position = new ChessPosition(row, col);
-                ChessPiece enemy_piece = game_board.getPiece(new_position);
+                ChessPiece enemy_piece = chessBoard.getPiece(new_position);
 
                 if (enemy_piece != null) {
                     if (enemy_piece.getTeamColor() != teamColor) {
-                        Collection<ChessMove> enemy_piece_moves = enemy_piece.pieceMoves(game_board, new_position);
+                        Collection<ChessMove> enemy_piece_moves = enemy_piece.pieceMoves(chessBoard, new_position);
                         for (ChessMove enemy_piece_move : enemy_piece_moves) {
                             if (teamColor == TeamColor.WHITE) {
                                 if (enemy_piece_move.getEndPosition().equals(WhiteKing)) {
@@ -257,7 +257,7 @@ public class ChessGame {
 
     public boolean isInCheckmate(TeamColor teamColor) {
         if (isInCheck(teamColor)) {
-            return helper_isInStalemate(teamColor);
+            return helperIsInStalemate(teamColor);
         }
         return false;
     }
@@ -288,7 +288,7 @@ public class ChessGame {
         for (int row = 1; row < 9; row++) {
             for (int col = 1; col < 9; col++) {
                 ChessPosition new_position = new ChessPosition(row, col);
-                ChessPiece my_piece = game_board.getPiece(new_position);
+                ChessPiece my_piece = chessBoard.getPiece(new_position);
 
                 if (my_piece != null && my_piece.getTeamColor() == teamColor && !validMoves(new_position).isEmpty()) {
                     return false;
@@ -298,7 +298,7 @@ public class ChessGame {
         return true;
     }
 
-    public boolean helper_isInStalemate(TeamColor teamColor) {
+    public boolean helperIsInStalemate(TeamColor teamColor) {
 
         if (teamColor == TeamColor.WHITE) {
             if (!validMoves(WhiteKing).isEmpty()) {
@@ -313,7 +313,7 @@ public class ChessGame {
         for (int row = 1; row < 9; row++) {
             for (int col = 1; col < 9; col++) {
                 ChessPosition new_position = new ChessPosition(row, col);
-                ChessPiece my_piece = game_board.getPiece(new_position);
+                ChessPiece my_piece = chessBoard.getPiece(new_position);
 
                 if (my_piece != null && my_piece.getTeamColor() == teamColor && !validMoves(new_position).isEmpty()) {
                     return false;
@@ -332,14 +332,14 @@ public class ChessGame {
     public void setBoard(ChessBoard board) {
 
 
-        game_board = board;
+        chessBoard = board;
 
 
         //Sets the positions for the Kings.
         for (int row = 1; row < 9; row++) {
             for (int col = 1; col < 9; col++) {
                 ChessPosition check_position = new ChessPosition(row, col);
-                ChessPiece piece_in_question = game_board.getPiece(check_position);
+                ChessPiece piece_in_question = chessBoard.getPiece(check_position);
                 if (piece_in_question != null) {
                     if (piece_in_question.getPieceType() == ChessPiece.PieceType.KING &&
                             piece_in_question.getTeamColor() == TeamColor.WHITE) {
@@ -364,7 +364,7 @@ public class ChessGame {
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        return game_board;
+        return chessBoard;
     }
 
     @Override
@@ -373,12 +373,12 @@ public class ChessGame {
             return false;
         }
         ChessGame chessGame = (ChessGame) o;
-        return CurrentTeam == chessGame.CurrentTeam && Objects.equals(game_board, chessGame.game_board) && Objects.equals(WhiteKing, chessGame.WhiteKing) && Objects.equals(BlackKing, chessGame.BlackKing);
+        return currentTeam == chessGame.currentTeam && Objects.equals(chessBoard, chessGame.chessBoard) && Objects.equals(WhiteKing, chessGame.WhiteKing) && Objects.equals(BlackKing, chessGame.BlackKing);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(CurrentTeam, game_board, WhiteKing, BlackKing);
+        return Objects.hash(currentTeam, chessBoard, WhiteKing, BlackKing);
     }
 }
 

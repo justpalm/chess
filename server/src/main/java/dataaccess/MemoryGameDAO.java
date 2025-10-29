@@ -48,7 +48,7 @@ public class MemoryGameDAO implements GameDAO {
 
         if (playerColor == ChessGame.TeamColor.WHITE) {
             if (Objects.equals(the_game.whiteUsername(), null)) {
-                the_game = the_game.new_user_white(new_username);
+                the_game = the_game.newUserWhite(new_username);
             } else {
                 throw new AlreadyTakenException("Error: Username already filled");
             }
@@ -56,7 +56,7 @@ public class MemoryGameDAO implements GameDAO {
 
         if (playerColor == ChessGame.TeamColor.BLACK) {
             if (Objects.equals(the_game.blackUsername(), null)) {
-                the_game = the_game.new_user_black(new_username);
+                the_game = the_game.newUserBlack(new_username);
             } else {
                 throw new AlreadyTakenException("Error: Username already filled");
             }

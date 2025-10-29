@@ -6,7 +6,7 @@ import java.util.Objects;
 
 public record GameData (String gameID,  String gameName, String whiteUsername, String blackUsername, ChessGame game){
 
-    public GameData new_user_white(String new_white_username) {
+    public GameData newUserWhite(String new_white_username) {
         //Make sure you are checking for open space outside the model
         if (!Objects.equals(this.whiteUsername, null)) {
             return null;
@@ -15,7 +15,7 @@ public record GameData (String gameID,  String gameName, String whiteUsername, S
         }
     }
 
-    public GameData new_user_black(String new_black_username) {
+    public GameData newUserBlack(String new_black_username) {
         // Make sure you are checking for open space outside the model
         if (!Objects.equals(this.blackUsername, null)) {
             return null;

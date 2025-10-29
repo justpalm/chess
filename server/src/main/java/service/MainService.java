@@ -6,7 +6,7 @@ import dataaccess.exceptions.AlreadyTakenException;
 import dataaccess.exceptions.BadRequestException;
 import dataaccess.exceptions.DataAccessException;
 import dataaccess.exceptions.UnauthorizedException;
-import service.RequestsandResults.*;
+import service.requestsandresults.*;
 
 import java.util.Objects;
 
