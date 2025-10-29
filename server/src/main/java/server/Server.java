@@ -3,19 +3,15 @@ package server;
 import com.google.gson.Gson;
 import dataaccess.exceptions.AlreadyTakenException;
 import dataaccess.exceptions.BadRequestException;
-import dataaccess.exceptions.DataAccessException;
 import dataaccess.exceptions.UnauthorizedException;
 import service.requestsandresults.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import service.MainService;
-
-import java.util.HashSet;
 import java.util.Map;
 
 
 public class Server {
-    final private HashSet<String> validTokens = new HashSet<String>();
 
     private final MainService mainService;
 
@@ -35,20 +31,6 @@ public class Server {
                 .post("/game", this::createGame)
                 .put("/game", this::joinGame)
                 .get("/game", this::listGames);
-
-        // Register your endpoints and exception handlers here.
-//
-//    }
-//
-//    private boolean authorized(Context ctx) {
-//        String authToken = ctx.header("authorization");
-//        if (!validTokens.contains(authToken)) {
-//            ctx.contentType("application/json");
-//            ctx.status(401);
-//            ctx.result(new Gson().toJson(Map.of("msg", "invalid authorization")));
-//            return false;
-//        }
-//        return true;
     }
 
 
@@ -63,7 +45,7 @@ public class Server {
         mainService.clear();
     }
 
-    private void createGame(Context ctx) throws UnauthorizedException, BadRequestException {
+    private void createGame(Context ctx) {
         try {
             CreateGameRequest createGameRequest = new Gson().fromJson(ctx.body(), CreateGameRequest.class);
             createGameRequest = createGameRequest.newAuthToken(ctx.header("Authorization"));
@@ -74,7 +56,7 @@ public class Server {
         }
     }
 
-    private void joinGame(Context ctx) throws UnauthorizedException, BadRequestException {
+    private void joinGame(Context ctx)  {
         try {
             JoinGameRequest joinGameRequest = new Gson().fromJson(ctx.body(), JoinGameRequest.class);
             joinGameRequest = joinGameRequest.newAuthToken(ctx.header("Authorization"));
@@ -86,7 +68,7 @@ public class Server {
     }
 
 
-    private void register(Context ctx) throws AlreadyTakenException, BadRequestException, UnauthorizedException {
+    private void register(Context ctx) {
 
         try {
                 RegisterRequest registerRequest = new Gson().fromJson(ctx.body(), RegisterRequest.class);
@@ -97,7 +79,7 @@ public class Server {
             }
     }
 
-    private void login(Context ctx) throws UnauthorizedException, BadRequestException, AlreadyTakenException, DataAccessException {
+    private void login(Context ctx) {
         try {
             LoginRequest loginRequest = new Gson().fromJson(ctx.body(), LoginRequest.class);
             LoginResult loginResult = mainService.login(loginRequest);
@@ -107,7 +89,7 @@ public class Server {
         }
     }
 
-    private void logout(Context ctx) throws UnauthorizedException, BadRequestException {
+    private void logout(Context ctx) {
         try {
             LogoutRequest logoutRequest = new LogoutRequest(ctx.header("Authorization"));
             LogoutResult logoutResult = mainService.logout(logoutRequest);
@@ -117,7 +99,7 @@ public class Server {
         }
     }
 
-    private void listGames(Context ctx) throws UnauthorizedException, BadRequestException {
+    private void listGames(Context ctx)  {
         try {
             ListGamesRequest listGamesRequest = new ListGamesRequest(ctx.header("Authorization"));
             ListGamesResult listGamesResult = mainService.listGames(listGamesRequest);
