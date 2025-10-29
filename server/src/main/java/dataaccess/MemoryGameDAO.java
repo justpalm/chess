@@ -29,7 +29,7 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     @Override
-    public GameData getGame(int game_id) throws UnauthorizedException {
+    public GameData getGame(String game_id) throws UnauthorizedException {
         if (games.get(game_id) == null) {
             throw new UnauthorizedException("Error: This games does not exists");
         }
@@ -45,31 +45,36 @@ public class MemoryGameDAO implements GameDAO {
             throw new UnauthorizedException("Error: This games does not exists");
         }
 
-        else {
-            GameData the_game= games.get(game_id);
-            if (playerColor == ChessGame.TeamColor.WHITE) {
-                if (Objects.equals(the_game.whiteUsername(), "")) {
-                    the_game.new_user_white(new_username);
-                } else {
-                    throw new UnauthorizedException("Error: Username already filled");
-                }
-            }
+        GameData the_game = games.get(game_id);
 
-            if (playerColor == ChessGame.TeamColor.BLACK) {
-                if (Objects.equals(the_game.blackUsername(), "")) {
-                    the_game.new_user_black(new_username);
-                } else {
-                    throw new UnauthorizedException("Error: Username already filled");
-                }
+        if (playerColor == ChessGame.TeamColor.WHITE) {
+            if (Objects.equals(the_game.whiteUsername(), "")) {
+                the_game = the_game.new_user_white(new_username);
+            } else {
+                throw new UnauthorizedException("Error: Username already filled");
             }
-
         }
+
+        if (playerColor == ChessGame.TeamColor.BLACK) {
+            if (Objects.equals(the_game.blackUsername(), "")) {
+                the_game = the_game.new_user_black(new_username);
+            } else {
+                throw new UnauthorizedException("Error: Username already filled");
+            }
+        }
+
+        games.put(game_id, the_game);
     }
 
 
     public void clearGames() {games.clear();}
 
     public HashMap<String, GameData> listGame() {
+        return games;
+    }
+
+
+    public HashMap<String, GameData> listGames() {
         return games;
     }
 

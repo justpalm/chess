@@ -10,6 +10,10 @@ public class MemoryAuthDAO implements AuthDAO {
 
     final private HashMap<String, AuthData> authTokens = new HashMap<>();
 
+    public HashMap<String, AuthData> listAuthdata () {
+        return authTokens;
+    }
+
     @Override
     public String createAuth(String username) throws UnauthorizedException {
 
@@ -18,7 +22,7 @@ public class MemoryAuthDAO implements AuthDAO {
         }
 
         String authToken = UUID.randomUUID().toString();
-        AuthData new_authdata = new AuthData(username, authToken);
+        AuthData new_authdata = new AuthData(authToken, username);
         authTokens.put(authToken, new_authdata);
 
         return authToken;

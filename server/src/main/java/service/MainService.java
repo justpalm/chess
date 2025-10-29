@@ -78,7 +78,7 @@ public class MainService {
     }
 
     public CreateGameResult createGame(CreateGameRequest createGameRequest) throws BadRequestException, UnauthorizedException {
-        if (Objects.equals(createGameRequest.authToken(), "") | Objects.equals(createGameRequest.gameName(), "")) {
+        if (Objects.equals(createGameRequest.authToken(), null) | Objects.equals(createGameRequest.gameName(), "")) {
             throw new BadRequestException("Error: 1 or more fields not filled correctly.");
         }
 
@@ -87,13 +87,20 @@ public class MainService {
     }
 
     public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException {
-        if (Objects.equals(joinGameRequest.authToken(), "") | Objects.equals(joinGameRequest.playerColor(), null)
-                | Objects.equals(joinGameRequest.gameID(), "")) {
+        if (Objects.equals(joinGameRequest.authToken(), null) | Objects.equals(joinGameRequest.playerColor(), null)
+                | Objects.equals(joinGameRequest.gameID(), null)) {
             throw new BadRequestException("Error: 1 or more fields not filled correctly.");
         }
 
         return gameService.join_game(joinGameRequest);
 
+
+    }
+
+
+    public ListGameResult listGames(ListGamesRequest listGamesRequest) throws BadRequestException, UnauthorizedException{
+        if (Objects.equals(listGamesRequest.authToken(), null) | Objects.equals(listGamesRequest.playerColor(), null)
+                | Objects.equals(joinGameRequest.gameID(), null)) {
 
     }
 }

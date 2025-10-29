@@ -11,7 +11,7 @@ public record GameData (String gameID,  String gameName, String whiteUsername, S
         if (!Objects.equals(this.whiteUsername, "")) {
             return null;
         } else {
-            return new GameData(this.gameID, new_white_username, this.blackUsername, this.gameName, this.game);
+            return new GameData(this.gameID, this.gameName, new_white_username, this.blackUsername, this.game);
         }
     }
 
@@ -20,7 +20,7 @@ public record GameData (String gameID,  String gameName, String whiteUsername, S
         if (!Objects.equals(this.blackUsername, "")) {
             return null;
         } else {
-            return new GameData(this.gameID, this.whiteUsername, new_black_username, this.gameName, this.game);
+            return new GameData(this.gameID, this.gameName, this.whiteUsername, new_black_username, this.game);
         }
     }
 

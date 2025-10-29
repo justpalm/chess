@@ -1,10 +1,7 @@
 package service;
 
 import chess.ChessGame;
-import dataaccess.GameDAO;
-import dataaccess.MemoryAuthDAO;
-import dataaccess.MemoryGameDAO;
-import dataaccess.MemoryUserDAO;
+import dataaccess.*;
 import dataaccess.exceptions.*;
 import model.GameData;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,28 +89,27 @@ public class ServiceTests {
     @Test
     void loginTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
-        RegisterRequest register_request = new RegisterRequest("Hey", "Password", "email");
+        //Register a new user
+        RegisterRequest registerRequest = new RegisterRequest("Hey", "Password", "email");
+        RegisterResult registerResult = service.register(registerRequest);
 
-        service.register(register_request);
+        //Logout the User
+        LogoutRequest logoutRequest = new LogoutRequest(registerResult.authToken());
+        service.logout(logoutRequest);
 
-        LoginRequest loginRequest = new LoginRequest(register_request.username(), register_request.password());
+        //Attempt new login
 
+        LoginRequest loginRequest = new LoginRequest(registerRequest.username(), registerRequest.password());
         service.login(loginRequest);
-
         LoginResult loginResult = service.login(loginRequest);
 
         assertEquals(loginRequest.username(), loginResult.username());
 
-        UnauthorizedException exception = assertThrows(
-                UnauthorizedException.class,
+        //Verifying creation of authToken
+        BadRequestException exception = assertThrows(
+                BadRequestException.class,
                 () -> memoryAuthData.getAuthToken(loginResult.authToken()) // Example call
         );
-
-
-        //This test is dubious, should check
-
-
-
     }
 
     @Test
@@ -124,7 +120,7 @@ public class ServiceTests {
         service.register(request);
 
 
-        LoginRequest loginRequest = new LoginRequest("", "");
+        LoginRequest loginRequest = new LoginRequest(null, null);
 
         BadRequestException exception = assertThrows(
                 BadRequestException.class,
@@ -177,7 +173,7 @@ public class ServiceTests {
 
         UnauthorizedException exception = assertThrows(
                 UnauthorizedException.class,
-                () -> service.logout(logoutRequest);
+                () -> service.logout(logoutRequest));
 
     }
 
@@ -188,19 +184,17 @@ public class ServiceTests {
         //Create User
         RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
         RegisterResult registerResult = service.register(request);
-
         String authToken = registerResult.authToken();
 
         //Create Game with AuthToken
         CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game");
-
         CreateGameResult createGameResult = service.createGame(createGameRequest);
 
 
         //First Game assertion
         assertEquals(1, service.getGameDAO().size());
 
-        GameData new_game = service.getGameDAO().getGame(1);
+        GameData new_game = service.getGameDAO().getGame("1");
 
         assertEquals("new_game", new_game.gameName());
 
@@ -211,7 +205,7 @@ public class ServiceTests {
 
         assertEquals(2, service.getGameDAO().size());
 
-        new_game = service.getGameDAO().getGame(2);
+        new_game = service.getGameDAO().getGame("2");
 
         assertEquals("new_game_2", new_game.gameName());
 
@@ -230,8 +224,8 @@ public class ServiceTests {
 
         //Create Game with Invalid AuthToken
         CreateGameRequest createGameRequest = new CreateGameRequest("ajsdahjfhdf", "new_game");
-        UnauthorizedException exception = assertThrows(
-                UnauthorizedException.class,
+        BadRequestException exception = assertThrows(
+                BadRequestException.class,
                 () -> service.createGame(createGameRequest));
     }
 
@@ -253,7 +247,7 @@ public class ServiceTests {
 
 
     @Test
-    void joinGame() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
+    void joinGamePositive() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Create User
         RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
@@ -271,6 +265,105 @@ public class ServiceTests {
         JoinGameRequest joinGameRequest = new JoinGameRequest(registerResult.authToken(), ChessGame.TeamColor.WHITE, "1");
         JoinGameResult joinGameResult = service.joinGame(joinGameRequest);
 
+        GameData testGame = service.getGameDAO().getGame("1");
+
+
+
+        assertEquals(testGame.whiteUsername(), request.username());
+
+    }
+
+    @Test
+    void joinGameNegativeNullField() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
+
+        //Create User
+        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterResult registerResult = service.register(request);
+
+        String authToken = registerResult.authToken();
+
+        //Create Game with AuthToken
+        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game");
+
+        CreateGameResult createGameResult = service.createGame(createGameRequest);
+
+        JoinGameRequest joinGameRequest = new JoinGameRequest(registerResult.authToken(), null, "1");
+
+        //Join the game
+        BadRequestException exception = assertThrows(
+                BadRequestException.class,
+                () -> service.joinGame(joinGameRequest));
+
+        //
+
+
+    }
+
+    @Test
+    void joinGameNegativeNoSpace_White() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
+
+        //Create User
+        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterResult registerResult = service.register(request);
+
+        String authToken = registerResult.authToken();
+
+        //Create Game with AuthToken
+        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game");
+
+        CreateGameResult createGameResult = service.createGame(createGameRequest);
+
+        //Join the game
+        JoinGameRequest joinGameRequest = new JoinGameRequest(registerResult.authToken(), ChessGame.TeamColor.WHITE, "1");
+        JoinGameResult joinGameResult = service.joinGame(joinGameRequest);
+
+
+        //Try a new user join the same team
+        request = new RegisterRequest("Hey2", "Password", "email");
+        registerResult = service.register(request);
+
+        joinGameRequest = new JoinGameRequest(registerResult.authToken(), ChessGame.TeamColor.WHITE, "1");
+
+        JoinGameRequest finalJoinGameRequest = joinGameRequest;
+        UnauthorizedException exception = assertThrows(
+                UnauthorizedException.class,
+                () -> service.joinGame(finalJoinGameRequest));
+    }
+
+
+    @Test
+    void joinGameNegativeNoSpace_Black() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
+
+        //Create User
+        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterResult registerResult = service.register(request);
+
+        String authToken = registerResult.authToken();
+
+        //Create Game with AuthToken
+        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game");
+
+        CreateGameResult createGameResult = service.createGame(createGameRequest);
+
+        //Join the game
+        JoinGameRequest joinGameRequest = new JoinGameRequest(registerResult.authToken(), ChessGame.TeamColor.BLACK, "1");
+        JoinGameResult joinGameResult = service.joinGame(joinGameRequest);
+
+
+        //Try a new user join the same team
+        request = new RegisterRequest("Hey2", "Password", "email");
+        registerResult = service.register(request);
+
+        joinGameRequest = new JoinGameRequest(registerResult.authToken(), ChessGame.TeamColor.BLACK, "1");
+
+        JoinGameRequest finalJoinGameRequest = joinGameRequest;
+        UnauthorizedException exception = assertThrows(
+                UnauthorizedException.class,
+                () -> service.joinGame(finalJoinGameRequest));
+
+
+
+
 
     }
 
@@ -284,16 +377,6 @@ public class ServiceTests {
 
 
 }
-
-
-
-//
-//        MemoryAuthDAO Test = service.getAuthDAO();
-//
-//        System.out.println(Test);
-//        System.out.println(logResult.username());
-//        System.out.println(loginResult.authToken());
-
 
 
 

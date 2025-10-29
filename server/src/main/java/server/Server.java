@@ -73,6 +73,7 @@ public class Server {
 //    }
 
     private void clear(Context ctx) {
+        mainService.clear();
     }
 
     private void createGame(Context ctx) throws UnauthorizedException, BadRequestException {
@@ -109,7 +110,7 @@ public class Server {
 
     private void login(Context ctx) throws UnauthorizedException, BadRequestException, AlreadyTakenException, DataAccessException {
         try {
-            LoginRequest loginRequest = String ctx.header("Authorization");
+            LoginRequest loginRequest = new Gson().fromJson(ctx.body(), LoginRequest.class);
             LoginResult loginResult = mainService.login(loginRequest);
             ctx.json(new Gson().toJson(loginResult));
         } catch (Exception e) {
@@ -117,10 +118,9 @@ public class Server {
         }
     }
 
-
     private void logout(Context ctx) throws UnauthorizedException, BadRequestException {
         try {
-            LogoutRequest logoutRequest = new Gson().fromJson(ctx.body(), LogoutRequest.class);
+            LogoutRequest logoutRequest = new LogoutRequest(ctx.header("Authorization"));
             LogoutResult logoutResult = mainService.logout(logoutRequest);
             ctx.json(new Gson().toJson(logoutResult));
         } catch (Exception e) {
