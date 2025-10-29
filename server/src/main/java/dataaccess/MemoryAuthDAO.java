@@ -30,11 +30,11 @@ public class MemoryAuthDAO implements AuthDAO {
 
 
     @Override
-    public String getAuthToken(String authToken) throws BadRequestException {
+    public String getAuthToken(String authToken) throws UnauthorizedException {
 
         AuthData authdata = authTokens.get(authToken);
         if (authdata == null) {
-            throw new BadRequestException("Error: AuthToken does not exist.");
+            throw new UnauthorizedException("Error: AuthToken does not exist.");
         } else {
             return authdata.authToken();
         }

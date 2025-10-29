@@ -63,7 +63,6 @@ public class MainService {
         if (loginRequest.username() == null | loginRequest.password() == null) {
             throw new BadRequestException("Error: 1 or more fields not filled");
         }
-
         return this.userService.login(loginRequest);
 
     }
@@ -73,35 +72,36 @@ public class MainService {
         if (logoutRequest.authToken() == null) {
             throw new BadRequestException("Error: 1 or more fields not filled");
         }
-
         return this.userService.logout(logoutRequest.authToken());
     }
 
     public CreateGameResult createGame(CreateGameRequest createGameRequest) throws BadRequestException, UnauthorizedException {
-        if (Objects.equals(createGameRequest.authToken(), null) | Objects.equals(createGameRequest.gameName(), "")) {
+        if (Objects.equals(createGameRequest.authToken(), null) | Objects.equals(createGameRequest.gameName(), null)) {
             throw new BadRequestException("Error: 1 or more fields not filled correctly.");
         }
-
         return gameService.create_game(createGameRequest);
 
     }
 
-    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException {
+    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException, AlreadyTakenException {
+
+
         if (Objects.equals(joinGameRequest.authToken(), null) | Objects.equals(joinGameRequest.playerColor(), null)
                 | Objects.equals(joinGameRequest.gameID(), null)) {
             throw new BadRequestException("Error: 1 or more fields not filled correctly.");
         }
 
+
+
         return gameService.join_game(joinGameRequest);
-
-
     }
 
 
-    public ListGameResult listGames(ListGamesRequest listGamesRequest) throws BadRequestException, UnauthorizedException{
-        if (Objects.equals(listGamesRequest.authToken(), null) | Objects.equals(listGamesRequest.playerColor(), null)
-                | Objects.equals(joinGameRequest.gameID(), null)) {
-
+    public ListGamesResult listGames(ListGamesRequest listGamesRequest) throws BadRequestException, UnauthorizedException{
+        if (Objects.equals(listGamesRequest.authToken(), null)) {
+            throw new BadRequestException("Error: 1 or more fields not filled correctly");
+        }
+        return gameService.listGames(listGamesRequest);
     }
 }
 

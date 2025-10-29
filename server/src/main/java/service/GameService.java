@@ -2,10 +2,7 @@ package service;
 
 import dataaccess.*;
 import dataaccess.exceptions.*;
-import model.GameData;
 import service.RequestsandResults.*;
-
-import java.util.Objects;
 
 
 public class GameService {
@@ -26,22 +23,25 @@ public class GameService {
         //Checks validity of authToken
         try {
             MemoryAuthData.getAuthToken(createGameRequest.authToken());
-        } catch (BadRequestException e) {
-            throw new BadRequestException(e.getMessage());
+        } catch (UnauthorizedException e) {
+            throw new UnauthorizedException(e.getMessage());
         }
 
         String new_game_id = MemoryGameData.createGame(createGameRequest.gameName());
-        CreateGameResult createGameResult = new CreateGameResult(new_game_id);
 
-        return createGameResult;
+        return new CreateGameResult(new_game_id);
     }
 
-    public JoinGameResult join_game(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException {
+    public JoinGameResult join_game(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException, AlreadyTakenException {
 
         //Checks null
 
-        //Checks AuthToken validity
-        MemoryAuthData.getAuthToken(joinGameRequest.authToken());
+        //Checks validity of authToken
+        try {
+            MemoryAuthData.getAuthToken(joinGameRequest.authToken());
+        } catch (UnauthorizedException e) {
+            throw new UnauthorizedException(e.getMessage());
+        }
 
 
         //Get the list to check for username
@@ -50,19 +50,25 @@ public class GameService {
         String new_username = authData.username();
 
         //Tries to join game
-        MemoryGameData.joinGame(new_username, joinGameRequest.playerColor(), joinGameRequest.gameID());
+        try {
+            MemoryGameData.joinGame(new_username, joinGameRequest.playerColor(), joinGameRequest.gameID());
+        } catch (AlreadyTakenException e) {
+            throw new AlreadyTakenException(e.getMessage());
+        }
 
         return new JoinGameResult();
 
+    }
 
+    public ListGamesResult listGames(ListGamesRequest listGamesRequest) throws BadRequestException, UnauthorizedException{
 
+        try {
+            MemoryAuthData.getAuthToken(listGamesRequest.authToken());
+        } catch (UnauthorizedException e) {
+            throw new UnauthorizedException(e.getMessage());
+        }
 
-
-
-
-
-
-
+        return new ListGamesResult(MemoryGameData.listGames());
 
     }
 

@@ -7,8 +7,7 @@ import dataaccess.exceptions.BadRequestException;
 import dataaccess.exceptions.UnauthorizedException;
 import model.GameData;
 
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
 
 public class MemoryGameDAO implements GameDAO {
 
@@ -40,7 +39,7 @@ public class MemoryGameDAO implements GameDAO {
     }
 
     @Override
-    public void joinGame(String new_username, ChessGame.TeamColor playerColor, String game_id) throws UnauthorizedException, BadRequestException {
+    public void joinGame(String new_username, ChessGame.TeamColor playerColor, String game_id) throws UnauthorizedException, AlreadyTakenException{
         if (games.get(game_id) == null) {
             throw new UnauthorizedException("Error: This games does not exists");
         }
@@ -51,7 +50,7 @@ public class MemoryGameDAO implements GameDAO {
             if (Objects.equals(the_game.whiteUsername(), "")) {
                 the_game = the_game.new_user_white(new_username);
             } else {
-                throw new UnauthorizedException("Error: Username already filled");
+                throw new AlreadyTakenException("Error: Username already filled");
             }
         }
 
@@ -59,7 +58,7 @@ public class MemoryGameDAO implements GameDAO {
             if (Objects.equals(the_game.blackUsername(), "")) {
                 the_game = the_game.new_user_black(new_username);
             } else {
-                throw new UnauthorizedException("Error: Username already filled");
+                throw new AlreadyTakenException("Error: Username already filled");
             }
         }
 
@@ -74,8 +73,13 @@ public class MemoryGameDAO implements GameDAO {
     }
 
 
-    public HashMap<String, GameData> listGames() {
-        return games;
+    public Collection<GameData> listGames() throws UnauthorizedException, BadRequestException{
+
+        Collection<GameData> return_games = new ArrayList<GameData>();
+
+        return_games = games.values();
+
+        return return_games;
     }
 
 

@@ -6,7 +6,7 @@ public interface AuthDAO {
 
     public String createAuth (String username) throws UnauthorizedException;
 
-    public String getAuthToken(String authToken) throws BadRequestException;
+    public String getAuthToken(String authToken) throws UnauthorizedException;
 
     public void deleteAuthToken(String authToken) throws UnauthorizedException;
 

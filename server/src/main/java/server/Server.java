@@ -35,23 +35,23 @@ public class Server {
                 .post("/session", this::login)
                 .exception(Exception.class, this::exceptionHandler)
                 .delete("/session", this::logout)
-//                .get("/game", this::listGames)
                 .post("/game", this::createGame)
-                .put("/game", this::joinGame);
+                .put("/game", this::joinGame)
+                .get("/game", this::listGames);
 
         // Register your endpoints and exception handlers here.
-
-    }
-
-    private boolean authorized(Context ctx) {
-        String authToken = ctx.header("authorization");
-        if (!validTokens.contains(authToken)) {
-            ctx.contentType("application/json");
-            ctx.status(401);
-            ctx.result(new Gson().toJson(Map.of("msg", "invalid authorization")));
-            return false;
-        }
-        return true;
+//
+//    }
+//
+//    private boolean authorized(Context ctx) {
+//        String authToken = ctx.header("authorization");
+//        if (!validTokens.contains(authToken)) {
+//            ctx.contentType("application/json");
+//            ctx.status(401);
+//            ctx.result(new Gson().toJson(Map.of("msg", "invalid authorization")));
+//            return false;
+//        }
+//        return true;
     }
 
 
@@ -62,16 +62,6 @@ public class Server {
 
 
 
-//    private void listGames(Context ctx) throws UnauthorizedException, BadRequestException {
-//        try {
-//            ListGamesRequest listGamesRequest = new Gson().fromJson(ctx.body(), ListGamesRequest.class);
-//            ListGamesResult listGamesResult = mainService.listGames(listGamesRequest);
-//            ctx.json(new Gson().toJson(listGamesResult));
-//        } catch (Exception e) {
-//            exceptionHandler(e, ctx);
-//        }
-//    }
-
     private void clear(Context ctx) {
         mainService.clear();
     }
@@ -79,6 +69,7 @@ public class Server {
     private void createGame(Context ctx) throws UnauthorizedException, BadRequestException {
         try {
             CreateGameRequest createGameRequest = new Gson().fromJson(ctx.body(), CreateGameRequest.class);
+            createGameRequest = createGameRequest.new_authToken(ctx.header("Authorization"));
             CreateGameResult createGameResult = mainService.createGame(createGameRequest);
             ctx.json(new Gson().toJson(createGameResult));
         } catch (Exception e) {
@@ -89,6 +80,7 @@ public class Server {
     private void joinGame(Context ctx) throws UnauthorizedException, BadRequestException {
         try {
             JoinGameRequest joinGameRequest = new Gson().fromJson(ctx.body(), JoinGameRequest.class);
+            joinGameRequest = joinGameRequest.new_authToken(ctx.header("Authorization"));
             JoinGameResult joinGameResult = mainService.joinGame(joinGameRequest);
             ctx.json(new Gson().toJson(joinGameResult));
         } catch (Exception e) {
@@ -123,6 +115,16 @@ public class Server {
             LogoutRequest logoutRequest = new LogoutRequest(ctx.header("Authorization"));
             LogoutResult logoutResult = mainService.logout(logoutRequest);
             ctx.json(new Gson().toJson(logoutResult));
+        } catch (Exception e) {
+            exceptionHandler(e, ctx);
+        }
+    }
+
+    private void listGames(Context ctx) throws UnauthorizedException, BadRequestException {
+        try {
+            ListGamesRequest listGamesRequest = new ListGamesRequest(ctx.header("Authorization"));
+            ListGamesResult listGamesResult = mainService.listGames(listGamesRequest);
+            ctx.json(new Gson().toJson(listGamesResult));
         } catch (Exception e) {
             exceptionHandler(e, ctx);
         }
