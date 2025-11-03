@@ -7,27 +7,27 @@ import service.requestsandresults.*;
 
 public class GameService {
 
-    private final MemoryUserDAO memoryUserDAO;
-    private final MemoryAuthDAO memoryAuthDAO;
-    private final MemoryGameDAO memoryGameDAO;
+    private final UserDAO memoryUserData;
+    private final MemoryAuthDAO memoryAuthData;
+    private final GameDAO memoryGameData;
 
-    public GameService(MemoryUserDAO memoryUserDAO, MemoryAuthDAO memoryAuthDAO, MemoryGameDAO memoryGameDAO) {
+    public GameService(MemoryUserDAO memoryUserData, MemoryAuthDAO memoryAuthData, MemoryGameDAO memoryGameData) {
 
-        this.memoryUserDAO = memoryUserDAO;
-        this.memoryAuthDAO = memoryAuthDAO;
-        this.memoryGameDAO = memoryGameDAO;
+        this.memoryUserData = memoryUserData;
+        this.memoryAuthData = memoryAuthData;
+        this.memoryGameData = memoryGameData;
     }
 
 
     public CreateGameResult createGame(CreateGameRequest createGameRequest) throws BadRequestException, UnauthorizedException {
         //Checks validity of authToken
         try {
-            memoryAuthDAO.getAuthToken(createGameRequest.authToken());
+            memoryAuthData.getAuthToken(createGameRequest.authToken());
         } catch (UnauthorizedException e) {
             throw new UnauthorizedException(e.getMessage());
         }
 
-        String newGameId = memoryGameDAO.createGame(createGameRequest.gameName());
+        String newGameId = memoryGameData.createGame(createGameRequest.gameName());
 
         return new CreateGameResult(newGameId);
     }
@@ -38,20 +38,20 @@ public class GameService {
 
         //Checks validity of authToken
         try {
-            memoryAuthDAO.getAuthToken(joinGameRequest.authToken());
+            memoryAuthData.getAuthToken(joinGameRequest.authToken());
         } catch (UnauthorizedException e) {
             throw new UnauthorizedException(e.getMessage());
         }
 
 
         //Get the list to check for username
-        var listAuthData = memoryAuthDAO.listAuthdata();
+        var listAuthData = memoryAuthData.listAuthdata();
         var authData = listAuthData.get(joinGameRequest.authToken());
         String newUsername = authData.username();
 
         //Tries to join game
         try {
-            memoryGameDAO.joinGame(newUsername, joinGameRequest.playerColor(), joinGameRequest.gameID());
+            memoryGameData.joinGame(newUsername, joinGameRequest.playerColor(), joinGameRequest.gameID());
         } catch (AlreadyTakenException e) {
             throw new AlreadyTakenException(e.getMessage());
         }
@@ -63,12 +63,12 @@ public class GameService {
     public ListGamesResult listGames(ListGamesRequest listGamesRequest) throws BadRequestException, UnauthorizedException{
 
         try {
-            memoryAuthDAO.getAuthToken(listGamesRequest.authToken());
+            memoryAuthData.getAuthToken(listGamesRequest.authToken());
         } catch (UnauthorizedException e) {
             throw new UnauthorizedException(e.getMessage());
         }
 
-        return new ListGamesResult(memoryGameDAO.listGames());
+        return new ListGamesResult(memoryGameData.listGames());
 
     }
 

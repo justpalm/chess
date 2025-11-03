@@ -2,10 +2,7 @@ package service;
 
 import dataaccess.*;
 
-import dataaccess.exceptions.AlreadyTakenException;
-import dataaccess.exceptions.BadRequestException;
-import dataaccess.exceptions.DataAccessException;
-import dataaccess.exceptions.UnauthorizedException;
+import dataaccess.exceptions.*;
 import service.requestsandresults.*;
 
 import java.util.Objects;
@@ -20,12 +17,12 @@ public class MainService {
     private final MemoryGameDAO memoryGameDAO;
 
 
-    public MainService() {
+    public MainService(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
         this.memoryUserDAO = new MemoryUserDAO();
         this.memoryAuthDAO = new MemoryAuthDAO();
         this.memoryGameDAO = new MemoryGameDAO();
-        this.userService = new UserService(memoryUserDAO, memoryAuthDAO);
-        this.gameService = new GameService(memoryUserDAO, memoryAuthDAO, memoryGameDAO);
+        this.userService = new UserService(userDAO, authDAO);
+        this.gameService = new GameService(userDAO, authDAO, authDAO);
     }
 
 

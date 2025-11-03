@@ -10,10 +10,10 @@ import java.util.Objects;
 
 public class UserService {
 
-    private final MemoryUserDAO memoryUserData;
-    private final MemoryAuthDAO memoryAuthData;
+    private final UserDAO memoryUserData;
+    private final AuthDAO memoryAuthData;
 
-    public UserService(MemoryUserDAO memoryUserData, MemoryAuthDAO memoryAuthData) {
+    public UserService(UserDAO memoryUserData, AuthDAO memoryAuthData) {
 
         this.memoryUserData = memoryUserData;
         this.memoryAuthData = memoryAuthData;

@@ -1,6 +1,7 @@
 package server;
 
 import com.google.gson.Gson;
+import dataaccess.*;
 import dataaccess.exceptions.AlreadyTakenException;
 import dataaccess.exceptions.BadRequestException;
 import dataaccess.exceptions.UnauthorizedException;
@@ -14,12 +15,13 @@ import java.util.Map;
 public class Server {
 
     private final MainService mainService;
-
     private final Javalin javalin;
 
-    public Server() {
+    public Server(UserDAO user, GameDAO game, AuthDAO auth) {
 
-        this.mainService = new MainService();
+
+
+        this.mainService = new MainService(user, game, auth);
 
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"))
