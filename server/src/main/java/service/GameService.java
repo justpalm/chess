@@ -8,10 +8,10 @@ import service.requestsandresults.*;
 public class GameService {
 
     private final UserDAO memoryUserData;
-    private final MemoryAuthDAO memoryAuthData;
+    private final AuthDAO memoryAuthData;
     private final GameDAO memoryGameData;
 
-    public GameService(MemoryUserDAO memoryUserData, MemoryAuthDAO memoryAuthData, MemoryGameDAO memoryGameData) {
+    public GameService(UserDAO memoryUserData, GameDAO memoryGameData, AuthDAO memoryAuthData) {
 
         this.memoryUserData = memoryUserData;
         this.memoryAuthData = memoryAuthData;
@@ -45,9 +45,7 @@ public class GameService {
 
 
         //Get the list to check for username
-        var listAuthData = memoryAuthData.listAuthdata();
-        var authData = listAuthData.get(joinGameRequest.authToken());
-        String newUsername = authData.username();
+        String newUsername = memoryAuthData.getUsername(joinGameRequest.authToken());
 
         //Tries to join game
         try {

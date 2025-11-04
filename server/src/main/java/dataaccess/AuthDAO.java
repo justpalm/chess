@@ -1,6 +1,9 @@
 package dataaccess;
 
 import dataaccess.exceptions.*;
+import model.AuthData;
+
+import java.util.HashMap;
 
 public interface AuthDAO {
 
@@ -11,6 +14,8 @@ public interface AuthDAO {
     public void deleteAuthToken(String authToken) throws UnauthorizedException;
 
     public void clearAuthTokens();
+
+    public String getUsername (String authToken);
 
 
 

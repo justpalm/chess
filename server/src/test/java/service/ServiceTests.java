@@ -17,7 +17,7 @@ public class ServiceTests {
     MemoryAuthDAO memoryAuthData = new MemoryAuthDAO();
     MemoryGameDAO memoryGameData = new MemoryGameDAO();
 
-    private final MainService service = new MainService();
+    private final MainService service = new MainService(memoryUserData, memoryGameData, memoryAuthData);
 //    private final UserService service = new UserService(memoryUserData, memoryAuthData, memoryGameData);
 
     @BeforeEach

@@ -22,7 +22,7 @@ public class MainService {
         this.memoryAuthDAO = new MemoryAuthDAO();
         this.memoryGameDAO = new MemoryGameDAO();
         this.userService = new UserService(userDAO, authDAO);
-        this.gameService = new GameService(userDAO, authDAO, authDAO);
+        this.gameService = new GameService(userDAO, gameDAO, authDAO);
     }
 
 

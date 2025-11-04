@@ -10,8 +10,9 @@ public class MemoryAuthDAO implements AuthDAO {
 
     final private HashMap<String, AuthData> authTokens = new HashMap<>();
 
-    public HashMap<String, AuthData> listAuthdata () {
-        return authTokens;
+    public String getUsername (String authToken) {
+        AuthData authData = authTokens.get(authToken);
+        return authData.username();
     }
 
     @Override

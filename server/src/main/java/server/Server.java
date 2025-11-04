@@ -17,8 +17,10 @@ public class Server {
     private final MainService mainService;
     private final Javalin javalin;
 
-    public Server(UserDAO user, GameDAO game, AuthDAO auth) {
-
+    public Server() {
+        UserDAO user = new MySQLUserDataAccess();
+        GameDAO game = new MySQLGameDataAccess();
+        AuthDAO auth = new MySLQAuthDataAccess();
 
 
         this.mainService = new MainService(user, game, auth);
