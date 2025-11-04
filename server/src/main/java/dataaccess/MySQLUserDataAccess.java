@@ -32,11 +32,14 @@ public class MySQLUserDataAccess implements UserDAO{
             PreparedStatement ps = conn.prepareStatement(statement);
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
-            return new UserData(rs.getString( "username"), rs.getString("password"), rs.getString("email"));
-            }
+                if (rs.next()) {
+                    return new UserData(rs.getString("username"), rs.getString("password"), rs.getString("email"));
+                }
+                }
         } catch (Exception e){
             throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
         }
+        return null;
     }
 
     private UserData readUser(ResultSet rs) throws SQLException {

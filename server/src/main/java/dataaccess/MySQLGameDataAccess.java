@@ -6,7 +6,6 @@ import dataaccess.exceptions.DataAccessException;
 import dataaccess.exceptions.UnauthorizedException;
 import model.GameData;
 import com.google.gson.Gson;
-import model.UserData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Objects;
 
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static java.sql.Types.NULL;
@@ -99,8 +98,53 @@ public class MySQLGameDataAccess implements GameDAO{
 
     @Override
     public void joinGame(String newUsername, ChessGame.TeamColor playerColor, String gameId) throws AlreadyTakenException, UnauthorizedException {
-//        ALTER TABLE pet ADD COLUMN nickname VARCHAR(255);
+
+        try {
+            //If the game is found and exists
+            var statement = "SELECT * FROM GameData WHERE gameID = ?";
+            Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setInt(1, Integer.parseInt(gameId));
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                var theGame = readGame(rs);
+                helperJoin(theGame, newUsername, playerColor, gameId);
+                //Update Data bast
+            }
+        } catch (Exception e) {
+            throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
+        }
     }
+
+    private void helperJoin(GameData theGame, String newUsername, ChessGame.TeamColor playerColor, String gameId) throws AlreadyTakenException, DataAccessException, SQLException {
+
+        Connection conn = DatabaseManager.getConnection();
+
+            if (playerColor == ChessGame.TeamColor.WHITE) {
+                if (Objects.equals(theGame.whiteUsername(), null)) {
+                    String statement = "UPDATE GameData SET whiteUsername = ? WHERE gameID = ?";
+                    PreparedStatement ps = conn.prepareStatement(statement);
+                    ps.setInt(2, Integer.parseInt(gameId));
+                    ps.setString(1, newUsername);
+                    ps.executeUpdate();
+                } else {
+                    throw new AlreadyTakenException("Error: Username already filled");
+                }
+            }
+
+            if (playerColor == ChessGame.TeamColor.BLACK) {
+                if (Objects.equals(theGame.blackUsername(), null)) {
+                    String statement = "UPDATE GameData SET blackUsername = ? WHERE gameID = ?";;
+                    PreparedStatement ps = conn.prepareStatement(statement);
+                    ps.setInt(2, Integer.parseInt(gameId));
+                    ps.setString(1, newUsername);
+                    ps.executeUpdate();
+                } else {
+                    throw new AlreadyTakenException("Error: Username already filled");
+                }
+            }
+    }
+
 
     @Override
     public void clearGames() {
