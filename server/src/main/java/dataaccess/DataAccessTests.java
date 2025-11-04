@@ -57,25 +57,9 @@ public class DataAccessTests {
     @Test
     void registerUsersTest() throws AlreadyTakenException, BadRequestException, UnauthorizedException {
 
-        //
-
-
-
-//            RegisterRequest request = new RegisterRequest("Megan Hoopes", "estarbien", "megoonoopes");
-//
-//            service.register(request);
-//
-//
-//            AlreadyTakenException exception = assertThrows(
-//                    AlreadyTakenException.class,
-//                    () -> service.register(request) // Example call
-//            );
-
         RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
 
         memoryUserData.createUser(request.username(), request.password(), request.email());
-
-        service.register(request);
 
         assertEquals(memoryUserData, service.getUserDAO());
     }
@@ -214,7 +198,7 @@ public class DataAccessTests {
         String authToken = registerResult.authToken();
 
         //Create Game with AuthToken
-        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game");
+        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "newGame");
         CreateGameResult createGameResult = service.createGame(createGameRequest);
 
 

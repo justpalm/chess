@@ -49,7 +49,7 @@ public class MySQLGameDataAccess implements GameDAO{
     @Override
     public GameData getGame(String gameID) throws UnauthorizedException {
         try {
-            var statement = "SELECT gameID FROM GameData WHERE gameID = ?";
+            var statement = "SELECT * FROM GameData WHERE gameID = ?";
             Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(statement);
             ps.setInt(1, Integer.parseInt(gameID));
@@ -65,8 +65,16 @@ public class MySQLGameDataAccess implements GameDAO{
     }
 
     private GameData readGame(ResultSet rs) throws SQLException {
-        var json = rs.getString("game");
-        return new Gson().fromJson(json, GameData.class);
+        var gameID = rs.getString("gameID");
+        var gameName = rs.getString("gameName");
+        var whiteUsername = rs.getString("whiteUsername");
+        var blackUsername = rs.getString("blackusername");
+        var game = rs.getString("game");
+        var real_game = new Gson().fromJson(game, ChessGame.class);
+
+        var gameData = new GameData(gameID, gameName, whiteUsername, blackUsername, real_game);
+
+        return gameData;
     }
 
 
