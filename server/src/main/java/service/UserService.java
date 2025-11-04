@@ -24,7 +24,7 @@ public class UserService {
         try {
             memoryUserData.createUser(registerRequest.username(), registerRequest.password(), registerRequest.email());
         } catch (AlreadyTakenException e ) {
-            throw new AlreadyTakenException(e.getMessage());
+            throw new AlreadyTakenException("Error" + e.getMessage());
         }
         String newAuthToken;
         newAuthToken = memoryAuthData.createAuth(registerRequest.username());
@@ -34,25 +34,30 @@ public class UserService {
 
     public LoginResult login(LoginRequest loginRequest) throws UnauthorizedException {
 
-        //Check if user exists
-        memoryUserData.getUser(loginRequest.username());
 
-
-     //Check password is valid
         String authToken;
-        var loginUser = this.memoryUserData.getUser(loginRequest.username());
+        if (memoryUserData.getUser(loginRequest.username()) == null) {
+            throw new UnauthorizedException("Error: User not found");
+        }
 
-        var hashedPassword = BCrypt.hashpw(loginRequest.password(), BCrypt.gensalt());
+        var loginUser = memoryUserData.getUser(loginRequest.username());
 
-        if (!Objects.equals(hashedPassword, loginUser.password())) {
+        // read the previously hashed password from the database
+        //Check password is valid
+        if (!BCrypt.checkpw(loginRequest.password(), loginUser.password())) {
             throw new UnauthorizedException("Error: Password incorrect");
         }
+
+        // Not sure if this will need to be reimplemented?
+//        if (!Objects.equals(hashedPassword, loginUser.password())) {
+//            throw new UnauthorizedException("Error: Password incorrect");
+//        }
 
         // Get new authToken
         try {
             authToken = this.memoryAuthData.createAuth(loginRequest.username());
         } catch (UnauthorizedException e) {
-            throw new UnauthorizedException(e.getMessage());
+            throw new UnauthorizedException("Error" + e.getMessage());
         }
 
         return new LoginResult(loginRequest.username(), authToken);
@@ -63,7 +68,7 @@ public class UserService {
         try {
             this.memoryAuthData.deleteAuthToken(authToken);
         } catch (UnauthorizedException e) {
-            throw new UnauthorizedException(e.getMessage()); //I am not sure what kind of auth stuff this is, but it is here.
+            throw new UnauthorizedException("Error: " + e.getMessage()); //I am not sure what kind of auth stuff this is, but it is here.
         }
 
         return new LogoutResult();

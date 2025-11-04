@@ -81,7 +81,7 @@ public class MySQLGameDataAccess implements GameDAO{
         Collection<GameData> listGames = new ArrayList<GameData>();
 
         try {
-            var statement = "SELECT gameName FROM GameData";
+            var statement = "SELECT * FROM GameData";
             Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(statement);
             try (ResultSet rs = ps.executeQuery()) {

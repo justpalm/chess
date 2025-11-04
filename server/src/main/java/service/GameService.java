@@ -24,7 +24,7 @@ public class GameService {
         try {
             memoryAuthData.getAuthToken(createGameRequest.authToken());
         } catch (UnauthorizedException e) {
-            throw new UnauthorizedException(e.getMessage());
+            throw new UnauthorizedException("Error: " + e.getMessage());
         }
 
         String newGameId = memoryGameData.createGame(createGameRequest.gameName());
@@ -40,7 +40,7 @@ public class GameService {
         try {
             memoryAuthData.getAuthToken(joinGameRequest.authToken());
         } catch (UnauthorizedException e) {
-            throw new UnauthorizedException(e.getMessage());
+            throw new UnauthorizedException("Error: " + e.getMessage());
         }
 
 
@@ -51,7 +51,7 @@ public class GameService {
         try {
             memoryGameData.joinGame(newUsername, joinGameRequest.playerColor(), joinGameRequest.gameID());
         } catch (AlreadyTakenException e) {
-            throw new AlreadyTakenException(e.getMessage());
+            throw new AlreadyTakenException("Error: " + e.getMessage());
         }
 
         return new JoinGameResult();
@@ -63,7 +63,7 @@ public class GameService {
         try {
             memoryAuthData.getAuthToken(listGamesRequest.authToken());
         } catch (UnauthorizedException e) {
-            throw new UnauthorizedException(e.getMessage());
+            throw new UnauthorizedException("Error: " + e.getMessage());
         }
 
         return new ListGamesResult(memoryGameData.listGames());

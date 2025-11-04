@@ -65,19 +65,21 @@ public class MainService {
     public LoginResult login(LoginRequest loginRequest)
             throws UnauthorizedException, BadRequestException, DataAccessException {
 
+        //Checks if the fields are null or not
         if (loginRequest.username() == null | loginRequest.password() == null) {
             throw new BadRequestException("Error: 1 or more fields not filled");
         }
         return this.userService.login(loginRequest);
-
     }
 
     public LogoutResult logout(LogoutRequest logoutRequest) throws UnauthorizedException, BadRequestException {
 
+        //Checks nullity of fields
         if (logoutRequest.authToken() == null) {
             throw new BadRequestException("Error: 1 or more fields not filled");
         }
         return this.userService.logout(logoutRequest.authToken());
+
     }
 
     public CreateGameResult createGame(CreateGameRequest createGameRequest) throws BadRequestException, UnauthorizedException {

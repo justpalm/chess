@@ -111,10 +111,7 @@ public class DataAccessTests {
         assertEquals(loginRequest.username(), loginResult.username());
 
         //Verifying creation of authToken
-        UnauthorizedException exception = assertThrows(
-                UnauthorizedException.class,
-                () -> memoryAuthData.getAuthToken(loginResult.authToken()) // Example call
-        );
+        String authToken = memoryAuthData.getAuthToken(loginResult.authToken()); // Example call
     }
 
     @Test
@@ -167,7 +164,7 @@ public class DataAccessTests {
 
         UnauthorizedException exception = assertThrows(
                 UnauthorizedException.class,
-                () -> service.getAuthDAO().getAuthToken(registerResult.authToken()));
+                () -> service.getAuthDAO().getAuthToken(logoutRequest.authToken()));
 
     }
 

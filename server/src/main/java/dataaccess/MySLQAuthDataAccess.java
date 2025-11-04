@@ -49,11 +49,13 @@ public class MySLQAuthDataAccess implements AuthDAO {
                 if (rs.next()) {
                     return (rs.getString("authToken"));
                 }
+                else {
+                    throw new UnauthorizedException("No authToken found");
+                }
             }
         } catch (Exception e) {
             throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
         }
-        return null;
     }
 
     @Override
@@ -63,7 +65,10 @@ public class MySLQAuthDataAccess implements AuthDAO {
             Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(statement);
             ps.setString(1, authToken);
-            ps.executeUpdate();
+            int rows_deleted = ps.executeUpdate();
+            if ((rows_deleted) != 1) {
+                throw new UnauthorizedException("No AuthData Found");
+            }
         } catch (Exception e) {
             throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
         }
