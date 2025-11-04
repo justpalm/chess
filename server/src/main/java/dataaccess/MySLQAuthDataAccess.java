@@ -82,7 +82,20 @@ public class MySLQAuthDataAccess implements AuthDAO {
 
     @Override
     public String getUsername(String authToken) {
-        return "";
+        try {
+            var statement = "SELECT username FROM AuthData WHERE authToken = ?";
+            Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(statement);
+            ps.setString(1, authToken);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getString("username");
+            }
+            return null;
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Unable to read data: %s", e.getMessage()));
+        }
+
     }
 
 

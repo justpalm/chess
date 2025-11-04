@@ -3,6 +3,7 @@ package service;
 import dataaccess.*;
 
 import dataaccess.exceptions.*;
+import org.mindrot.jbcrypt.BCrypt;
 import service.requestsandresults.*;
 
 import java.util.Objects;
@@ -40,7 +41,10 @@ public class UserService {
      //Check password is valid
         String authToken;
         var loginUser = this.memoryUserData.getUser(loginRequest.username());
-        if (!Objects.equals(loginUser.password(), loginRequest.password())) {
+
+        var hashedPassword = BCrypt.hashpw(loginRequest.password(), BCrypt.gensalt());
+
+        if (!Objects.equals(hashedPassword, loginUser.password())) {
             throw new UnauthorizedException("Error: Password incorrect");
         }
 

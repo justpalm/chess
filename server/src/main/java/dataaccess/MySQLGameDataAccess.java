@@ -112,7 +112,7 @@ public class MySQLGameDataAccess implements GameDAO{
                 //Update Data bast
             }
         } catch (Exception e) {
-            throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
+            throw new AlreadyTakenException(String.format("Unable to read data: %s", e.getMessage()));
         }
     }
 
