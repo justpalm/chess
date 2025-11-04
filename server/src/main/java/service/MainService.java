@@ -5,6 +5,7 @@ import dataaccess.*;
 import dataaccess.exceptions.*;
 import service.requestsandresults.*;
 
+import javax.xml.crypto.Data;
 import java.util.Objects;
 
 
@@ -12,36 +13,42 @@ public class MainService {
 
     private final GameService gameService;
     private final UserService userService;
-    private final MemoryUserDAO memoryUserDAO;
-    private final MemoryAuthDAO memoryAuthDAO;
-    private final MemoryGameDAO memoryGameDAO;
+    private final UserDAO memoryUserData;
+    private final GameDAO memoryGameData;
+    private final AuthDAO memoryAuthData;
 
 
     public MainService(UserDAO userDAO, GameDAO gameDAO, AuthDAO authDAO) {
-        this.memoryUserDAO = new MemoryUserDAO();
-        this.memoryAuthDAO = new MemoryAuthDAO();
-        this.memoryGameDAO = new MemoryGameDAO();
+        this.memoryUserData = userDAO;
+        this.memoryGameData = gameDAO;
+        this.memoryAuthData = authDAO;
         this.userService = new UserService(userDAO, authDAO);
         this.gameService = new GameService(userDAO, gameDAO, authDAO);
     }
 
 
-    public MemoryUserDAO getUserDAO() {
-        return memoryUserDAO;
+    public UserDAO getUserDAO() {
+        return memoryUserData;
     }
 
-    public MemoryAuthDAO getAuthDAO() {
-        return memoryAuthDAO;
+    public AuthDAO getAuthDAO() {
+        return memoryAuthData;
     }
 
-    public MemoryGameDAO getGameDAO() {
-        return memoryGameDAO;
+    public GameDAO getGameDAO() {
+        return memoryGameData;
     }
 
-    public void clear() {
-        memoryUserDAO.clearUsers();
-        memoryAuthDAO.clearAuthTokens();
-        memoryGameDAO.clearGames();
+    public void clear()  {
+        try {
+
+            memoryUserData.clearUsers();
+            memoryAuthData.clearAuthTokens();
+            memoryGameData.clearGames();
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 

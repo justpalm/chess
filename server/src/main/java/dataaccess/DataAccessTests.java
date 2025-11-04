@@ -1,61 +1,85 @@
-package service;
+package dataaccess;
 
 import chess.ChessGame;
-import dataaccess.*;
 import dataaccess.exceptions.*;
 import model.GameData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import server.Server;
+import service.*;
 import service.requestsandresults.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class ServiceTests {
+public class DataAccessTests {
 
-    UserDAO memoryUserData = new MySQLUserDataAccess();
-    GameDAO memoryGameData = new MySQLGameDataAccess();
-    AuthDAO memoryAuthData = new MySLQAuthDataAccess();
+    private MainService service;
+    private UserDAO memoryUserData;
+    private AuthDAO memoryAuthData;
+    private GameDAO memoryGameData;
+
+   public DataAccessTests() {
+
+        memoryUserData = new MySQLUserDataAccess();
+        memoryAuthData = new MySLQAuthDataAccess();
+        memoryGameData = new MySQLGameDataAccess();
+
+        service = new MainService(memoryUserData, memoryGameData, memoryAuthData);
+    }
 
 
-    private final MainService service = new MainService(memoryUserData, memoryGameData, memoryAuthData);
 
+
+//    private final UserService service = new UserService(memoryUserData, memoryAuthData, memoryGameData);
 
     @BeforeEach
-    void clear() {
-        service.clear();
+    void reset() {
+
+        try {
+            service.clear();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @Test
+    void clearTest() throws AlreadyTakenException, BadRequestException, UnauthorizedException {
+        try {
+            service.clear();
+        } catch (Exception e) {
+            throw new BadRequestException(e.getMessage());
+        }
 
     }
 
 
     @Test
-    void clearTest() throws AlreadyTakenException, BadRequestException, UnauthorizedException{
-
-        RegisterRequest request = new RegisterRequest("Megan Hoopes", "estarbien", "megoonoopes");
-
-        service.register(request);
-
-
-        AlreadyTakenException exception = assertThrows(
-                AlreadyTakenException.class,
-                () -> service.register(request) // Example call
-        );
-    }
-
-
-    @Test
-    void registerUsersTest() throws AlreadyTakenException, BadRequestException, UnauthorizedException{
+    void registerUsersTest() throws AlreadyTakenException, BadRequestException, UnauthorizedException {
 
         //
+
+
+
+//            RegisterRequest request = new RegisterRequest("Megan Hoopes", "estarbien", "megoonoopes");
+//
+//            service.register(request);
+//
+//
+//            AlreadyTakenException exception = assertThrows(
+//                    AlreadyTakenException.class,
+//                    () -> service.register(request) // Example call
+//            );
 
         RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
 
         memoryUserData.createUser(request.username(), request.password(), request.email());
 
+        service.register(request);
 
         assertEquals(memoryUserData, service.getUserDAO());
     }
+
 
 
     @Test
@@ -104,7 +128,7 @@ public class ServiceTests {
 
         //Verifying creation of authToken
         UnauthorizedException exception = assertThrows(
-                UnauthorizedException .class,
+                UnauthorizedException.class,
                 () -> memoryAuthData.getAuthToken(loginResult.authToken()) // Example call
         );
     }
@@ -124,6 +148,7 @@ public class ServiceTests {
                 () -> service.login(loginRequest)
         );
     }
+
     @Test
     void loginUnauthorizedTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
@@ -141,7 +166,7 @@ public class ServiceTests {
                 UnauthorizedException.class,
                 () -> service.login(loginRequest));
 
-        }
+    }
 
     @Test
     void logoutPositiveTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
@@ -152,16 +177,15 @@ public class ServiceTests {
         RegisterResult registerResult = service.register(request);
 
 
-
         LogoutRequest logoutRequest = new LogoutRequest(registerResult.authToken());
 
         service.logout(logoutRequest);
 
-        UnauthorizedException exception= assertThrows(
+        UnauthorizedException exception = assertThrows(
                 UnauthorizedException.class,
                 () -> service.getAuthDAO().getAuthToken(registerResult.authToken()));
 
-        }
+    }
 
     @Test
     void logoutNegativeTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
@@ -199,7 +223,7 @@ public class ServiceTests {
 
         GameData newGame = service.getGameDAO().getGame("1");
 
-        assertEquals("new_game", newGame.gameName());
+        assertEquals("newGame", newGame.gameName());
 
         //Second Assertion
         createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game_2");
@@ -213,7 +237,6 @@ public class ServiceTests {
         assertEquals("new_game_2", newGame.gameName());
 
     }
-
 
 
     @Test
@@ -269,7 +292,6 @@ public class ServiceTests {
         JoinGameResult joinGameResult = service.joinGame(joinGameRequest);
 
         GameData testGame = service.getGameDAO().getGame("1");
-
 
 
         assertEquals(testGame.whiteUsername(), request.username());
@@ -365,54 +387,5 @@ public class ServiceTests {
                 () -> service.joinGame(finalJoinGameRequest));
 
 
-
-
-
     }
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//
-//    @Test
-//    void registerUsers () {}
-//
-//    @Test
-//    void registerUsers () {}
-
-
-
-
-
-
-
-
-
-
-

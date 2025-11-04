@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import dataaccess.*;
 import dataaccess.exceptions.AlreadyTakenException;
 import dataaccess.exceptions.BadRequestException;
+import dataaccess.exceptions.DataAccessException;
 import dataaccess.exceptions.UnauthorizedException;
 import service.requestsandresults.*;
 import io.javalin.Javalin;
@@ -18,6 +19,8 @@ public class Server {
     private final Javalin javalin;
 
     public Server() {
+
+
         UserDAO user = new MySQLUserDataAccess();
         GameDAO game = new MySQLGameDataAccess();
         AuthDAO auth = new MySLQAuthDataAccess();
