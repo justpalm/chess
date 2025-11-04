@@ -12,6 +12,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -27,7 +28,6 @@ public class MySQLGameDataAccess implements GameDAO{
             throw new RuntimeException(e.getMessage());
         }
     }
-
 
 
     @Override
@@ -68,15 +68,33 @@ public class MySQLGameDataAccess implements GameDAO{
         var gameID = rs.getString("gameID");
         var gameName = rs.getString("gameName");
         var whiteUsername = rs.getString("whiteUsername");
-        var blackUsername = rs.getString("blackusername");
+        var blackUsername = rs.getString("blackUsername");
         var game = rs.getString("game");
         var real_game = new Gson().fromJson(game, ChessGame.class);
 
-        var gameData = new GameData(gameID, gameName, whiteUsername, blackUsername, real_game);
-
-        return gameData;
+        return new GameData(gameID, gameName, whiteUsername, blackUsername, real_game);
     }
 
+
+    @Override
+    public Collection<GameData> listGames()  {
+
+        Collection<GameData> listGames = new ArrayList<GameData>();
+
+        try {
+            var statement = "SELECT gameName FROM GameData";
+            Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(statement);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    listGames.add(readGame(rs));
+                }
+            }
+        } catch (Exception e){
+            throw new RuntimeException(String.format("Unable to read data: %s", e.getMessage()));
+        }
+        return listGames;
+    }
 
 
     @Override
@@ -101,11 +119,9 @@ public class MySQLGameDataAccess implements GameDAO{
                     Object param = params[i];
                     if (param instanceof String p) ps.setString(i + 1, p);
                     else if (param instanceof Integer p) ps.setInt(i + 1, p);
-//                    else if (param instanceof ChessGame g) ps.setString(i + 1, g.toString());
                     else if (param == null) ps.setNull(i + 1, NULL);
                 }
                 ps.executeUpdate();
-
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
                     return rs.getInt(1);
@@ -144,14 +160,5 @@ public class MySQLGameDataAccess implements GameDAO{
         } catch (SQLException ex) {
             throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
         }
-    }
-
-
-
-
-
-    @Override
-    public Collection<GameData> listGames() {
-        return List.of();
     }
 }
