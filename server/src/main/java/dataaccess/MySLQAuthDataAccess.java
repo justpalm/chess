@@ -27,19 +27,21 @@ public class MySLQAuthDataAccess implements AuthDAO {
     }
 
     @Override
-    public String createAuth(String username) throws UnauthorizedException {
+    public String createAuth(String username) throws UnauthorizedException, DataAccessException {
         try {
             var statement = "INSERT INTO AuthData (authToken, username) VALUES (?, ?)";
             String authToken = UUID.randomUUID().toString();
             executeUpdate(statement, authToken, username);
             return authToken;
-        } catch (Exception e) {
-            throw new UnauthorizedException(e.getMessage());
+        } catch (SQLException e) {
+            throw new UnauthorizedException(((String.format("Unable to read data: %s", e.getMessage()))));
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error" + e.getMessage());
         }
     }
 
     @Override
-    public String getAuthToken(String authToken) throws UnauthorizedException {
+    public String getAuthToken(String authToken) throws UnauthorizedException, DataAccessException {
         try {
             var statement = "SELECT authToken FROM AuthData WHERE authToken = ?";
             Connection conn = DatabaseManager.getConnection();
@@ -50,16 +52,18 @@ public class MySLQAuthDataAccess implements AuthDAO {
                     return (rs.getString("authToken"));
                 }
                 else {
-                    throw new UnauthorizedException("No authToken found");
+                    throw new UnauthorizedException("\"Error\" + No authToken found");
                 }
             }
-        } catch (Exception e) {
-            throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
+        } catch (SQLException e) {
+            throw new UnauthorizedException((String.format("Unable to read data: %s", e.getMessage())));
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error" + e.getMessage());
         }
     }
 
     @Override
-    public void deleteAuthToken(String authToken) throws UnauthorizedException {
+    public void deleteAuthToken(String authToken) throws UnauthorizedException, DataAccessException {
         try {
             var statement = "DELETE FROM AuthData WHERE authToken = ?";
             Connection conn = DatabaseManager.getConnection();
@@ -69,24 +73,29 @@ public class MySLQAuthDataAccess implements AuthDAO {
             if ((rows_deleted) != 1) {
                 throw new UnauthorizedException("No AuthData Found");
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error" + e.getMessage());
         }
+
 
     }
 
     @Override
-    public void clearAuthTokens() {
+    public void clearAuthTokens() throws DataAccessException {
         String statement = "TRUNCATE AuthData";
         try {
             executeUpdate(statement);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException("Error" + e.getMessage());
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error" + e.getMessage());
         }
     }
 
     @Override
-    public String getUsername(String authToken) {
+    public String getUsername(String authToken) throws DataAccessException, UnauthorizedException {
         try {
             var statement = "SELECT username FROM AuthData WHERE authToken = ?";
             Connection conn = DatabaseManager.getConnection();
@@ -96,9 +105,13 @@ public class MySLQAuthDataAccess implements AuthDAO {
             if (rs.next()) {
                 return rs.getString("username");
             }
-            return null;
-        } catch (Exception e) {
-            throw new RuntimeException(String.format("Unable to read data: %s", e.getMessage()));
+            else {
+                throw new UnauthorizedException("User does not exist");
+            }
+        } catch (SQLException e) {
+            throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error" + e.getMessage());
         }
 
     }

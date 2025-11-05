@@ -30,7 +30,7 @@ public class MySQLGameDataAccess implements GameDAO{
 
 
     @Override
-    public String createGame(String gameName) {
+    public String createGame(String gameName) throws DataAccessException {
                 String statement = "INSERT INTO GameData ("
                         + "whiteUsername, blackUsername, gameName, game) VALUES(?, ?, ?, ?)";
 
@@ -39,14 +39,16 @@ public class MySQLGameDataAccess implements GameDAO{
                try {
                int id = executeUpdate(statement, null, null, gameName, json);
                return String.valueOf(id);
-                } catch (Exception e) {
-                throw new RuntimeException(e.getMessage());
-                }
+                } catch (DataAccessException e) {
+                throw new DataAccessException("Error" + e.getMessage());
+                } catch (SQLException e) {
+                   throw new RuntimeException("Error" + e.getMessage());
+               }
         };
 
 
     @Override
-    public GameData getGame(String gameID) throws UnauthorizedException {
+    public GameData getGame(String gameID) throws UnauthorizedException, DataAccessException {
         try {
             var statement = "SELECT * FROM GameData WHERE gameID = ?";
             Connection conn = DatabaseManager.getConnection();
@@ -56,11 +58,15 @@ public class MySQLGameDataAccess implements GameDAO{
                 if (rs.next()) {
                     return readGame(rs);
                 }
+                else {
+                    throw new UnauthorizedException("Game not found");
+                }
             }
-        } catch (Exception e){
+        } catch (SQLException e){
             throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
+        } catch (DataAccessException e ) {
+            throw new DataAccessException("Error" + e.getMessage());
         }
-        return null;
     }
 
     private GameData readGame(ResultSet rs) throws SQLException {
@@ -76,7 +82,7 @@ public class MySQLGameDataAccess implements GameDAO{
 
 
     @Override
-    public Collection<GameData> listGames()  {
+    public Collection<GameData> listGames() throws DataAccessException, UnauthorizedException {
 
         Collection<GameData> listGames = new ArrayList<GameData>();
 
@@ -89,15 +95,18 @@ public class MySQLGameDataAccess implements GameDAO{
                     listGames.add(readGame(rs));
                 }
             }
-        } catch (Exception e){
-            throw new RuntimeException(String.format("Unable to read data: %s", e.getMessage()));
+        } catch (SQLException e){
+            throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
+        } catch (DataAccessException e ) {
+            throw new DataAccessException("Error" + e.getMessage());
         }
         return listGames;
     }
 
 
     @Override
-    public void joinGame(String newUsername, ChessGame.TeamColor playerColor, String gameId) throws AlreadyTakenException, UnauthorizedException {
+    public void joinGame(String newUsername, ChessGame.TeamColor playerColor, String gameId) throws
+            AlreadyTakenException, UnauthorizedException, DataAccessException {
 
         try {
             //If the game is found and exists
@@ -111,12 +120,20 @@ public class MySQLGameDataAccess implements GameDAO{
                 helperJoin(theGame, newUsername, playerColor, gameId);
                 //Update Data bast
             }
-        } catch (Exception e) {
-            throw new AlreadyTakenException(String.format("Unable to read data: %s", e.getMessage()));
+            else {
+                throw new UnauthorizedException("Game does not exist");
+            }
+        } catch (SQLException e) {
+            throw new UnauthorizedException(((String.format("Unable to read data: %s", e.getMessage()))));
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error" + e.getMessage());
+        } catch (AlreadyTakenException e) {
+            throw new AlreadyTakenException("Error" + e.getMessage());
         }
     }
 
-    private void helperJoin(GameData theGame, String newUsername, ChessGame.TeamColor playerColor, String gameId) throws AlreadyTakenException, DataAccessException, SQLException {
+    private void helperJoin(GameData theGame, String newUsername, ChessGame.TeamColor playerColor, String gameId) throws
+            AlreadyTakenException, DataAccessException, SQLException {
 
         Connection conn = DatabaseManager.getConnection();
 
@@ -147,12 +164,14 @@ public class MySQLGameDataAccess implements GameDAO{
 
 
     @Override
-    public void clearGames() {
+    public void clearGames() throws DataAccessException {
         String statement = "TRUNCATE GameData";
         try {
             executeUpdate(statement);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error" + e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException(((String.format("Unable to read data: %s", e.getMessage()))));
         }
     }
 
@@ -173,7 +192,7 @@ public class MySQLGameDataAccess implements GameDAO{
                 return 0;
             }
         } catch (SQLException e) {
-            throw new SQLException(String.format("unable to update database: %s, %s", statement, e.getMessage()));
+            throw new SQLException(String.format("\"Error\" + unable to update database: %s, %s", statement, e.getMessage()));
         }
     }
 
@@ -202,7 +221,7 @@ public class MySQLGameDataAccess implements GameDAO{
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
+            throw new DataAccessException(String.format("\"Error\" + Unable to configure database: %s", ex.getMessage()));
         }
     }
 }

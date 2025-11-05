@@ -55,7 +55,7 @@ public class DataAccessTests {
 
 
     @Test
-    void registerUsersTest() throws AlreadyTakenException, BadRequestException, UnauthorizedException {
+    void registerUsersTest() throws AlreadyTakenException, DataAccessException {
 
         RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
 
@@ -78,7 +78,8 @@ public class DataAccessTests {
     }
 
     @Test
-    void registerUserAlreadyTaken() throws AlreadyTakenException, BadRequestException, UnauthorizedException {
+    void registerUserAlreadyTaken() throws AlreadyTakenException,
+            BadRequestException, UnauthorizedException, DataAccessException {
 
         RegisterRequest request = new RegisterRequest("Justin Palmer", "hello", "new_email");
 

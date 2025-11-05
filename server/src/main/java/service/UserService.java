@@ -6,6 +6,7 @@ import dataaccess.exceptions.*;
 import org.mindrot.jbcrypt.BCrypt;
 import service.requestsandresults.*;
 
+import javax.xml.crypto.Data;
 import java.util.Objects;
 
 
@@ -20,7 +21,7 @@ public class UserService {
         this.memoryAuthData = memoryAuthData;
     }
 
-    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, UnauthorizedException {
+    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, UnauthorizedException, DataAccessException {
         try {
             memoryUserData.createUser(registerRequest.username(), registerRequest.password(), registerRequest.email());
         } catch (AlreadyTakenException e ) {
@@ -32,7 +33,7 @@ public class UserService {
         return (new RegisterResult(registerRequest.username(), newAuthToken));
     }
 
-    public LoginResult login(LoginRequest loginRequest) throws UnauthorizedException {
+    public LoginResult login(LoginRequest loginRequest) throws UnauthorizedException, DataAccessException {
 
 
         String authToken;
@@ -63,7 +64,7 @@ public class UserService {
         return new LoginResult(loginRequest.username(), authToken);
     }
 
-    public LogoutResult logout(String authToken) throws UnauthorizedException {
+    public LogoutResult logout(String authToken) throws UnauthorizedException, DataAccessException  {
 
         try {
             this.memoryAuthData.deleteAuthToken(authToken);

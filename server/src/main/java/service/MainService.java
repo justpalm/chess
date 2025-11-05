@@ -46,13 +46,13 @@ public class MainService {
             memoryAuthData.clearAuthTokens();
             memoryGameData.clearGames();
 
-        } catch (DataAccessException e) {
+        } catch (DataAccessException | UnauthorizedException e) {
             throw new RuntimeException(e);
         }
     }
 
 
-    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException, UnauthorizedException {
+    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException, UnauthorizedException, DataAccessException  {
 
         if (registerRequest.password() == null | registerRequest.username() == null | registerRequest.email() == null) {
             throw new BadRequestException("Error: 1 or more fields not filled");
@@ -72,7 +72,7 @@ public class MainService {
         return this.userService.login(loginRequest);
     }
 
-    public LogoutResult logout(LogoutRequest logoutRequest) throws UnauthorizedException, BadRequestException {
+    public LogoutResult logout(LogoutRequest logoutRequest) throws UnauthorizedException, BadRequestException, DataAccessException  {
 
         //Checks nullity of fields
         if (logoutRequest.authToken() == null) {
@@ -82,7 +82,7 @@ public class MainService {
 
     }
 
-    public CreateGameResult createGame(CreateGameRequest createGameRequest) throws BadRequestException, UnauthorizedException {
+    public CreateGameResult createGame(CreateGameRequest createGameRequest) throws BadRequestException, UnauthorizedException, DataAccessException  {
         if (Objects.equals(createGameRequest.authToken(), null) | Objects.equals(createGameRequest.gameName(), null)) {
             throw new BadRequestException("Error: 1 or more fields not filled correctly.");
         }
@@ -90,7 +90,7 @@ public class MainService {
 
     }
 
-    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException, AlreadyTakenException {
+    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException  {
 
 
         if (Objects.equals(joinGameRequest.authToken(), null) | Objects.equals(joinGameRequest.playerColor(), null)
@@ -104,7 +104,7 @@ public class MainService {
     }
 
 
-    public ListGamesResult listGames(ListGamesRequest listGamesRequest) throws BadRequestException, UnauthorizedException{
+    public ListGamesResult listGames(ListGamesRequest listGamesRequest) throws BadRequestException, UnauthorizedException, DataAccessException {
         if (Objects.equals(listGamesRequest.authToken(), null)) {
             throw new BadRequestException("Error: 1 or more fields not filled correctly");
         }

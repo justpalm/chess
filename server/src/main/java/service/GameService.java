@@ -19,7 +19,7 @@ public class GameService {
     }
 
 
-    public CreateGameResult createGame(CreateGameRequest createGameRequest) throws BadRequestException, UnauthorizedException {
+    public CreateGameResult createGame(CreateGameRequest createGameRequest) throws BadRequestException, UnauthorizedException, DataAccessException  {
         //Checks validity of authToken
         try {
             memoryAuthData.getAuthToken(createGameRequest.authToken());
@@ -32,7 +32,7 @@ public class GameService {
         return new CreateGameResult(newGameId);
     }
 
-    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException, AlreadyTakenException {
+    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException  {
 
         //Checks null
 
@@ -58,7 +58,7 @@ public class GameService {
 
     }
 
-    public ListGamesResult listGames(ListGamesRequest listGamesRequest) throws BadRequestException, UnauthorizedException{
+    public ListGamesResult listGames(ListGamesRequest listGamesRequest) throws BadRequestException, UnauthorizedException, DataAccessException {
 
         try {
             memoryAuthData.getAuthToken(listGamesRequest.authToken());

@@ -15,17 +15,16 @@ import static java.sql.Types.NULL;
 
 public class MySQLUserDataAccess implements UserDAO{
 
-
     public MySQLUserDataAccess() {
         try {
             configureDatabase();
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("Error" + e.getMessage());
         }
     }
 
     @Override
-    public UserData getUser(String username) throws UnauthorizedException {
+    public UserData getUser(String username) throws UnauthorizedException, DataAccessException {
         try {
             var statement = "SELECT username, password, email FROM UserData WHERE username = ?";
             Connection conn = DatabaseManager.getConnection();
@@ -33,42 +32,48 @@ public class MySQLUserDataAccess implements UserDAO{
             ps.setString(1, username);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new UserData(rs.getString("username"), rs.getString("password"), rs.getString("email"));
+                    return new UserData(rs.getString("username"),
+                            rs.getString("password"),
+                            rs.getString("email"));
                 }
+                else {
+                    throw new SQLException("User not found");
                 }
-        } catch (Exception e){
-            throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
-        }
-        return null;
-    }
+            }
+        } catch (DataAccessException e) {
+            throw new DataAccessException(String.format("Error" + e.getMessage()));
 
-    private UserData readUser(ResultSet rs) throws SQLException {
-        var json = rs.getString("json");
-        UserData user = new Gson().fromJson(json, UserData.class);
-        return user;
+        } catch (SQLException e) {
+            throw new UnauthorizedException(String.format("\"Error\" + Unable to read data: %s", e.getMessage()));
+        }
     }
 
 
     @Override
-    public UserData createUser(String username, String password, String email) throws AlreadyTakenException {
+    public UserData createUser(String username, String password, String email) throws AlreadyTakenException, DataAccessException  {
         try {
             var statement = "INSERT INTO UserData (username, password, email) VALUES (?, ?, ?)";
             String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
             int id = executeUpdate(statement, username, hashedPassword, email);
             return new UserData(username, password, email);
-        } catch (Exception e) {
-            throw new AlreadyTakenException(e.getMessage());
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error" + e.getMessage());
+        } catch (SQLException e) {
+            throw new AlreadyTakenException("Error" + e.getMessage());
         }
     }
 
     @Override
-    public void clearUsers()  {
+    public void clearUsers() throws DataAccessException {
         String statement = "TRUNCATE UserData";
         try {
             executeUpdate(statement);
-        } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+        } catch (DataAccessException e) {
+            throw new DataAccessException("Error" + e.getMessage());
+        } catch (SQLException e) {
+            throw new RuntimeException("Error" + e.getMessage());
         }
+
     }
 
 
@@ -78,12 +83,10 @@ public class MySQLUserDataAccess implements UserDAO{
                 for (int i = 0; i < params.length; i++) {
                     Object param = params[i];
                     if (param instanceof String p) ps.setString(i + 1, p);
-//                    else if (param instanceof Integer p) ps.setInt(i + 1, p);
                     else if (param instanceof ChessGame g) ps.setString(i + 1, g.toString());
                     else if (param == null) ps.setNull(i + 1, NULL);
                 }
                 ps.executeUpdate();
-
                 ResultSet rs = ps.getGeneratedKeys();
                 if (rs.next()) {
                     return rs.getInt(1);

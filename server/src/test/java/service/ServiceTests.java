@@ -30,22 +30,22 @@ public class ServiceTests {
 
 
     @Test
-    void clearTest() throws AlreadyTakenException, BadRequestException, UnauthorizedException{
+    void clearTest() throws AlreadyTakenException, BadRequestException, UnauthorizedException, DataAccessException {
+        {
 
-        RegisterRequest request = new RegisterRequest("Megan Hoopes", "estarbien", "megoonoopes");
+            RegisterRequest request = new RegisterRequest("Megan Hoopes", "estarbien", "megoonoopes");
 
-        service.register(request);
+            service.register(request);
 
 
-        AlreadyTakenException exception = assertThrows(
-                AlreadyTakenException.class,
-                () -> service.register(request) // Example call
-        );
+            AlreadyTakenException exception = assertThrows(
+                    AlreadyTakenException.class,
+                    () -> service.register(request) // Example call
+            );
+        }
     }
-
-
     @Test
-    void registerUsersTest() throws AlreadyTakenException, BadRequestException, UnauthorizedException{
+    void registerUsersTest() throws AlreadyTakenException, BadRequestException, UnauthorizedException, DataAccessException{
 
         //
 
@@ -70,17 +70,19 @@ public class ServiceTests {
     }
 
     @Test
-    void registerUserAlreadyTaken() throws AlreadyTakenException, BadRequestException, UnauthorizedException {
+    void registerUserAlreadyTaken() throws AlreadyTakenException, BadRequestException, UnauthorizedException, DataAccessException {
+        {
 
-        RegisterRequest request = new RegisterRequest("Justin Palmer", "hello", "new_email");
+            RegisterRequest request = new RegisterRequest("Justin Palmer", "hello", "new_email");
 
-        service.register(request);
+            service.register(request);
 
 
-        AlreadyTakenException exception = assertThrows(
-                AlreadyTakenException.class,
-                () -> service.register(request) // Example call
-        );
+            AlreadyTakenException exception = assertThrows(
+                    AlreadyTakenException.class,
+                    () -> service.register(request) // Example call
+            );
+        }
     }
 
     @Test

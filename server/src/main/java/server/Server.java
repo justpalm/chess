@@ -126,6 +126,9 @@ public class Server {
         if (ex instanceof AlreadyTakenException) {
             ctx.status(403);
         }
+        if (ex instanceof DataAccessException) {
+            ctx.status(500);
+        }
 
         ctx.json(new Gson().toJson(Map.of("message", ex.getMessage(),"stats", ctx.status())));
 
