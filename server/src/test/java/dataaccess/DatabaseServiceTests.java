@@ -11,8 +11,10 @@ import org.junit.jupiter.api.Test;
 import service.MainService;
 import service.requestsandresults.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class DatabaseServiceTests {
@@ -30,6 +32,46 @@ public class DatabaseServiceTests {
         service.clear();
 
     }
+
+    @Test
+    void listgamesPositive() throws AlreadyTakenException, BadRequestException, UnauthorizedException, DataAccessException {
+        //Create User
+        RegisterRequest request = new RegisterRequest("He", "Passwor", "emai");
+        RegisterResult registerResult = service.register(request);
+
+        //Create Game with AuthToken
+        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_gam");
+        CreateGameResult createGameResult = service.createGame(createGameRequest);
+
+        //Get positive list
+        var list = service.getGameDAO().listGames();
+
+        var test_list = new ArrayList<GameData>();
+        test_list.add(service.getGameDAO().getGame("1"));
+
+        assertEquals(test_list, list);
+
+    }
+
+    @Test
+    void listgamesNegative() throws AlreadyTakenException, BadRequestException, UnauthorizedException, DataAccessException {
+        //Create User
+        RegisterRequest request = new RegisterRequest("He", "Passwor", "emai");
+        RegisterResult registerResult = service.register(request);
+
+        //Get an empty list
+        var list = service.getGameDAO().listGames();
+
+        var test_list = new ArrayList<GameData>();
+
+        test_list.add(new GameData("ajsdksdjk", "ajsdksjd","", "", new ChessGame()));
+
+        assertNotEquals(test_list, list);
+
+    }
+
+
+
 
 
     @Test
