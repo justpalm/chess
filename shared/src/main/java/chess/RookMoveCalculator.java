@@ -3,151 +3,57 @@ package chess;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class RookMoveCalculator implements PieceMoveCalculator{
+public class RookMoveCalculator implements PieceMoveCalculator {
     @Override
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition oldPositionRow) {
+    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition oldPosition) {
 
         Collection<ChessMove> possibleMoves = new ArrayList<>();
-        ChessPiece piece = board.getPiece(oldPositionRow);
+        ChessPiece piece = board.getPiece(oldPosition);
         ChessGame.TeamColor color = piece.getTeamColor();
 
-        ChessMove newMove;
-        ChessPosition chessPosition;
 
         //Set Values
-        int row = oldPositionRow.getRow();
-        int col = oldPositionRow.getColumn();
-        boolean n = true;
+        int row = oldPosition.getRow();
+        int col = oldPosition.getColumn();
 
 
         //Check Up
-
-        while (n) {
+        do {
             row += 1;
 
-            if (row < 9 && col < 9 && row > 0 && col > 0) {
-
-                chessPosition = new ChessPosition(row, col);
-
-
-                if (board.getPiece(chessPosition) != null) {
-                    if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
-
-                        newMove = new ChessMove(oldPositionRow, chessPosition, null);
-                        possibleMoves.add(newMove);
-                        break;
-                    } else { //friend
-                        break;
-                    }
-                } else {
-                    newMove = new ChessMove(oldPositionRow, chessPosition, null);
-                    possibleMoves.add(newMove);
-                }
-            }
-            else {
-                break;
-            }
-        }
+        } while (QueenMoveCalculator.QueenMove(board, oldPosition, row, col, color, possibleMoves));
         //Reset
-        row = oldPositionRow.getRow();
-        col = oldPositionRow.getColumn();
-
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
 
         //Check Right
-        while (n) {
+        do {
             col += 1;
 
-            if (row < 9 && col < 9 && row > 0 && col > 0) {
-
-                chessPosition = new ChessPosition(row, col);
-
-
-                if (board.getPiece(chessPosition) != null) {
-                    if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
-
-                        newMove = new ChessMove(oldPositionRow, chessPosition, null);
-                        possibleMoves.add(newMove);
-                        break;
-                    } else { //friend
-                        break;
-                    }
-                } else {
-                    newMove = new ChessMove(oldPositionRow, chessPosition, null);
-                    possibleMoves.add(newMove);
-                }
-            }
-            else {
-                break;
-            }
-        }
+        } while (QueenMoveCalculator.QueenMove(board, oldPosition, row, col, color, possibleMoves));
         //Reset
-        row = oldPositionRow.getRow();
-        col = oldPositionRow.getColumn();
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
 
         //Check Down
-
-        while (n) {
+        do {
             row -= 1;
 
-            if (row < 9 && col < 9 && row > 0 && col > 0) {
-
-                chessPosition = new ChessPosition(row, col);
-
-
-                if (board.getPiece(chessPosition) != null) {
-                    if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
-
-                        newMove = new ChessMove(oldPositionRow, chessPosition, null);
-                        possibleMoves.add(newMove);
-                        break;
-                    } else { //friend
-                        break;
-                    }
-                } else {
-                    newMove = new ChessMove(oldPositionRow, chessPosition, null);
-                    possibleMoves.add(newMove);
-                }
-            }
-            else {
-                break;
-            }
-        }
+        } while (QueenMoveCalculator.QueenMove(board, oldPosition, row, col, color, possibleMoves));
         //Reset
-        row = oldPositionRow.getRow();
-        col = oldPositionRow.getColumn();
-
+        row = oldPosition.getRow();
+        col = oldPosition.getColumn();
 
 
         //Check Left
-
-        while (n) {
+        do {
             col -= 1;
 
-            if (row < 9 && col < 9 && row > 0 && col > 0) {
+        } while (QueenMoveCalculator.QueenMove(board, oldPosition, row, col, color, possibleMoves));
 
-                chessPosition = new ChessPosition(row, col);
-
-
-                if (board.getPiece(chessPosition) != null) {
-                    if (board.getPiece(chessPosition).getTeamColor() != color) { //enemy
-
-                        newMove = new ChessMove(oldPositionRow, chessPosition, null);
-                        possibleMoves.add(newMove);
-                        break;
-                    } else { //friend
-                        break;
-                    }
-                } else {
-                    newMove = new ChessMove(oldPositionRow, chessPosition, null);
-                    possibleMoves.add(newMove);
-                }
-            }
-            else {
-                break;
-            }
-        }
         return possibleMoves;
     }
 }
+
