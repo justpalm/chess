@@ -19,7 +19,7 @@ public class MemoryAuthDAO implements AuthDAO {
     public String createAuth(String username) throws UnauthorizedException {
 
         if (authTokens.get(username) != null) {
-            throw new UnauthorizedException("Error: User already has token");
+            throw new UnauthorizedException("Error : User already has token");
         }
 
         String authToken = UUID.randomUUID().toString();

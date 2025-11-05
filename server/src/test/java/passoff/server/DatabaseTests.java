@@ -114,7 +114,7 @@ public class DatabaseTests {
         loadPropertiesMethod.invoke(obj, fakeDbProperties);
 
         List<Supplier<TestResult>> operations = List.of(
-//                () -> serverFacade.clear(),
+                () -> serverFacade.clear(),
                 () -> serverFacade.register(TEST_USER),
                 () -> serverFacade.login(TEST_USER),
                 () -> serverFacade.logout(UUID.randomUUID().toString()),

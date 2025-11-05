@@ -4,8 +4,6 @@ import dataaccess.*;
 
 import dataaccess.exceptions.*;
 import service.requestsandresults.*;
-
-import javax.xml.crypto.Data;
 import java.util.Objects;
 
 
@@ -39,7 +37,7 @@ public class MainService {
         return memoryGameData;
     }
 
-    public void clear()  {
+    public void clear() throws DataAccessException {
         try {
 
             memoryUserData.clearUsers();
@@ -47,7 +45,7 @@ public class MainService {
             memoryGameData.clearGames();
 
         } catch (DataAccessException | UnauthorizedException e) {
-            throw new RuntimeException(e);
+            throw new DataAccessException("Error" + e.getMessage());
         }
     }
 
