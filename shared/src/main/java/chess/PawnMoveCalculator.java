@@ -57,8 +57,8 @@ public class PawnMoveCalculator implements PieceMoveCalculator {
         //Check for foes LEFT
         row += move;
         col -= 1;
-        newPosition = new ChessPosition(row, col);
-        movePawn(board, oldPositionRow, row, col, newPosition, color, possibleMoves, promotionRow);
+
+        CheckingFoes(board, oldPositionRow, row, col, color, possibleMoves, promotionRow);
 
         //Reset
         row = oldPositionRow.getRow();
@@ -68,8 +68,8 @@ public class PawnMoveCalculator implements PieceMoveCalculator {
         //Check for foes RIGHT
         row += move;
         col += 1;
-        newPosition = new ChessPosition(row, col);
-        movePawn(board, oldPositionRow, row, col, newPosition, color, possibleMoves, promotionRow);
+
+        CheckingFoes(board, oldPositionRow, row, col, color, possibleMoves, promotionRow);
 
         //Reset
         row = oldPositionRow.getRow();
@@ -78,13 +78,21 @@ public class PawnMoveCalculator implements PieceMoveCalculator {
 
         // Check forward normal
         row += move;
+
         newPosition = new ChessPosition(row, col);
-        movePawn(board, oldPositionRow, row, col, newPosition, color, possibleMoves, promotionRow);
+
+        if (row < 9 && col < 9 && row > 0 && col > 0) {
+            if (board.getPiece(newPosition) == null) {
+                putPromotionPieces(oldPositionRow, possibleMoves, newPosition, row, promotionRow);
+            }
+        }
 
         return possibleMoves;
     }
 
-    private void movePawn(ChessBoard board, ChessPosition oldPositionRow, int row, int col, ChessPosition newPosition, ChessGame.TeamColor color, Collection<ChessMove> possibleMoves, int promotionRow) {
+    private void CheckingFoes(ChessBoard board, ChessPosition oldPositionRow, int row, int col, ChessGame.TeamColor color, Collection<ChessMove> possibleMoves, int promotionRow) {
+        ChessPosition newPosition = new ChessPosition(row, col);
+
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != color) {
                 putPromotionPieces(oldPositionRow, possibleMoves, newPosition, row, promotionRow);
