@@ -9,6 +9,7 @@ import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.*;
 
+import static dataaccess.MySLQAuthDataAccess.cyclethrough;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static java.sql.Types.NULL;
 
@@ -79,22 +80,7 @@ public class MySQLUserDataAccess implements UserDAO{
     private int executeUpdate(String statement, Object... params) throws SQLException, DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             try (PreparedStatement ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
-                for (int i = 0; i < params.length; i++) {
-                    Object param = params[i];
-                    switch (param) {
-                        case String p -> ps.setString(i + 1, p);
-                        case ChessGame g -> ps.setString(i + 1, g.toString());
-                        case null -> ps.setNull(i + 1, NULL);
-                        default -> {
-                        }
-                    }
-                }
-                ps.executeUpdate();
-                ResultSet rs = ps.getGeneratedKeys();
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-                return 0;
+                return cyclethrough(ps, params);
             }
         } catch (SQLException e) {
             throw new SQLException(String.format("unable to update database: %s, %s", statement, e.getMessage()));

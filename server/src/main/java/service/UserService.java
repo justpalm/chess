@@ -43,18 +43,10 @@ public class UserService {
 
         var loginUser = memoryUserData.getUser(loginRequest.username());
 
-        // read the previously hashed password from the database
-        //Check password is valid
         if (!BCrypt.checkpw(loginRequest.password(), loginUser.password())) {
             throw new UnauthorizedException("Error: Password incorrect");
         }
 
-        // Not sure if this will need to be reimplemented?
-//        if (!Objects.equals(hashedPassword, loginUser.password())) {
-//            throw new UnauthorizedException("Error: Password incorrect");
-//        }
-
-        // Get new authToken
         try {
             authToken = this.memoryAuthData.createAuth(loginRequest.username());
         } catch (UnauthorizedException e) {
