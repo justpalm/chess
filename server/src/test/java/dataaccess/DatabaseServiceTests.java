@@ -308,7 +308,7 @@ public class DatabaseServiceTests {
 
 
         //Try a new user join the same team
-        request = new RegisterRequest("Hey2", "Password", "email");
+        request = new RegisterRequest("Hey", "Pass", "email");
         registerResult = service.register(request);
 
         joinGameRequest = new JoinGameRequest(registerResult.authToken(), ChessGame.TeamColor.WHITE, "1");
@@ -340,7 +340,7 @@ public class DatabaseServiceTests {
 
 
         //Try a new user join the same team
-        request = new RegisterRequest("Hey2", "Password", "email");
+        request = new RegisterRequest("Hey", "Password", "email");
         registerResult = service.register(request);
 
         joinGameRequest = new JoinGameRequest(registerResult.authToken(), ChessGame.TeamColor.BLACK, "1");
