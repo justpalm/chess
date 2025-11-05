@@ -83,7 +83,7 @@ public class DatabaseServiceTests {
     void loginTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Register a new user
-        RegisterRequest registerRequest = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest registerRequest = new RegisterRequest("Phi", "Phie", "pho");
         RegisterResult registerResult = service.register(registerRequest);
 
         //Logout the User
@@ -101,7 +101,7 @@ public class DatabaseServiceTests {
     @Test
     void loginBadRequestTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest request = new RegisterRequest("Phi", "Phie", "pho");
 
         service.register(request);
 
@@ -119,12 +119,12 @@ public class DatabaseServiceTests {
         //I'm not sure how best to factor in this one/
 
 
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest request = new RegisterRequest("Phi", "Password", "email");
 
         service.register(request);
 
 
-        LoginRequest loginRequest = new LoginRequest("Hey", "Pass");
+        LoginRequest loginRequest = new LoginRequest("Phi", "Pass");
 
         assertThrows(
                 UnauthorizedException.class,
@@ -137,7 +137,7 @@ public class DatabaseServiceTests {
 
 
         //Create User
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest request = new RegisterRequest("Phi", "Passwor", "emai");
         RegisterResult registerResult = service.register(request);
 
 
@@ -156,7 +156,7 @@ public class DatabaseServiceTests {
     void logoutNegativeTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Create User
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest request = new RegisterRequest("He", "Passwor", "emai");
         service.register(request);
 
 
@@ -174,11 +174,11 @@ public class DatabaseServiceTests {
     void createGamePositiveTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Create User
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest request = new RegisterRequest("He", "Passwor", "emai");
         RegisterResult registerResult = service.register(request);
 
         //Create Game with AuthToken
-        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game");
+        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_gam");
         CreateGameResult createGameResult = service.createGame(createGameRequest);
 
 
@@ -187,7 +187,7 @@ public class DatabaseServiceTests {
 
         GameData newGame = service.getGameDAO().getGame("1");
 
-        assertEquals("new_game", newGame.gameName());
+        assertEquals("new_gam", newGame.gameName());
 
         //Second Assertion
         createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game_2");
@@ -202,13 +202,11 @@ public class DatabaseServiceTests {
 
     }
 
-
-
     @Test
     void createGameBadTokenTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Create User
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest request = new RegisterRequest("He", "Passwor", "emai");
         RegisterResult registerResult = service.register(request);
 
         String authToken = registerResult.authToken();
@@ -224,7 +222,7 @@ public class DatabaseServiceTests {
     void createGameNoInfoTest() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Create User
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest request = new RegisterRequest("He", "Passwor", "emai");
         RegisterResult registerResult = service.register(request);
 
         String authToken = registerResult.authToken();
@@ -241,13 +239,13 @@ public class DatabaseServiceTests {
     void joinGamePositive() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Create User
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest request = new RegisterRequest("He", "Passwor", "emai");
         RegisterResult registerResult = service.register(request);
 
         String authToken = registerResult.authToken();
 
         //Create Game with AuthToken
-        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game");
+        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_gam");
 
         CreateGameResult createGameResult = service.createGame(createGameRequest);
 
@@ -268,13 +266,13 @@ public class DatabaseServiceTests {
     void joinGameNegativeNullField() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Create User
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest request = new RegisterRequest("He", "Passwor", "emai");
         RegisterResult registerResult = service.register(request);
 
         String authToken = registerResult.authToken();
 
         //Create Game with AuthToken
-        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game");
+        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_gam");
 
         CreateGameResult createGameResult = service.createGame(createGameRequest);
 
@@ -294,13 +292,13 @@ public class DatabaseServiceTests {
     void joinGameNegativeNoSpaceWhite() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Create User
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest request = new RegisterRequest("He", "Passwor", "emai");
         RegisterResult registerResult = service.register(request);
 
         String authToken = registerResult.authToken();
 
         //Create Game with AuthToken
-        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game");
+        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_gam");
 
         CreateGameResult createGameResult = service.createGame(createGameRequest);
 
@@ -326,13 +324,13 @@ public class DatabaseServiceTests {
     void joinGameNegativeNoSpaceBlack() throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException {
 
         //Create User
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
+        RegisterRequest request = new RegisterRequest("He", "Passwor", "emai");
         RegisterResult registerResult = service.register(request);
 
         String authToken = registerResult.authToken();
 
         //Create Game with AuthToken
-        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_game");
+        CreateGameRequest createGameRequest = new CreateGameRequest(registerResult.authToken(), "new_gam");
 
         CreateGameResult createGameResult = service.createGame(createGameRequest);
 
@@ -357,44 +355,7 @@ public class DatabaseServiceTests {
 
 
     }
-
-
-
-
-
-
-
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//
-//
-//    @Test
-//    void registerUsers () {}
-//
-//    @Test
-//    void registerUsers () {}
-
-
 
 
 
