@@ -21,7 +21,7 @@ public class RookMoveCalculator implements PieceMoveCalculator {
         do {
             row += 1;
 
-        } while (QueenMoveCalculator.QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (QueenMoveCalculator.queenMove(board, oldPosition, row, col, color, possibleMoves));
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
@@ -31,7 +31,7 @@ public class RookMoveCalculator implements PieceMoveCalculator {
         do {
             col += 1;
 
-        } while (QueenMoveCalculator.QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (QueenMoveCalculator.queenMove(board, oldPosition, row, col, color, possibleMoves));
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
@@ -41,7 +41,7 @@ public class RookMoveCalculator implements PieceMoveCalculator {
         do {
             row -= 1;
 
-        } while (QueenMoveCalculator.QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (QueenMoveCalculator.queenMove(board, oldPosition, row, col, color, possibleMoves));
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
@@ -51,7 +51,7 @@ public class RookMoveCalculator implements PieceMoveCalculator {
         do {
             col -= 1;
 
-        } while (QueenMoveCalculator.QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (QueenMoveCalculator.queenMove(board, oldPosition, row, col, color, possibleMoves));
 
         return possibleMoves;
     }

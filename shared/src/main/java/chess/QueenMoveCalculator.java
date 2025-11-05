@@ -22,7 +22,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         do {
             row += 1;
 
-        } while (QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (queenMove(board, oldPosition, row, col, color, possibleMoves));
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
@@ -34,7 +34,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         do {
             col += 1;
 
-        } while (QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (queenMove(board, oldPosition, row, col, color, possibleMoves));
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
@@ -45,7 +45,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         do {
             row -= 1;
 
-        } while (QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (queenMove(board, oldPosition, row, col, color, possibleMoves));
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
@@ -57,7 +57,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         do {
             col -= 1;
 
-        } while (QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (queenMove(board, oldPosition, row, col, color, possibleMoves));
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
@@ -69,7 +69,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
             col -= 1;
             row += 1;
 
-        } while (QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (queenMove(board, oldPosition, row, col, color, possibleMoves));
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
@@ -81,7 +81,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
             col = col + 1;
             row = row + 1;
 
-        } while (QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (queenMove(board, oldPosition, row, col, color, possibleMoves));
 
         //Reset
         row = oldPosition.getRow();
@@ -93,7 +93,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
             col = col - 1;
             row = row - 1;
 
-        } while (QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (queenMove(board, oldPosition, row, col, color, possibleMoves));
 
         //Reset
         row = oldPosition.getRow();
@@ -105,14 +105,14 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
             col = col + 1;
             row = row - 1;
 
-        } while (QueenMove(board, oldPosition, row, col, color, possibleMoves));
+        } while (queenMove(board, oldPosition, row, col, color, possibleMoves));
 
         return possibleMoves;
     }
 
 
 
-    public static boolean QueenMove(ChessBoard board, ChessPosition oldPosition, int row, int col, ChessGame.TeamColor color, Collection<ChessMove> possibleMoves) {
+    public static boolean queenMove(ChessBoard board, ChessPosition oldPosition, int row, int col, ChessGame.TeamColor color, Collection<ChessMove> possibleMoves) {
         ChessMove chessMove;
         ChessPosition chessPosition;
         if (row < 9 && col < 9 && row > 0 && col > 0) {

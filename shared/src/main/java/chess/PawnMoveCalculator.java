@@ -58,7 +58,7 @@ public class PawnMoveCalculator implements PieceMoveCalculator {
         row += move;
         col -= 1;
 
-        CheckingFoes(board, oldPositionRow, row, col, color, possibleMoves, promotionRow);
+        checkingFoes(board, oldPositionRow, row, col, color, possibleMoves, promotionRow);
 
         //Reset
         row = oldPositionRow.getRow();
@@ -69,7 +69,7 @@ public class PawnMoveCalculator implements PieceMoveCalculator {
         row += move;
         col += 1;
 
-        CheckingFoes(board, oldPositionRow, row, col, color, possibleMoves, promotionRow);
+        checkingFoes(board, oldPositionRow, row, col, color, possibleMoves, promotionRow);
 
         //Reset
         row = oldPositionRow.getRow();
@@ -90,7 +90,7 @@ public class PawnMoveCalculator implements PieceMoveCalculator {
         return possibleMoves;
     }
 
-    private void CheckingFoes(ChessBoard board, ChessPosition oldPositionRow, int row, int col, ChessGame.TeamColor color, Collection<ChessMove> possibleMoves, int promotionRow) {
+    private void checkingFoes(ChessBoard board, ChessPosition oldPositionRow, int row, int col, ChessGame.TeamColor color, Collection<ChessMove> possibleMoves, int promotionRow) {
         ChessPosition newPosition = new ChessPosition(row, col);
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
