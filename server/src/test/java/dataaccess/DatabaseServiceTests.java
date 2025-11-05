@@ -46,10 +46,10 @@ public class DatabaseServiceTests {
         //Get positive list
         var list = service.getGameDAO().listGames();
 
-        var test_list = new ArrayList<GameData>();
-        test_list.add(service.getGameDAO().getGame("1"));
+        var testList = new ArrayList<GameData>();
+        testList.add(service.getGameDAO().getGame("1"));
 
-        assertEquals(test_list, list);
+        assertEquals(testList, list);
 
     }
 
@@ -62,11 +62,11 @@ public class DatabaseServiceTests {
         //Get an empty list
         var list = service.getGameDAO().listGames();
 
-        var test_list = new ArrayList<GameData>();
+        var testList = new ArrayList<GameData>();
 
-        test_list.add(new GameData("ajsdksdjk", "ajsdksjd","", "", new ChessGame()));
+        testList.add(new GameData("ajsdksdjk", "ajsdksjd","", "", new ChessGame()));
 
-        assertNotEquals(test_list, list);
+        assertNotEquals(testList, list);
 
     }
 
