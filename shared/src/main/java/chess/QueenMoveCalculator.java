@@ -16,8 +16,6 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         int row = oldPosition.getRow();
         int col = oldPosition.getColumn();
 
-
-
         //Check Up
         do {
             row += 1;
@@ -26,9 +24,6 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
-
-
 
         //Check Right
         do {
@@ -40,7 +35,6 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         col = oldPosition.getColumn();
 
 
-
         //Check Down
         do {
             row -= 1;
@@ -49,10 +43,6 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
-
-
-
         //Check Left
         do {
             col -= 1;
@@ -61,9 +51,6 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
-
-
         //Check left UP LOOP (minus a column, up a row)
         do {
             col -= 1;
@@ -73,9 +60,6 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
-
-
         //Check right UP
         do {
             col = col + 1;
@@ -86,8 +70,6 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
-
         //Check left DOWN
         do {
             col = col - 1;
@@ -98,8 +80,6 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         //Reset
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
-
         //Check right DOWN
         do {
             col = col + 1;
@@ -109,9 +89,6 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
 
         return possibleMoves;
     }
-
-
-
     public static boolean queenMove(ChessBoard board, ChessPosition oldPosition, int row, int col,
                                     ChessGame.TeamColor color, Collection<ChessMove> possibleMoves) {
         ChessMove chessMove;

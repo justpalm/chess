@@ -101,6 +101,10 @@ public class MySQLUserDataAccess implements UserDAO{
     };
 
     private void configureDatabase() throws DataAccessException {
+        configuredatabase(createStatements);
+    }
+
+    static void configuredatabase(String[] createStatements) throws DataAccessException {
         DatabaseManager.createDatabase();
         try (Connection conn = DatabaseManager.getConnection()) {
             for (String statement : createStatements) {

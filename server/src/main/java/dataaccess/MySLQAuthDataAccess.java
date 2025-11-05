@@ -127,10 +127,10 @@ public class MySLQAuthDataAccess implements AuthDAO {
     };
 
 
-    private int executeUpdate(String statement, Object... params) throws SQLException, DataAccessException {
+    private void executeUpdate(String statement, Object... params) throws SQLException, DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
             PreparedStatement ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS);
-            return cyclethrough(ps, params);
+            cyclethrough(ps, params);
         } catch (SQLException e) {
             throw new SQLException(String.format("unable to update database: %s, %s", statement, e.getMessage()));
         } catch (DataAccessException e ) {
@@ -159,15 +159,6 @@ public class MySLQAuthDataAccess implements AuthDAO {
     }
 
     private void configureDatabase() throws DataAccessException {
-        DatabaseManager.createDatabase();
-        try (Connection conn = DatabaseManager.getConnection()) {
-            for (String statement : createStatements) {
-                try (var preparedStatement = conn.prepareStatement(statement)) {
-                    preparedStatement.executeUpdate();
-                }
-            }
-        } catch (SQLException ex) {
-            throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
-        }
+        MySQLUserDataAccess.configuredatabase(createStatements);
     }
 }

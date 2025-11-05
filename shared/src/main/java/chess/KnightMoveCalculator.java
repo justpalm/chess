@@ -16,33 +16,28 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         //Set Values
         int row = oldPosition.getRow();
         int col = oldPosition.getColumn();
-
         //CHeck top left
         col -= 1;
         row += 2;
 
         chessPosition = new ChessPosition(row, col);
-
         KingMoveCalculator.cycleBoard(board, oldPosition,
                 row, col, chessPosition, possibleMoves, color);
 
         //Reset Values
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
         //Check top right
         col += 1;
         row += 2;
 
         chessPosition = new ChessPosition(row, col);
-
         KingMoveCalculator.cycleBoard(board, oldPosition,
                 row, col, chessPosition, possibleMoves, color);
 
         //Reset Values
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
         //Check middle top right
         col += 2;
         row += 1;
@@ -54,7 +49,6 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         //Reset Values
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
         //Check middle bottom right
         col += 2;
         row -= 1;
@@ -66,7 +60,6 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         //Reset Values
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
         //Check down right
         col += 1;
         row -= 2;
@@ -79,7 +72,6 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         //Reset Values
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
         //Check down left
         col -= 1;
         row -= 2;
@@ -92,7 +84,6 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         //Reset Values
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
         //Check middle bottom left
         col -= 2;
         row -= 1;
@@ -104,7 +95,6 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         //Reset Values
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
         //Check middle top left
         col -= 2;
         row += 1;

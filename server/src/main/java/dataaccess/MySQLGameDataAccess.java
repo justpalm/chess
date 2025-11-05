@@ -177,7 +177,7 @@ public class MySQLGameDataAccess implements GameDAO{
 
     private int executeUpdate(String statement, Object... params) throws SQLException, DataAccessException {
         try (Connection conn = DatabaseManager.getConnection()) {
-            try (PreparedStatement ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
+            PreparedStatement ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS);
                 for (int i = 0; i < params.length; i++) {
                     Object param = params[i];
                     switch (param) {
@@ -194,9 +194,10 @@ public class MySQLGameDataAccess implements GameDAO{
                     return rs.getInt(1);
                 }
                 return 0;
-            }
         } catch (SQLException e) {
             throw new SQLException(String.format("\"Error\" + unable to update database: %s, %s", statement, e.getMessage()));
+        } catch (DataAccessException e) {
+            throw new DataAccessException(e.getMessage());
         }
     }
 

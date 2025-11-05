@@ -110,11 +110,15 @@ public class KingMoveCalculator implements PieceMoveCalculator {
         return possibleMoves;
     }
 
-    private static void checkBoard(ChessBoard board, ChessPosition oldPosition, int row, int col, ChessPosition newPosition, Collection<ChessMove> possibleMoves, ChessGame.TeamColor color) {
+    private static void checkBoard(ChessBoard board, ChessPosition
+            oldPosition, int row, int col, ChessPosition newPosition,
+                                   Collection<ChessMove> possibleMoves, ChessGame.TeamColor color) {
         cycleBoard(board, oldPosition, row, col, newPosition, possibleMoves, color);
     }
 
-    static void cycleBoard(ChessBoard board, ChessPosition oldPosition, int row, int col, ChessPosition newPosition, Collection<ChessMove> possibleMoves, ChessGame.TeamColor color) {
+    static void cycleBoard(ChessBoard board, ChessPosition oldPosition,
+                           int row, int col, ChessPosition newPosition,
+                           Collection<ChessMove> possibleMoves, ChessGame.TeamColor color) {
         ChessMove newMove;
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(newPosition) == null) {
