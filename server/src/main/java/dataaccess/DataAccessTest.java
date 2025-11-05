@@ -11,14 +11,14 @@ import service.requestsandresults.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class DataAccessTests {
+public class DataAccessTest {
 
     private MainService service;
     private UserDAO memoryUserData;
     private AuthDAO memoryAuthData;
     private GameDAO memoryGameData;
 
-   public DataAccessTests() {
+   public DataAccessTest() {
 
         memoryUserData = new MySQLUserDataAccess();
         memoryAuthData = new MySLQAuthDataAccess();

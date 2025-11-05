@@ -29,18 +29,7 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
 
         chessPosition = new ChessPosition(row, col);
 
-        if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(chessPosition) == null) {
-                chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possibleMoves.add(chessMove);
-            }
-            else {
-                if (board.getPiece(chessPosition).getTeamColor() != color) {
-                    chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possibleMoves.add(chessMove);
-                }
-            }
-        }
+        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
 
         //Reset Values
         row = oldPosition.getRow();
@@ -53,19 +42,7 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
 
         chessPosition = new ChessPosition(row, col);
 
-        if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(chessPosition) == null) {
-                chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possibleMoves.add(chessMove);
-            }
-            else {
-                if (board.getPiece(chessPosition).getTeamColor() != color) {
-                    chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possibleMoves.add(chessMove);
-                }
-            }
-        }
-
+        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
 
 
         //Reset Values
@@ -78,19 +55,7 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
 
         chessPosition = new ChessPosition(row, col);
 
-        if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(chessPosition) == null) {
-                chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possibleMoves.add(chessMove);
-            }
-            else {
-                if (board.getPiece(chessPosition).getTeamColor() != color) {
-                    chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possibleMoves.add(chessMove);
-                }
-            }
-        }
-
+        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
 
 
         //Reset Values
@@ -103,19 +68,7 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
 
         chessPosition = new ChessPosition(row, col);
 
-        if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(chessPosition) == null) {
-                chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possibleMoves.add(chessMove);
-            }
-            else {
-                if (board.getPiece(chessPosition).getTeamColor() != color) {
-                    chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possibleMoves.add(chessMove);
-                }
-            }
-        }
-
+        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
 
 
         //Reset Values
@@ -128,19 +81,7 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
 
         chessPosition = new ChessPosition(row, col);
 
-        if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(chessPosition) == null) {
-                chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possibleMoves.add(chessMove);
-            }
-            else {
-                if (board.getPiece(chessPosition).getTeamColor() != color) {
-                    chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possibleMoves.add(chessMove);
-                }
-            }
-        }
-
+        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
 
 
         //Reset Values
@@ -153,18 +94,7 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
 
         chessPosition = new ChessPosition(row, col);
 
-        if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(chessPosition) == null) {
-                chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possibleMoves.add(chessMove);
-            }
-            else {
-                if (board.getPiece(chessPosition).getTeamColor() != color) {
-                    chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possibleMoves.add(chessMove);
-                }
-            }
-        }
+        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
 
 
         //Reset Values
@@ -177,18 +107,7 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
 
         chessPosition = new ChessPosition(row, col);
 
-        if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(chessPosition) == null) {
-                chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possibleMoves.add(chessMove);
-            }
-            else {
-                if (board.getPiece(chessPosition).getTeamColor() != color) {
-                    chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possibleMoves.add(chessMove);
-                }
-            }
-        }
+        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
 
 
         //Reset Values
@@ -201,18 +120,7 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
 
         chessPosition = new ChessPosition(row, col);
 
-        if (row < 9 && col < 9 && row > 0 && col > 0) {
-            if (board.getPiece(chessPosition) == null) {
-                chessMove = new ChessMove(oldPosition, chessPosition, null);
-                possibleMoves.add(chessMove);
-            }
-            else {
-                if (board.getPiece(chessPosition).getTeamColor() != color) {
-                    chessMove = new ChessMove(oldPosition, chessPosition, null);
-                    possibleMoves.add(chessMove);
-                }
-            }
-        }
+        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
         return possibleMoves;
     }
 }

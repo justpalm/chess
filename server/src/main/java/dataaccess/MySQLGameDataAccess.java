@@ -75,9 +75,9 @@ public class MySQLGameDataAccess implements GameDAO{
         var whiteUsername = rs.getString("whiteUsername");
         var blackUsername = rs.getString("blackUsername");
         var game = rs.getString("game");
-        var real_game = new Gson().fromJson(game, ChessGame.class);
+        var realGame = new Gson().fromJson(game, ChessGame.class);
 
-        return new GameData(gameID, gameName, whiteUsername, blackUsername, real_game);
+        return new GameData(gameID, gameName, whiteUsername, blackUsername, realGame);
     }
 
 

@@ -69,8 +69,8 @@ public class MySLQAuthDataAccess implements AuthDAO {
             Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(statement);
             ps.setString(1, authToken);
-            int rows_deleted = ps.executeUpdate();
-            if ((rows_deleted) != 1) {
+            int rowsDeleted = ps.executeUpdate();
+            if ((rowsDeleted) != 1) {
                 throw new UnauthorizedException("No AuthData Found");
             }
         } catch (SQLException e) {
