@@ -18,12 +18,11 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         //Set Values
         int row = oldPosition.getRow();
         int col = oldPosition.getColumn();
-        boolean n = true;
 
 
         //Check Up
 
-        while (n) {
+        while (true) {
             row += 1;
 
             if (row < 9 && col < 9 && row > 0 && col > 0) {
@@ -56,7 +55,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
 
 
         //Check Right
-        while (n) {
+        while (true) {
             col += 1;
 
             if (row < 9 && col < 9 && row > 0 && col > 0) {
@@ -89,7 +88,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
 
         //Check Down
 
-        while (n) {
+        while (true) {
             row -= 1;
 
             if (row < 9 && col < 9 && row > 0 && col > 0) {
@@ -123,7 +122,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
 
         //Check Left
 
-        while (n) {
+        while (true) {
             col -= 1;
 
             if (row < 9 && col < 9 && row > 0 && col > 0) {
@@ -160,7 +159,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
 
 
         //Check left UP LOOP (minus a column, up a row)
-        while (n) {
+        while (true) {
             col -= 1;
             row += 1;
 
@@ -194,7 +193,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
 
         //Check right UP
 
-        while (n) {
+        while (true) {
             col = col + 1;
             row = row + 1;
 
@@ -230,7 +229,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
 
         //Check left DOWN
 
-        while (n) {
+        while (true) {
             col = col - 1;
             row = row - 1;
 
@@ -267,7 +266,7 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
         //Check right DOWN
 
 
-        while (n) {
+        while (true) {
             col = col + 1;
             row = row - 1;
 

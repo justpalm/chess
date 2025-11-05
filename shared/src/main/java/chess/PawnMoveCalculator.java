@@ -62,20 +62,7 @@ public class PawnMoveCalculator implements PieceMoveCalculator {
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != color) {
-                if (row == promotionRow) {
-
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.QUEEN);
-                    possibleMoves.add(newMove);
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.ROOK);
-                    possibleMoves.add(newMove);
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.BISHOP);
-                    possibleMoves.add(newMove);
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.KNIGHT);
-                    possibleMoves.add(newMove);
-                } else {
-                    newMove = new ChessMove(oldPositionRow, newPosition, null);
-                    possibleMoves.add(newMove);
-                }
+                putPromotionPieces(oldPositionRow, possibleMoves, newPosition, row, promotionRow);
             }
         }
 
@@ -92,19 +79,7 @@ public class PawnMoveCalculator implements PieceMoveCalculator {
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(newPosition) != null && board.getPiece(newPosition).getTeamColor() != color) {
-                if (row == promotionRow) {
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.QUEEN);
-                    possibleMoves.add(newMove);
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.ROOK);
-                    possibleMoves.add(newMove);
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.BISHOP);
-                    possibleMoves.add(newMove);
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.KNIGHT);
-                    possibleMoves.add(newMove);
-                } else {
-                    newMove = new ChessMove(oldPositionRow, newPosition, null);
-                    possibleMoves.add(newMove);
-                }
+                putPromotionPieces(oldPositionRow, possibleMoves, newPosition, row, promotionRow);
             }
         }
 
@@ -120,22 +95,27 @@ public class PawnMoveCalculator implements PieceMoveCalculator {
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
             if (board.getPiece(newPosition) == null) {
-                if (row == promotionRow) {
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.QUEEN);
-                    possibleMoves.add(newMove);
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.ROOK);
-                    possibleMoves.add(newMove);
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.BISHOP);
-                    possibleMoves.add(newMove);
-                    newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.KNIGHT);
-                    possibleMoves.add(newMove);
-                } else {
-                    newMove = new ChessMove(oldPositionRow, newPosition, null);
-                    possibleMoves.add(newMove);
-                }
+                putPromotionPieces(oldPositionRow, possibleMoves, newPosition, row, promotionRow);
             }
         }
 
         return possibleMoves;
+    }
+
+    private void putPromotionPieces(ChessPosition oldPositionRow, Collection<ChessMove> possibleMoves, ChessPosition newPosition, int row, int promotionRow) {
+        ChessMove newMove;
+        if (row == promotionRow) {
+            newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.QUEEN);
+            possibleMoves.add(newMove);
+            newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.ROOK);
+            possibleMoves.add(newMove);
+            newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.BISHOP);
+            possibleMoves.add(newMove);
+            newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.KNIGHT);
+            possibleMoves.add(newMove);
+        } else {
+            newMove = new ChessMove(oldPositionRow, newPosition, null);
+            possibleMoves.add(newMove);
+        }
     }
 }

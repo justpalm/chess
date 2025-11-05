@@ -14,7 +14,6 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         ChessPiece piece = board.getPiece(oldPosition);
         ChessGame.TeamColor color = piece.getTeamColor();
 
-        ChessMove chessMove;
         ChessPosition chessPosition;
 
         //Set Values
