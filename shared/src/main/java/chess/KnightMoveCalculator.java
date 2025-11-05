@@ -8,19 +8,14 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
 
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition oldPosition) {
-
-
         Collection<ChessMove> possibleMoves = new ArrayList<>();
         ChessPiece piece = board.getPiece(oldPosition);
         ChessGame.TeamColor color = piece.getTeamColor();
-
         ChessPosition chessPosition;
 
         //Set Values
         int row = oldPosition.getRow();
         int col = oldPosition.getColumn();
-
-
 
         //CHeck top left
         col -= 1;
@@ -28,12 +23,12 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
 
         chessPosition = new ChessPosition(row, col);
 
-        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
+        KingMoveCalculator.cycleBoard(board, oldPosition,
+                row, col, chessPosition, possibleMoves, color);
 
         //Reset Values
         row = oldPosition.getRow();
         col = oldPosition.getColumn();
-
 
         //Check top right
         col += 1;
@@ -41,8 +36,8 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
 
         chessPosition = new ChessPosition(row, col);
 
-        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
-
+        KingMoveCalculator.cycleBoard(board, oldPosition,
+                row, col, chessPosition, possibleMoves, color);
 
         //Reset Values
         row = oldPosition.getRow();
@@ -53,9 +48,8 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         row += 1;
 
         chessPosition = new ChessPosition(row, col);
-
-        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
-
+        KingMoveCalculator.cycleBoard(board, oldPosition,
+                row, col, chessPosition, possibleMoves, color);
 
         //Reset Values
         row = oldPosition.getRow();
@@ -66,9 +60,8 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         row -= 1;
 
         chessPosition = new ChessPosition(row, col);
-
-        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
-
+        KingMoveCalculator.cycleBoard(board, oldPosition,
+                row, col, chessPosition, possibleMoves, color);
 
         //Reset Values
         row = oldPosition.getRow();
@@ -79,8 +72,8 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         row -= 2;
 
         chessPosition = new ChessPosition(row, col);
-
-        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
+        KingMoveCalculator.cycleBoard(board, oldPosition,
+                row, col, chessPosition, possibleMoves, color);
 
 
         //Reset Values
@@ -92,8 +85,8 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         row -= 2;
 
         chessPosition = new ChessPosition(row, col);
-
-        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
+        KingMoveCalculator.cycleBoard(board, oldPosition,
+                row, col, chessPosition, possibleMoves, color);
 
 
         //Reset Values
@@ -105,9 +98,8 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         row -= 1;
 
         chessPosition = new ChessPosition(row, col);
-
-        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
-
+        KingMoveCalculator.cycleBoard(board, oldPosition,
+                row, col, chessPosition, possibleMoves, color);
 
         //Reset Values
         row = oldPosition.getRow();
@@ -118,8 +110,8 @@ public class KnightMoveCalculator implements PieceMoveCalculator{
         row += 1;
 
         chessPosition = new ChessPosition(row, col);
-
-        KingMoveCalculator.cycleBoard(board, oldPosition, row, col, chessPosition, possibleMoves, color);
+        KingMoveCalculator.cycleBoard(board, oldPosition,
+                row, col, chessPosition, possibleMoves, color);
         return possibleMoves;
     }
 }

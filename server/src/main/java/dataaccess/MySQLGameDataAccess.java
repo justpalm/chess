@@ -44,7 +44,7 @@ public class MySQLGameDataAccess implements GameDAO{
                 } catch (SQLException e) {
                    throw new RuntimeException("Error" + e.getMessage());
                }
-        };
+        }
 
 
     @Override
@@ -84,7 +84,7 @@ public class MySQLGameDataAccess implements GameDAO{
     @Override
     public Collection<GameData> listGames() throws DataAccessException, UnauthorizedException {
 
-        Collection<GameData> listGames = new ArrayList<GameData>();
+        Collection<GameData> listGames = new ArrayList<>();
 
         try {
             var statement = "SELECT * FROM GameData";
@@ -151,7 +151,7 @@ public class MySQLGameDataAccess implements GameDAO{
 
             if (playerColor == ChessGame.TeamColor.BLACK) {
                 if (Objects.equals(theGame.blackUsername(), null)) {
-                    String statement = "UPDATE GameData SET blackUsername = ? WHERE gameID = ?";;
+                    String statement = "UPDATE GameData SET blackUsername = ? WHERE gameID = ?";
                     PreparedStatement ps = conn.prepareStatement(statement);
                     ps.setInt(2, Integer.parseInt(gameId));
                     ps.setString(1, newUsername);
@@ -180,9 +180,13 @@ public class MySQLGameDataAccess implements GameDAO{
             try (PreparedStatement ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS)) {
                 for (int i = 0; i < params.length; i++) {
                     Object param = params[i];
-                    if (param instanceof String p) ps.setString(i + 1, p);
-                    else if (param instanceof Integer p) ps.setInt(i + 1, p);
-                    else if (param == null) ps.setNull(i + 1, NULL);
+                    switch (param) {
+                        case String p -> ps.setString(i + 1, p);
+                        case Integer p -> ps.setInt(i + 1, p);
+                        case null -> ps.setNull(i + 1, NULL);
+                        default -> {
+                        }
+                    }
                 }
                 ps.executeUpdate();
                 ResultSet rs = ps.getGeneratedKeys();

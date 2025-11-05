@@ -21,7 +21,7 @@ public class MainService {
         this.memoryGameData = gameDAO;
         this.memoryAuthData = authDAO;
         this.userService = new UserService(userDAO, authDAO);
-        this.gameService = new GameService(userDAO, gameDAO, authDAO);
+        this.gameService = new GameService(gameDAO, authDAO);
     }
 
 
@@ -50,7 +50,8 @@ public class MainService {
     }
 
 
-    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException, BadRequestException, UnauthorizedException, DataAccessException  {
+    public RegisterResult register(RegisterRequest registerRequest) throws AlreadyTakenException,
+            BadRequestException, UnauthorizedException, DataAccessException  {
 
         if (registerRequest.password() == null | registerRequest.username() == null | registerRequest.email() == null) {
             throw new BadRequestException("Error: 1 or more fields not filled");
@@ -88,7 +89,8 @@ public class MainService {
 
     }
 
-    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException  {
+    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException,
+            UnauthorizedException, AlreadyTakenException, DataAccessException  {
 
 
         if (Objects.equals(joinGameRequest.authToken(), null) | Objects.equals(joinGameRequest.playerColor(), null)

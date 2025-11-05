@@ -37,10 +37,7 @@ public class DatabaseServiceTests {
         {
 
             RegisterRequest request = new RegisterRequest("Megan Hoopes", "estarbien", "megoonoopes");
-
             service.register(request);
-
-
             assertThrows(
                     AlreadyTakenException.class,
                     () -> service.register(request) // Example call
@@ -52,11 +49,8 @@ public class DatabaseServiceTests {
 
         //
 
-        RegisterRequest request = new RegisterRequest("Hey", "Password", "email");
-
+        RegisterRequest request = new RegisterRequest("Hi", "Pass", "mail");
         memoryUserData.createUser(request.username(), request.password(), request.email());
-
-
         assertEquals(memoryUserData, service.getUserDAO());
     }
 
@@ -64,7 +58,7 @@ public class DatabaseServiceTests {
     @Test
     void registerUsersBadRequest() {
 
-        RegisterRequest request = new RegisterRequest(null, null, "palmerjustins");
+        RegisterRequest request = new RegisterRequest(null, null, "palmerjust");
 
         assertThrows(
                 BadRequestException.class,
@@ -76,11 +70,8 @@ public class DatabaseServiceTests {
     void registerUserAlreadyTaken() throws AlreadyTakenException, BadRequestException, UnauthorizedException, DataAccessException {
         {
 
-            RegisterRequest request = new RegisterRequest("Justin Palmer", "hello", "new_email");
-
+            RegisterRequest request = new RegisterRequest("Just Palm", "hello", "new_email");
             service.register(request);
-
-
             assertThrows(
                     AlreadyTakenException.class,
                     () -> service.register(request) // Example call

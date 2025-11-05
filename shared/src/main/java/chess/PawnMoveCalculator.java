@@ -90,7 +90,8 @@ public class PawnMoveCalculator implements PieceMoveCalculator {
         return possibleMoves;
     }
 
-    private void checkingFoes(ChessBoard board, ChessPosition oldPositionRow, int row, int col, ChessGame.TeamColor color, Collection<ChessMove> possibleMoves, int promotionRow) {
+    private void checkingFoes(ChessBoard board, ChessPosition oldPositionRow, int row, int col,
+                              ChessGame.TeamColor color, Collection<ChessMove> possibleMoves, int promotionRow) {
         ChessPosition newPosition = new ChessPosition(row, col);
 
         if (row < 9 && col < 9 && row > 0 && col > 0) {
@@ -100,7 +101,8 @@ public class PawnMoveCalculator implements PieceMoveCalculator {
         }
     }
 
-    private void putPromotionPieces(ChessPosition oldPositionRow, Collection<ChessMove> possibleMoves, ChessPosition newPosition, int row, int promotionRow) {
+    private void putPromotionPieces(ChessPosition oldPositionRow, Collection<ChessMove> possibleMoves,
+                                    ChessPosition newPosition, int row, int promotionRow) {
         ChessMove newMove;
         if (row == promotionRow) {
             newMove = new ChessMove(oldPositionRow, newPosition, ChessPiece.PieceType.QUEEN);

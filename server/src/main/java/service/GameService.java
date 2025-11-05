@@ -7,19 +7,18 @@ import service.requestsandresults.*;
 
 public class GameService {
 
-    private final UserDAO memoryUserData;
     private final AuthDAO memoryAuthData;
     private final GameDAO memoryGameData;
 
-    public GameService(UserDAO memoryUserData, GameDAO memoryGameData, AuthDAO memoryAuthData) {
+    public GameService(GameDAO memoryGameData, AuthDAO memoryAuthData) {
 
-        this.memoryUserData = memoryUserData;
         this.memoryAuthData = memoryAuthData;
         this.memoryGameData = memoryGameData;
     }
 
 
-    public CreateGameResult createGame(CreateGameRequest createGameRequest) throws BadRequestException, UnauthorizedException, DataAccessException  {
+    public CreateGameResult createGame(CreateGameRequest createGameRequest)
+            throws BadRequestException, UnauthorizedException, DataAccessException  {
         //Checks validity of authToken
         try {
             memoryAuthData.getAuthToken(createGameRequest.authToken());
@@ -32,7 +31,8 @@ public class GameService {
         return new CreateGameResult(newGameId);
     }
 
-    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException, UnauthorizedException, AlreadyTakenException, DataAccessException  {
+    public JoinGameResult joinGame(JoinGameRequest joinGameRequest) throws BadRequestException,
+            UnauthorizedException, AlreadyTakenException, DataAccessException  {
 
         //Checks null
 

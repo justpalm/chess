@@ -112,7 +112,8 @@ public class QueenMoveCalculator implements PieceMoveCalculator{
 
 
 
-    public static boolean queenMove(ChessBoard board, ChessPosition oldPosition, int row, int col, ChessGame.TeamColor color, Collection<ChessMove> possibleMoves) {
+    public static boolean queenMove(ChessBoard board, ChessPosition oldPosition, int row, int col,
+                                    ChessGame.TeamColor color, Collection<ChessMove> possibleMoves) {
         ChessMove chessMove;
         ChessPosition chessPosition;
         if (row < 9 && col < 9 && row > 0 && col > 0) {
