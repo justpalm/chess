@@ -54,8 +54,6 @@ public class ServerFacade {
         var request = buildRequest("PUT", "/game", joinGameRequest);
         var response = sendRequest(request);
         return handleResponse(response, JoinGameResult.class);
-
-
     }
 
 
