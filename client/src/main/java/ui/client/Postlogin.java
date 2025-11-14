@@ -1,10 +1,18 @@
-package ui;
+package ui.client;
+
+import serverfacade.ServerFacade;
+import ui.State;
 
 import java.util.Arrays;
 
-public class Postlogin {
+public class Postlogin implements Client{
 
+    ServerFacade sf;
 
+    public Postlogin(ServerFacade serverFacade) {
+        this.sf = serverFacade;
+
+    }
 
 
 
@@ -30,7 +38,7 @@ public class Postlogin {
         }
     }
 
-
+    @Override
     public String help() {
         if (state == State.SIGNEDOUT) {
             return """
@@ -49,10 +57,10 @@ public class Postlogin {
             """;
     }
 
-
-
-
-
+    @Override
+    public String intro() {
+        return "";
+    }
 
 
 }

@@ -1,14 +1,14 @@
-package ui;
+package ui.client;
 
 import dataaccess.exceptions.DataAccessException;
+import org.junit.jupiter.api.AfterEach;
 import serverfacade.ServerFacade;
 import service.requestsandresults.LoginRequest;
 import service.requestsandresults.RegisterRequest;
 
-import java.rmi.ServerError;
 import java.util.Arrays;
 
-public class Prelogin {
+public class Prelogin implements Client{
 
     ServerFacade sf;
 
@@ -68,7 +68,7 @@ public class Prelogin {
 
 
 
-
+    @Override
     public String help() {
 //        if (state == State.SIGNEDOUT) {
 //            return """
@@ -84,9 +84,10 @@ public class Prelogin {
                 """;
     }
 
-
-
-
+    @Override
+    public String intro() {
+        return "";
+    }
 
 
 }
