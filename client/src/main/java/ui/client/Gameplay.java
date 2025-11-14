@@ -1,5 +1,7 @@
 package ui.client;
 
+import dataaccess.exceptions.DataAccessException;
+
 public class Gameplay implements Client{
     @Override
     public String help() {
@@ -7,7 +9,12 @@ public class Gameplay implements Client{
     }
 
     @Override
-    public String intro() {
+    public String eval(String input) throws DataAccessException {
         return "";
+    }
+
+    @Override
+    public Client switchClient() throws DataAccessException {
+        return null;
     }
 }

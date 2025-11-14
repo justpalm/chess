@@ -3,14 +3,14 @@ package ui.client;
 import dataaccess.exceptions.DataAccessException;
 import org.junit.jupiter.api.AfterEach;
 import serverfacade.ServerFacade;
-import service.requestsandresults.LoginRequest;
-import service.requestsandresults.RegisterRequest;
+import service.requestsandresults.*;
 
 import java.util.Arrays;
 
 public class Prelogin implements Client{
 
     ServerFacade sf;
+    String authToken = null;
 
     public Prelogin(ServerFacade serverFacade) {
         this.sf = serverFacade;
@@ -18,6 +18,7 @@ public class Prelogin implements Client{
     }
 
 
+    @Override
     public String eval(String input) throws DataAccessException {
         try {
             String[] tokens = input.toLowerCase().split(" ");
@@ -26,7 +27,6 @@ public class Prelogin implements Client{
             return switch (cmd) {
                 case "register" -> register(params);
                 case "login" -> login(params);
-                case "quit" -> quit();
                 case "help" -> help();
                 default -> help();
             };
@@ -35,23 +35,28 @@ public class Prelogin implements Client{
         }
     }
 
+    public Client switchClient() {
+        return new Postlogin(authToken, sf);
 
-    public String register(String... params) throws DataAccessException {
+    }
+
+
+    private String register(String... params) throws DataAccessException {
         if (params.length >= 1) {
+            RegisterResult registerResult;
             var registerRequest = new RegisterRequest(params[0], params[1], params[2]);
             try {
-                sf.register(registerRequest);
+                registerResult = sf.register(registerRequest);
             } catch (Exception e) {
                 throw new DataAccessException(e.getMessage());
             }
+            authToken = registerResult.authToken();
             return String.format("You signed in as %s.", registerRequest.username());
         }
         throw new DataAccessException("Expected: <username>, <password>, <email>");
     }
 
-
-
-    public String login(String... params) throws DataAccessException {
+    private String login(String... params) throws DataAccessException {
         if (params.length >= 1) {
             var loginRequest = new LoginRequest(params[0], params[1]);
             try {
@@ -67,15 +72,8 @@ public class Prelogin implements Client{
 
 
 
-
     @Override
     public String help() {
-//        if (state == State.SIGNEDOUT) {
-//            return """
-//                    - signIn <yourname>
-//                    - quit
-//                    """;
-//        }
         return """
                 - register <username> <password> <email>
                 - login <username> <password>
@@ -83,11 +81,5 @@ public class Prelogin implements Client{
                 - help
                 """;
     }
-
-    @Override
-    public String intro() {
-        return "";
-    }
-
 
 }
