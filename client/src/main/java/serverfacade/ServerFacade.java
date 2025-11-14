@@ -1,10 +1,11 @@
+package serverfacade;
 
 import service.requestsandresults.*;
 
 import com.google.gson.Gson;
 import dataaccess.exceptions.*;
-import model.*;
 
+import javax.xml.crypto.Data;
 import java.net.*;
 import java.net.http.*;
 import java.net.http.HttpRequest.BodyPublisher;
@@ -26,7 +27,6 @@ public class ServerFacade {
         var request = buildRequest("POST", "/user", registerRequest);
         var response = sendRequest(request);
         return handleResponse(response, RegisterResult.class);
-
     }
 
     public LoginResult login(LoginRequest loginRequest)  throws UnauthorizedException, BadRequestException, DataAccessException {
@@ -63,6 +63,10 @@ public class ServerFacade {
         return handleResponse(response, ListGamesResult.class);
     }
 
+    public void clear() throws DataAccessException{
+        var request = buildRequest("DELETE", "/db", null);
+        var response = sendRequest(request);
+    }
 
 
     private HttpRequest buildRequest(String method, String path, Object body) {
@@ -70,7 +74,7 @@ public class ServerFacade {
                 .uri(URI.create(serverUrl + path))
                 .method(method, makeRequestBody(body));
         if (body != null) {
-            request.setHeader("authorization", "application/json");
+            request.setHeader("Content-Type", "application/json");
         }
         return request.build();
     }
@@ -78,17 +82,6 @@ public class ServerFacade {
     //I'm thinking we need to make a build request specifically for those that have a body and request
     //For example, Join Game, Create Game. For everything else the function above works
 
-
-
-    private HttpRequest buildRequestBodyAndHeader(String method, String path, Object body) {
-        var request = HttpRequest.newBuilder()
-                .uri(URI.create(serverUrl + path))
-                .method(method, makeRequestBody(body));
-                request.setHeader("authorization", "application/json");
-
-
-        return request.build();
-    }
 
 
     private BodyPublisher makeRequestBody(Object request) {
