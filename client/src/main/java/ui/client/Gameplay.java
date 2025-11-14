@@ -17,4 +17,9 @@ public class Gameplay implements Client{
     public Client switchClient() throws DataAccessException {
         return null;
     }
+
+    @Override
+    public String specialHelp() {
+        return "";
+    }
 }

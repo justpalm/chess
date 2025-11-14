@@ -7,6 +7,9 @@ import service.requestsandresults.*;
 
 import java.util.Arrays;
 
+import static ui.EscapeSequences.SET_BG_COLOR_BLUE;
+import static ui.EscapeSequences.SET_BG_COLOR_WHITE;
+
 public class Prelogin implements Client{
 
     ServerFacade sf;
@@ -28,21 +31,36 @@ public class Prelogin implements Client{
                 case "register" -> register(params);
                 case "login" -> login(params);
                 case "help" -> help();
-                default -> help();
+                default -> specialHelp();
             };
         } catch (DataAccessException ex) {
-            return ex.getMessage();
+            throw new DataAccessException(ex.getMessage());
         }
     }
 
+
     public Client switchClient() {
+
         return new Postlogin(authToken, sf);
 
     }
 
+    @Override
+    public String specialHelp() {
+        return """
+                
+                Input unrecognized. Here's the help screen again to double-check!
+                
+                - register <username> <password> <email>
+                - login <username> <password>
+                - quit
+                - help
+                """;
+    }
+
 
     private String register(String... params) throws DataAccessException {
-        if (params.length >= 1) {
+        if (params.length == 3) {
             RegisterResult registerResult;
             var registerRequest = new RegisterRequest(params[0], params[1], params[2]);
             try {
@@ -51,13 +69,13 @@ public class Prelogin implements Client{
                 throw new DataAccessException(e.getMessage());
             }
             authToken = registerResult.authToken();
-            return String.format("You signed in as %s.", registerRequest.username());
+            return String.format("Your signed in as '%s'", registerRequest.username());
         }
         throw new DataAccessException("Expected: <username>, <password>, <email>");
     }
 
     private String login(String... params) throws DataAccessException {
-        if (params.length >= 1) {
+        if (params.length == 2) {
             var loginRequest = new LoginRequest(params[0], params[1]);
             try {
                 sf.login(loginRequest);

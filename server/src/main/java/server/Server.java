@@ -130,7 +130,7 @@ public class Server {
             ctx.status(500);
         }
 
-        ctx.json(new Gson().toJson(Map.of("message", ex.getMessage(),"stats", ctx.status())));
+//        ctx.json(new Gson().toJson(Map.of("Message", ex.getMessage(),"Stats", ctx.status())));
 
 
     }

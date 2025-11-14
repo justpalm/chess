@@ -7,4 +7,5 @@ public interface Client {
     public String help();
     public String eval(String input) throws DataAccessException;
     public Client switchClient() throws DataAccessException;
+    public String specialHelp();
 }

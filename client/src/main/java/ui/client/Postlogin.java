@@ -7,10 +7,12 @@ import model.GameData;
 import serverfacade.ServerFacade;
 import service.requestsandresults.*;
 import ui.State;
+import static ui.EscapeSequences.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+
 
 public class Postlogin implements Client{
 
@@ -29,7 +31,7 @@ public class Postlogin implements Client{
 
 
     @Override
-    public String eval(String input) {
+    public String eval(String input) throws DataAccessException{
         try {
             String[] tokens = input.toLowerCase().split(" ");
             String cmd = (tokens.length > 0) ? tokens[0] : "help";
@@ -41,16 +43,32 @@ public class Postlogin implements Client{
                 case "observe" -> observe(params);
                 case "logout" -> logout();
                 case "help" -> help();
-                default -> help();
+                default -> specialHelp();
             };
         } catch (Exception ex) {
-            return ex.getMessage();
+            throw new DataAccessException(ex.getMessage());
         }
     }
 
     @Override
     public Client switchClient() throws DataAccessException {
-        return null;
+        return new Prelogin(sf);
+    }
+
+    @Override
+    public String specialHelp() {
+        return """
+            
+            Input unrecognized. Here's the help screen again to double-check!
+            
+            - create <GAMENAME>
+            - list
+            - join <ID> [WHITE|BLACK]
+            - observe <ID>
+            - logout
+            - quit 
+            - help 
+            """;
     }
 
     private String create(String... params) throws DataAccessException {
