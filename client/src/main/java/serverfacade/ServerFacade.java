@@ -37,7 +37,7 @@ public class ServerFacade {
 }
 
     public LogoutResult logout(LogoutRequest logoutRequest) throws UnauthorizedException, BadRequestException, DataAccessException  {
-        var request = buildRequest("DELETE", "/session", logoutRequest);
+        var request = buildRequestHeader("DELETE", "/session", logoutRequest, logoutRequest.authToken());
         var response = sendRequest(request);
         return handleResponse(response, LogoutResult.class);
     }
@@ -58,7 +58,7 @@ public class ServerFacade {
 
 
     public ListGamesResult listGames(ListGamesRequest listGamesRequest) throws BadRequestException, UnauthorizedException, DataAccessException {
-        var request = buildRequest("GET", "/game", listGamesRequest);
+        var request = buildRequestHeader("GET", "/game", listGamesRequest, listGamesRequest.authToken());
         var response = sendRequest(request);
         return handleResponse(response, ListGamesResult.class);
     }
@@ -66,6 +66,17 @@ public class ServerFacade {
     public void clear() throws DataAccessException{
         var request = buildRequest("DELETE", "/db", null);
         var response = sendRequest(request);
+    }
+
+
+    private HttpRequest buildRequestHeader(String method, String path, Object body, String authToken) {
+        var request = HttpRequest.newBuilder()
+                .uri(URI.create(serverUrl + path))
+                .method(method, makeRequestBody(body));
+        request.setHeader("Authorization", authToken);
+
+        return request.build();
+
     }
 
 

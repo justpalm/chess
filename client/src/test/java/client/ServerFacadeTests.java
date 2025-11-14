@@ -162,11 +162,11 @@ public class ServerFacadeTests {
         var createGameRequest = new CreateGameRequest(authToken, "new_game");
         var createGameResult = facade.createGame(createGameRequest);
 
-        var joingGameRequest = new JoinGameRequest(authToken, null,
+        var joinGameRequest = new JoinGameRequest(authToken, null,
                 createGameResult.gameID());
 
         try {
-            facade.joinGame(joingGameRequest);
+            facade.joinGame(joinGameRequest);
         } catch (Exception e) {
             assertTrue(true);
             return;
@@ -205,6 +205,48 @@ public class ServerFacadeTests {
                 DataAccessException.class,
                 () -> facade.createGame(createGameRequest));
     }
+
+
+    @Test
+    void logout() throws Exception {
+        var request = new RegisterRequest("player1", "password", "p1@email.com");
+        var authData = facade.register(request);
+        String authToken = authData.authToken();
+
+        var createGameRequest = new CreateGameRequest(authToken, "new_game");
+        var createGameResult = facade.createGame(createGameRequest);
+
+        var logoutRequest = new LogoutRequest(authToken);
+        try {
+            facade.logout(logoutRequest);
+        } catch (Exception e) {
+            assertTrue(false);
+            return;
+        }
+
+        assertTrue(true);
+        return;
+    }
+
+    @Test
+    void failLogout() throws Exception {
+        var request = new RegisterRequest("player1", "password", "p1@email.com");
+        var authData = facade.register(request);
+        String authToken = authData.authToken();
+        assertTrue(authToken.length() > 10);
+
+        //Invalid Token
+        var logoutRequest = new LogoutRequest("a_string");
+        assertThrows(
+                DataAccessException.class,
+                () -> facade.logout(logoutRequest));
+
+    }
+
+
+
+
+
 }
 
 
