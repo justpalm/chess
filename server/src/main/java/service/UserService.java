@@ -7,6 +7,7 @@ import org.mindrot.jbcrypt.BCrypt;
 import service.requestsandresults.*;
 
 import javax.xml.crypto.Data;
+import java.sql.SQLException;
 import java.util.Objects;
 
 
@@ -37,7 +38,7 @@ public class UserService {
 
 
         String authToken;
-        if (memoryUserData.getUser(loginRequest.username()) == null) {
+        if ((memoryUserData.getUser(loginRequest.username())) == null) {
             throw new UnauthorizedException("Error: User not found");
         }
 

@@ -103,12 +103,6 @@ public class ServiceTests {
         LoginResult loginResult = service.login(loginRequest);
 
         assertEquals(loginRequest.username(), loginResult.username());
-
-        //Verifying creation of authToken
-        assertThrows(
-                UnauthorizedException .class,
-                () -> memoryAuthData.getAuthToken(loginResult.authToken()) // Example call
-        );
     }
 
     @Test

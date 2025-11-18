@@ -4,11 +4,11 @@ import dataaccess.exceptions.DataAccessException;
 import org.junit.jupiter.api.AfterEach;
 import serverfacade.ServerFacade;
 import service.requestsandresults.*;
+import ui.EscapeSequences;
 
 import java.util.Arrays;
 
-import static ui.EscapeSequences.SET_BG_COLOR_BLUE;
-import static ui.EscapeSequences.SET_BG_COLOR_WHITE;
+import static ui.EscapeSequences.*;
 
 public class Prelogin implements Client{
 
@@ -31,6 +31,7 @@ public class Prelogin implements Client{
                 case "register" -> register(params);
                 case "login" -> login(params);
                 case "help" -> help();
+                case "quit" -> quit();
                 default -> specialHelp();
             };
         } catch (DataAccessException ex) {
@@ -48,7 +49,6 @@ public class Prelogin implements Client{
     @Override
     public String specialHelp() {
         return """
-                
                 Input unrecognized. Here's the help screen again to double-check!
                 
                 - register <username> <password> <email>
@@ -56,6 +56,16 @@ public class Prelogin implements Client{
                 - quit
                 - help
                 """;
+    }
+
+    @Override
+    public String bgTheme() {
+        return SET_BG_COLOR_WHITE;
+    }
+
+    @Override
+    public String quit() {
+        return "quit";
     }
 
 

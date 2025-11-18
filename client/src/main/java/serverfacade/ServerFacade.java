@@ -121,6 +121,7 @@ public class ServerFacade {
             if (body != null) {
                 throw new DataAccessException((String.format("Server error occurred: %s", body)));
             }
+
             //Keep in mind that this is different
             throw new DataAccessException("other failure: " + status);
         }

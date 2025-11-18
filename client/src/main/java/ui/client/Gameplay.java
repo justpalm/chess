@@ -22,4 +22,14 @@ public class Gameplay implements Client{
     public String specialHelp() {
         return "";
     }
+
+    @Override
+    public String bgTheme() {
+        return "";
+    }
+
+    @Override
+    public String quit() {
+        return "";
+    }
 }

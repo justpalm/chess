@@ -28,8 +28,8 @@ public class Repl {
 
     public void run() {
         System.out.println(SET_TEXT_BOLD + SET_BG_COLOR_MAGENTA + SET_TEXT_COLOR_WHITE +  WHITE_KING +
-                " Welcome to the Chess Game" + BLACK_KING + RESET_BG_COLOR + RESET_TEXT_COLOR);
-        System.out.print(SET_BG_COLOR_WHITE + client.help());
+                " Welcome to the Chess Game" + BLACK_KING);
+        System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_BOLD + SET_TEXT_COLOR_BLACK + client.help());
 
         Scanner scanner = new Scanner(System.in);
         var result = "";
@@ -39,9 +39,9 @@ public class Repl {
 
             try {
                 result = client.eval(line);
-
-                System.out.print(SET_BG_COLOR_WHITE + SET_TEXT_COLOR_BLACK + SET_TEXT_BOLD + result + "\n");
-
+                if(!result.equals("quit")) {
+                    System.out.print(client.bgTheme() + SET_TEXT_COLOR_BLACK + SET_TEXT_BOLD + result + "\n");
+                }
                 String[] tokens = line.toLowerCase().split(" ");
 
                 if (tokens[0].equals("login") | (tokens[0].equals("register"))) {
@@ -57,7 +57,7 @@ public class Repl {
                 System.out.print(msg);
             }
         }
-        System.out.println();
+        System.out.println("Goodbye!");
     }
 
 }

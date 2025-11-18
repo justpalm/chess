@@ -42,6 +42,7 @@ public class Postlogin implements Client{
                 case "join" -> join(params);
                 case "observe" -> observe(params);
                 case "logout" -> logout();
+                case "quit" -> quit();
                 case "help" -> help();
                 default -> specialHelp();
             };
@@ -58,7 +59,6 @@ public class Postlogin implements Client{
     @Override
     public String specialHelp() {
         return """
-            
             Input unrecognized. Here's the help screen again to double-check!
             
             - create <GAMENAME>
@@ -71,6 +71,21 @@ public class Postlogin implements Client{
             """;
     }
 
+    @Override
+    public String bgTheme() {
+        return SET_BG_COLOR_LIGHT_GREY;
+    }
+
+    @Override
+    public String quit() throws DataAccessException {
+        if (logout().equals("Logout successful")) {
+            return "quit";
+        }
+        else {
+            return "Quit unsuccessful. Try logging out first?";
+        }
+    }
+
     private String create(String... params) throws DataAccessException {
         if (params.length == 1) {
             var createGameRequest = new CreateGameRequest(authToken, params[0]);
@@ -81,7 +96,7 @@ public class Postlogin implements Client{
             }
             //THis just resets the list since a new game is created and the numbers are out of whack now
             gameNumTogameId = null;
-            return String.format("Game created called %s", createGameRequest.gameName());
+            return String.format("New game created called '%s'", createGameRequest.gameName());
         }
         throw new DataAccessException("Expected: <GAMENAME>");
     }
@@ -96,13 +111,13 @@ public class Postlogin implements Client{
             throw new DataAccessException(e.getMessage());
         }
         int n = 0;
-        String theString = null;
+        String theString = "";
         gameNumTogameId = new HashMap<Integer, GameData>();
         for (var game : listGamesResult.games()) {
             n++;
-            theString += String.format(String.valueOf(n) + "--->" + game.gameName() + "\n" +
+            theString += (String.format("#" + n + " ---> Game name: " + game.gameName() + "\n" +
                     "White User: " + game.whiteUsername() + "\n" +
-                    "Black User: " + game.blackUsername()) + "\n";
+                    "Black User: " + game.blackUsername() + "\n"));
             gameNumTogameId.put(n, game);
         }
 
@@ -127,7 +142,7 @@ public class Postlogin implements Client{
                 throw new DataAccessException(e.getMessage());
             }
 
-            GameData game = gameNumTogameId.get(params[1]);
+            GameData game = gameNumTogameId.get(Integer.valueOf(params[1]));
             if (game == null)
                 throw new DataAccessException("Game number invalid, please consult the list of games");
 
@@ -155,21 +170,28 @@ public class Postlogin implements Client{
         }
 
         private void drawChessboard(GameData game) throws DataAccessException {
-            return;
+
+
+
+
+
+
+
+
     }
 
     private String observe(String... params) throws DataAccessException {
         if (gameNumTogameId == null) {
-            throw new DataAccessException("Call 'list' first to know the game numbers. (List must be recalled" +
+            throw new DataAccessException("Call 'list' first to know the game numbers. (List must be recalled " +
                     "after a new game is created.");
         }
 
-        GameData game = gameNumTogameId.get(params[0]);
+        GameData game = gameNumTogameId.get(Integer.valueOf(params[1]));
         if (game == null)
             throw new DataAccessException("Game number invalid, please consult the list of games");
 
         drawChessboard(game);
-        return String.format("Now observing game: %s !", game.gameName());
+        return String.format("Now observing game: '%s' !", game.gameName());
 
     }
 
@@ -180,7 +202,7 @@ public class Postlogin implements Client{
             } catch (Exception e) {
                 throw new DataAccessException(e.getMessage());
             }
-            return String.format("Logout succesful");
+            return String.format("Logout successful");
     }
 
 

@@ -36,16 +36,14 @@ public class MySQLUserDataAccess implements UserDAO{
                             rs.getString("password"),
                             rs.getString("email"));
                 }
-                else {
-                    throw new SQLException("User not found");
+                return null;
                 }
-            }
-        } catch (DataAccessException e) {
-            throw new DataAccessException(String.format("Error" + e.getMessage()));
+            } catch (DataAccessException e) {
+                throw new DataAccessException(String.format("Error: " + e.getMessage()));
 
-        } catch (SQLException e) {
-            throw new UnauthorizedException(String.format("\"Error\" + Unable to read data: %s", e.getMessage()));
-        }
+            } catch (SQLException e) {
+                throw new UnauthorizedException(String.format("Error: %s", e.getMessage()));
+            }
     }
 
 
