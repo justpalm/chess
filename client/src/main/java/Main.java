@@ -9,11 +9,6 @@ public class Main {
     static Server server;
 
     public static void main(String[] args) throws DataAccessException{
-        var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
-
-        server = new Server();
-        var port = server.run(8080);
-        System.out.println("Started test HTTP server on " + port);
         runRepl();
     }
 
