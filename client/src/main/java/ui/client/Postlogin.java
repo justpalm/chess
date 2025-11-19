@@ -2,14 +2,12 @@ package ui.client;
 
 import chess.ChessGame;
 import dataaccess.exceptions.DataAccessException;
-import jdk.jshell.spi.ExecutionControl;
 import model.GameData;
 import serverfacade.ServerFacade;
 import service.requestsandresults.*;
-import ui.State;
+
 import static ui.EscapeSequences.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -137,12 +135,12 @@ public class Postlogin implements Client{
         ChessGame.TeamColor teamColor;
         if (params.length == 2) {
             try {
-                teamColor = setTeamColor(params[0]);
+                teamColor = setTeamColor(params[1]);
             } catch (DataAccessException e) {
                 throw new DataAccessException(e.getMessage());
             }
 
-            GameData game = gameNumTogameId.get(Integer.valueOf(params[1]));
+            GameData game = gameNumTogameId.get(Integer.valueOf(params[0]));
             if (game == null)
                 throw new DataAccessException("Game number invalid, please consult the list of games");
 
@@ -152,7 +150,14 @@ public class Postlogin implements Client{
             } catch (Exception e) {
                 throw new DataAccessException(e.getMessage());
             }
-            drawChessboard(game);
+
+            if (teamColor == ChessGame.TeamColor.BLACK) {
+                BlackChessBoardDrawing.main();
+            }
+            if (teamColor == ChessGame.TeamColor.WHITE) {
+                WhiteChessBoardDrawing.main();
+            }
+
             return String.format("Game %s joined!", game.gameName());
         }
         throw new DataAccessException("Expected: <teamcolor> <gamenumber> ");
@@ -169,16 +174,6 @@ public class Postlogin implements Client{
         throw new DataAccessException("Team Color not correctly specified");
         }
 
-        private void drawChessboard(GameData game) throws DataAccessException {
-
-
-
-
-
-
-
-
-    }
 
     private String observe(String... params) throws DataAccessException {
         if (gameNumTogameId == null) {
@@ -190,7 +185,8 @@ public class Postlogin implements Client{
         if (game == null)
             throw new DataAccessException("Game number invalid, please consult the list of games");
 
-        drawChessboard(game);
+
+        WhiteChessBoardDrawing.main();
         return String.format("Now observing game: '%s' !", game.gameName());
 
     }

@@ -1,14 +1,14 @@
-package ui;
+package ui.client;
 
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 import chess.ChessGame;
+import ui.EscapeSequences;
 
 import static ui.EscapeSequences.*;
 
@@ -16,17 +16,15 @@ import static ui.EscapeSequences.*;
 public class BlackChessBoardDrawing {
 
     // Board dimensions.
-    private static final int BOARD_SIZE_IN_SQUARES = 8;
+    private static final int BOARD_SIZE = 8;
 
 
-    private static final String X = WHITE_KING;
-    private static final String O = BLACK_KING;
-    private static ChessGame.TeamColor PlayerColor;
+    private static ChessGame.TeamColor PlayerColor = ChessGame.TeamColor.BLACK;
     static String colorSquare;
 
 
     //White Printing
-    private static List<String> row_1 = new ArrayList<>(Arrays.asList(
+    private static ArrayList<String> row_1 = new ArrayList<>(Arrays.asList(
             WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_KING, WHITE_QUEEN, WHITE_BISHOP, WHITE_KNIGHT, WHITE_ROOK));
     private static ArrayList<String> row_2 = new ArrayList<>(Arrays.asList(
             WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN));
@@ -35,10 +33,8 @@ public class BlackChessBoardDrawing {
     //Black Printing
     private static ArrayList<String> row_7 = new ArrayList<>(Arrays.asList(
             BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN));
-    private static ArrayList<String> row_8= new ArrayList<>(Arrays.asList(
+    private static ArrayList<String> row_8 = new ArrayList<>(Arrays.asList(
             BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_KING, BLACK_QUEEN, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
-
-
 
 
     private static Random rand = new Random();
@@ -49,6 +45,7 @@ public class BlackChessBoardDrawing {
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
         out.print(ERASE_SCREEN);
+        out.print(SET_TEXT_FAINT);
 
         drawHeaders(out);
 
@@ -62,29 +59,25 @@ public class BlackChessBoardDrawing {
 
     private static void drawHeaders(PrintStream out) {
 
-        setBlack(out);
 
-        String[] headers = {EMPTY + " a", "b", "c", "d", "e", "f", "g", "h", EMPTY};
-        for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
+        String[] headers = {EMPTY + "h", "g", "f", "e", "d", "c", "b", "a" + " \u2002" };
+        for (int boardCol = 0; boardCol < (BOARD_SIZE); ++boardCol) {
             drawHeader(out, headers[boardCol]);
-
-            if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
-                out.print("\u2003 ");
-            }
+            out.print("\u2003 ");
         }
-
+        setBlack(out);
         out.println();
     }
 
     private static void drawHeader(PrintStream out, String headerText) {
 
-        out.print(SET_BG_COLOR_LIGHT_GREY + EMPTY);
+        out.print(SET_BG_COLOR_DARK_GREY);
         printHeaderText(out, headerText);
-        out.print(SET_BG_COLOR_LIGHT_GREY + EMPTY);
+        out.print(SET_BG_COLOR_DARK_GREY);
     }
 
     private static void printHeaderText(PrintStream out, String player) {
-        out.print(SET_BG_COLOR_LIGHT_GREY);
+        out.print(SET_BG_COLOR_DARK_GREY);
         out.print(SET_TEXT_COLOR_WHITE);
 
         out.print(player);
@@ -94,41 +87,19 @@ public class BlackChessBoardDrawing {
 
     private static void drawChessBoard(PrintStream out) {
 
-        for (int boardRow = 1 ; boardRow < BOARD_SIZE_IN_SQUARES + 1; ++boardRow) {
-            out.print(SET_BG_COLOR_LIGHT_GREY + SET_TEXT_COLOR_WHITE + " " + String.valueOf(boardRow) + " ");
+        for (int boardRow = 1; boardRow < BOARD_SIZE + 1; ++boardRow) {
+            out.print(SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " " + String.valueOf(boardRow) + " ");
+            for (int boardCol = 1; boardCol < BOARD_SIZE + 1; ++boardCol) {
 
-            drawRowOfSquares(out);
-            out.print(SET_BG_COLOR_LIGHT_GREY + " " + String.valueOf(boardRow) + " ");;
-            setBlack(out);
-            out.println();
-
-
-
-
-//            if (boardRow < BOARD_SIZE_IN_SQUARES - 1) {
-//                // Draw horizontal row separator.
-//                drawHorizontalLine(out);
-//                setBlack(out);
-//            }
-        }
-    }
-
-    private static void drawRowOfSquares(PrintStream out) {
-
-
-
-        for (int squareRow = 0; squareRow < BOARD_SIZE_IN_SQUARES + 1; ++squareRow) {
-            for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
-
-
-                if (boardCol % 2 == 0) {
-                    if (squareRow % 2 == 1) {
+                //This determines what the color of the square should be
+                if (boardRow % 2 == 0) {
+                    if (boardCol % 2 == 1) {
                         colorSquare = SET_BG_COLOR_WHITE;
                     } else {
                         colorSquare = SET_BG_COLOR_BLACK;
                     }
                 } else {
-                    if (squareRow % 2 == 1) {
+                    if (boardCol % 2 == 1) {
                         colorSquare = SET_BG_COLOR_BLACK;
                     } else {
                         colorSquare = SET_BG_COLOR_WHITE;
@@ -136,41 +107,33 @@ public class BlackChessBoardDrawing {
                 }
 
 
-                switch (squareRow) {
+                switch (boardRow) {
                     case 1:
-                        printPlayer(out, row_1.get(squareRow));
+                        printWhitePlayer(out, row_1.get(boardCol - 1), colorSquare);
                         break;
                     case 2:
-                        printPlayer(out, row_2.get(squareRow));
+                        printWhitePlayer(out, row_2.get(boardCol - 1), colorSquare);
                         break;
                     case 7:
-                        printPlayer(out, row_7.get(squareRow));
+                        printBlackPlayer(out, row_7.get(boardCol - 1), colorSquare);
                         break;
                     case 8:
-                        printPlayer(out, row_8.get(squareRow));
+                        printBlackPlayer(out, row_8.get(boardCol - 1), colorSquare);
                         break;
                     default:
+                        printEmpty(out, colorSquare);
                         break;
                 }
             }
-        }
+            out.print(SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " " + String.valueOf(boardRow) + " ");
+            setBlack(out);
+            out.println();
     }
-    private void printSquare(PrintStream out) {
-                    out.print(colorSquare);
-                    out.print(EMPTY);
-
-                    out.print(EMPTY);
-                }
-
+    }
 
     private static void setWhite(PrintStream out) {
         out.print(SET_BG_COLOR_WHITE);
         out.print(SET_TEXT_COLOR_WHITE);
-    }
-
-    private static void setRed(PrintStream out) {
-        out.print(SET_BG_COLOR_RED);
-        out.print(SET_TEXT_COLOR_RED);
     }
 
     private static void setBlack(PrintStream out) {
@@ -178,12 +141,27 @@ public class BlackChessBoardDrawing {
         out.print(SET_TEXT_COLOR_BLACK);
     }
 
-    private static void printPlayer(PrintStream out, String player) {
-        out.print(SET_TEXT_COLOR_BLACK);
-        out.print(player);
+    private static void printEmpty(PrintStream out, String color) {
+        //This is only to print blank players
+        out.print(color);
+        out.print(EscapeSequences.EMPTY);
         setWhite(out);
     }
 
+    private static void printBlackPlayer(PrintStream out, String player, String color) {
+            out.print(color);
+            out.print(SET_TEXT_COLOR_MAGENTA);
+            out.print(player);
+            setWhite(out);
+    }
 
 
-}
+    private static void printWhitePlayer(PrintStream out, String player, String color) {
+            out.print(color);
+            out.print(SET_TEXT_COLOR_BLUE);
+            out.print(player);
+            setWhite(out);
+        }
+    }
+
+

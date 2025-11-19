@@ -1,27 +1,51 @@
 package ui;
 
+import chess.ChessGame;
+
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import static ui.EscapeSequences.*;
+import static ui.EscapeSequences.EMPTY;
 
 public class TicTacToe {
 
     // Board dimensions.
-    private static final int BOARD_SIZE_IN_SQUARES = 3;
+    private static final int BOARD_SIZE_IN_SQUARES = 8;
     private static final int SQUARE_SIZE_IN_PADDED_CHARS = 3;
     private static final int LINE_WIDTH_IN_PADDED_CHARS = 1;
 
-    // Padded characters.
-    private static final String EMPTY = "   ";
-    private static final String X = " X ";
-    private static final String O = " O ";
+
+
+    private static final String X = " " + WHITE_KING + " " ;
+    private static final String O = " " + BLACK_KING + " ";
+    private static ChessGame.TeamColor PlayerColor;
+    static String colorSquare;
+
+
+    //White Printing
+    private static ArrayList<String> row_1 = new ArrayList<>(Arrays.asList(
+            WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_KING, WHITE_QUEEN, WHITE_BISHOP, WHITE_KNIGHT, WHITE_ROOK));
+    private static ArrayList<String> row_2 = new ArrayList<>(Arrays.asList(
+            WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN));
+
+
+    //Black Printing
+    private static ArrayList<String> row_7 = new ArrayList<>(Arrays.asList(
+            BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN));
+    private static ArrayList<String> row_8= new ArrayList<>(Arrays.asList(
+            BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_KING, BLACK_QUEEN, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
+
+
 
     private static Random rand = new Random();
 
 
-    public static void main(String[] args) {
+    public static void main() {
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
         out.print(ERASE_SCREEN);
@@ -38,7 +62,7 @@ public class TicTacToe {
 
         setBlack(out);
 
-        String[] headers = { "TIC", "TAC", "TOE" };
+        String[] headers = {EMPTY + " a", "b", "c", "d", "e", "f", "g", "h", EMPTY};
         for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
             drawHeader(out, headers[boardCol]);
 

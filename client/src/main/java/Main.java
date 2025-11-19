@@ -1,9 +1,7 @@
 import chess.*;
 import dataaccess.exceptions.DataAccessException;
 import server.Server;
-import ui.BlackChessBoardDrawing;
 import ui.Repl;
-import ui.TicTacToe;
 
 public class Main {
 
@@ -12,13 +10,13 @@ public class Main {
 
     public static void main(String[] args) throws DataAccessException{
         var piece = new ChessPiece(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.PAWN);
-        System.out.println("♕ 240 Chess Client: " + piece.toString());
 
         server = new Server();
         var port = server.run(8080);
         System.out.println("Started test HTTP server on " + port);
-        TicTacToe.main();
+        runRepl();
     }
+
 
     private static void runRepl() throws DataAccessException{
 
