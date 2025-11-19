@@ -2,14 +2,12 @@ package client;
 
 import chess.ChessGame;
 import dataaccess.*;
-import dataaccess.exceptions.AlreadyTakenException;
-import dataaccess.exceptions.BadRequestException;
-import dataaccess.exceptions.DataAccessException;
-import dataaccess.exceptions.UnauthorizedException;
-import model.GameData;
+import dataaccess.exceptions.*;
 import org.junit.jupiter.api.*;
 import server.Server;
 import service.requestsandresults.*;
+
+
 
 import serverfacade.ServerFacade;
 import server.Server;

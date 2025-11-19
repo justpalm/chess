@@ -16,7 +16,7 @@ public class Repl {
     public Repl (String serverUrl) throws DataAccessException{
         server = new ServerFacade(serverUrl);
         client = new Prelogin(server);
-        server.clear();
+//        server.clear();
     }
 
 
