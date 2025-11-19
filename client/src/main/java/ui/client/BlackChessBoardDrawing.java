@@ -87,17 +87,20 @@ public class BlackChessBoardDrawing {
             for (int boardCol = 1; boardCol < BOARD_SIZE + 1; ++boardCol) {
 
                 //This determines what the color of the square should be
-                if (boardRow % 2 == 0) {
-                    if (boardCol % 2 == 1) {
-                        colorSquare = SET_BG_COLOR_WHITE;
-                    } else {
-                        colorSquare = SET_BG_COLOR_BLACK;
+                switch (boardRow % 2) {
+                    case 0 -> {
+                        if (boardCol % 2 == 1) {
+                            colorSquare = SET_BG_COLOR_WHITE;
+                        } else {
+                            colorSquare = SET_BG_COLOR_BLACK;
+                        }
                     }
-                } else {
-                    if (boardCol % 2 == 1) {
-                        colorSquare = SET_BG_COLOR_BLACK;
-                    } else {
-                        colorSquare = SET_BG_COLOR_WHITE;
+                    default -> {
+                        if (boardCol % 2 == 1) {
+                            colorSquare = SET_BG_COLOR_BLACK;
+                        } else {
+                            colorSquare = SET_BG_COLOR_WHITE;
+                        }
                     }
                 }
 
