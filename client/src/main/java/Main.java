@@ -1,12 +1,10 @@
 import chess.*;
 import dataaccess.exceptions.DataAccessException;
-import server.Server;
 import ui.Repl;
 
 public class Main {
 
     static Repl repl;
-    static Server server;
 
     public static void main(String[] args) throws DataAccessException{
         runRepl();
