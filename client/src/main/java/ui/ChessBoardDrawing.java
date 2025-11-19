@@ -60,7 +60,7 @@ public class ChessBoardDrawing {
 
         setBlack(out);
 
-        String[] headers = {EMPTY + " a", "b", "c", "d", "e", "f", "g", "h", "   "};
+        String[] headers = {EMPTY + " a", "b", "c", "d", "e", "f", "g", "h", EMPTY};
         for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
             drawHeader(out, headers[boardCol]);
 
