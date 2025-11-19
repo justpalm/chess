@@ -21,16 +21,16 @@ public class BlackChessBoardDrawing {
 
 
     //White Printing
-    private static final ArrayList<String> row1 = new ArrayList<>(Arrays.asList(
+    private static ArrayList<String> row1 = new ArrayList<>(Arrays.asList(
             WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_KING, WHITE_QUEEN, WHITE_BISHOP, WHITE_KNIGHT, WHITE_ROOK));
-    private static final ArrayList<String> row2 = new ArrayList<>(Arrays.asList(
+    private static ArrayList<String> row2 = new ArrayList<>(Arrays.asList(
             WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN));
 
 
     //Black Printing
-    private static final ArrayList<String> row7 = new ArrayList<>(Arrays.asList(
+    private static ArrayList<String> row7 = new ArrayList<>(Arrays.asList(
             BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN));
-    private static final ArrayList<String> row8 = new ArrayList<>(Arrays.asList(
+    private static ArrayList<String> row8 = new ArrayList<>(Arrays.asList(
             BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_KING, BLACK_QUEEN, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
 
 
