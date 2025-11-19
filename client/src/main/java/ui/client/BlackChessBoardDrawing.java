@@ -5,9 +5,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
-import chess.ChessGame;
 import ui.EscapeSequences;
 
 import static ui.EscapeSequences.*;
@@ -19,25 +17,22 @@ public class BlackChessBoardDrawing {
     private static final int BOARD_SIZE = 8;
 
 
-    private static ChessGame.TeamColor playerColor = ChessGame.TeamColor.BLACK;
     static String colorSquare;
 
 
     //White Printing
-    private static ArrayList<String> row1 = new ArrayList<>(Arrays.asList(
+    private static final ArrayList<String> row1 = new ArrayList<>(Arrays.asList(
             WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_KING, WHITE_QUEEN, WHITE_BISHOP, WHITE_KNIGHT, WHITE_ROOK));
-    private static ArrayList<String> row2 = new ArrayList<>(Arrays.asList(
+    private static final ArrayList<String> row2 = new ArrayList<>(Arrays.asList(
             WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN));
 
 
     //Black Printing
-    private static ArrayList<String> row7 = new ArrayList<>(Arrays.asList(
+    private static final ArrayList<String> row7 = new ArrayList<>(Arrays.asList(
             BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN));
-    private static ArrayList<String> row8 = new ArrayList<>(Arrays.asList(
+    private static final ArrayList<String> row8 = new ArrayList<>(Arrays.asList(
             BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_KING, BLACK_QUEEN, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
 
-
-    private static Random rand = new Random();
 
 
     public static void main() {

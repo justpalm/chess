@@ -7,8 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-import chess.ChessGame;
-
 import static ui.EscapeSequences.*;
 
 
@@ -18,30 +16,29 @@ public class WhiteChessBoardDrawing {
     private static final int BOARD_SIZE = 8;
 
 
-    private static ChessGame.TeamColor playerColor = ChessGame.TeamColor.BLACK;
+
     static String colorSquare;
 
 
     //White Printing
-    private static ArrayList<String> row1 = new ArrayList<>(Arrays.asList(
+    private static final ArrayList<String> row1 = new ArrayList<>(Arrays.asList(
             WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_QUEEN, WHITE_KING, WHITE_BISHOP, WHITE_KNIGHT, WHITE_ROOK));
-    private static ArrayList<String> row2 = new ArrayList<>(Arrays.asList(
+    private static final ArrayList<String> row2 = new ArrayList<>(Arrays.asList(
             WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN));
 
 
     //Black Printing
-    private static ArrayList<String> row7 = new ArrayList<>(Arrays.asList(
+    private static final ArrayList<String> row7 = new ArrayList<>(Arrays.asList(
             BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN));
-    private static ArrayList<String> row8 = new ArrayList<>(Arrays.asList(
+    private static final ArrayList<String> row8 = new ArrayList<>(Arrays.asList(
             BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
 
 
-    private static Random rand = new Random();
 
 
     public static void main() {
 
-        var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
+        PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
         out.print(ERASE_SCREEN);
         out.print(SET_TEXT_FAINT);
@@ -90,42 +87,46 @@ public class WhiteChessBoardDrawing {
             for (int boardCol = 8; boardCol > 0; boardCol--) {
 
                 //This determines what the color of the square should be
-                if (boardRow % 2 == 0) {
-                    if (boardCol % 2 == 1) {
-                        colorSquare = SET_BG_COLOR_WHITE;
-                    } else {
-                        colorSquare = SET_BG_COLOR_BLACK;
-                    }
-                } else {
-                    if (boardCol % 2 == 1) {
-                        colorSquare = SET_BG_COLOR_BLACK;
-                    } else {
-                        colorSquare = SET_BG_COLOR_WHITE;
-                    }
-                }
-
-
-                switch (boardRow) {
-                    case 1:
-                        printWhitePlayer(out, row1.get(boardCol - 1), colorSquare);
-                        break;
-                    case 2:
-                        printWhitePlayer(out, row2.get(boardCol - 1), colorSquare);
-                        break;
-                    case 7:
-                        printBlackPlayer(out, row7.get(boardCol - 1), colorSquare);
-                        break;
-                    case 8:
-                        printBlackPlayer(out, row8.get(boardCol - 1), colorSquare);
-                        break;
-                    default:
-                        printEmpty(out, colorSquare);
-                        break;
-                }
+                boardprinting(out, boardRow, boardCol);
             }
             out.print(SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " " + String.valueOf(boardRow) + " ");
             setBlack(out);
             out.println();
+        }
+    }
+
+    public static void boardprinting(PrintStream out, int boardRow, int boardCol) {
+        if (boardRow % 2 == 0) {
+            if (boardCol % 2 == 1) {
+                colorSquare = SET_BG_COLOR_WHITE;
+            } else {
+                colorSquare = SET_BG_COLOR_BLACK;
+            }
+        } else {
+            if (boardCol % 2 == 1) {
+                colorSquare = SET_BG_COLOR_BLACK;
+            } else {
+                colorSquare = SET_BG_COLOR_WHITE;
+            }
+        }
+
+
+        switch (boardRow) {
+            case 1:
+                printWhitePlayer(out, row1.get(boardCol - 1), colorSquare);
+                break;
+            case 2:
+                printWhitePlayer(out, row2.get(boardCol - 1), colorSquare);
+                break;
+            case 7:
+                printBlackPlayer(out, row7.get(boardCol - 1), colorSquare);
+                break;
+            case 8:
+                printBlackPlayer(out, row8.get(boardCol - 1), colorSquare);
+                break;
+            default:
+                printEmpty(out, colorSquare);
+                break;
         }
     }
 

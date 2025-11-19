@@ -19,8 +19,6 @@ public class Repl {
         server.clear();
     }
 
-    private void checkState () throws DataAccessException{
-    }
 
     private void printPrompt() {
         System.out.print("\n" + SET_TEXT_COLOR_BLACK + ">>> " );
