@@ -2,6 +2,7 @@ import chess.*;
 import dataaccess.exceptions.DataAccessException;
 import server.Server;
 import serverfacade.ServerFacade;
+import ui.ChessBoardDrawing;
 import ui.Repl;
 
 public class Main {
@@ -16,7 +17,8 @@ public class Main {
         server = new Server();
         var port = server.run(8080);
         System.out.println("Started test HTTP server on " + port);
-        runRepl();
+        ChessGame.TeamColor playercolor = ChessGame.TeamColor.WHITE;
+        ChessBoardDrawing.main(playercolor);
     }
 
     private static void runRepl() throws DataAccessException{
