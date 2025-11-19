@@ -16,7 +16,6 @@ public class WhiteChessBoardDrawing {
     private static final int BOARD_SIZE = 8;
 
 
-
     static String colorSquare;
 
 
@@ -32,8 +31,6 @@ public class WhiteChessBoardDrawing {
             BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN));
     private static ArrayList<String> row8 = new ArrayList<>(Arrays.asList(
             BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
-
-
 
 
     public static void main() {
@@ -96,69 +93,77 @@ public class WhiteChessBoardDrawing {
     }
 
     public static void boardprinting(PrintStream out, int boardRow, int boardCol) {
-        if (boardRow % 2 == 0) {
-            if (boardCol % 2 == 1) {
-                colorSquare = SET_BG_COLOR_WHITE;
-            } else {
-                colorSquare = SET_BG_COLOR_BLACK;
-            }
-        } else {
-            if (boardCol % 2 == 1) {
-                colorSquare = SET_BG_COLOR_BLACK;
-            } else {
-                colorSquare = SET_BG_COLOR_WHITE;
-            }
-        }
+        BaseChessBoardDrawing baseChessBoardDrawing = new BaseChessBoardDrawing();
+
+        baseChessBoardDrawing.processBoard(row1, row2, row7, row8, out, boardRow, boardCol, colorSquare);
 
 
-        switch (boardRow) {
-            case 1:
-                printWhitePlayer(out, row1.get(boardCol - 1), colorSquare);
-                break;
-            case 2:
-                printWhitePlayer(out, row2.get(boardCol - 1), colorSquare);
-                break;
-            case 7:
-                printBlackPlayer(out, row7.get(boardCol - 1), colorSquare);
-                break;
-            case 8:
-                printBlackPlayer(out, row8.get(boardCol - 1), colorSquare);
-                break;
-            default:
-                printEmpty(out, colorSquare);
-                break;
-        }
     }
 
-    private static void setWhite(PrintStream out) {
-        out.print(SET_BG_COLOR_WHITE);
-        out.print(SET_TEXT_COLOR_WHITE);
-    }
-
+    //        if (boardRow % 2 == 0) {
+//            if (boardCol % 2 == 1) {
+//                colorSquare = SET_BG_COLOR_WHITE;
+//            } else {
+//                colorSquare = SET_BG_COLOR_BLACK;
+//            }
+//        } else {
+//            if (boardCol % 2 == 1) {
+//                colorSquare = SET_BG_COLOR_BLACK;
+//            } else {
+//                colorSquare = SET_BG_COLOR_WHITE;
+//            }
+//        }
+//
+//
+//        switch (boardRow) {
+//            case 1:
+//                printWhitePlayer(out, row1.get(boardCol - 1), colorSquare);
+//                break;
+//            case 2:
+//                printWhitePlayer(out, row2.get(boardCol - 1), colorSquare);
+//                break;
+//            case 7:
+//                printBlackPlayer(out, row7.get(boardCol - 1), colorSquare);
+//                break;
+//            case 8:
+//                printBlackPlayer(out, row8.get(boardCol - 1), colorSquare);
+//                break;
+//            default:
+//                printEmpty(out, colorSquare);
+//                break;
+//        }
+//    }
+//
+//    private static void setWhite(PrintStream out) {
+//        out.print(SET_BG_COLOR_WHITE);
+//        out.print(SET_TEXT_COLOR_WHITE);
+//    }
+//
     private static void setBlack(PrintStream out) {
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_BLACK);
     }
-
-    private static void printEmpty(PrintStream out, String color) {
-        //This is only to print blank players
-        out.print(color);
-        out.print(EMPTY);
-        setWhite(out);
-    }
-
-    private static void printBlackPlayer(PrintStream out, String player, String color) {
-        out.print(color);
-        out.print(SET_TEXT_COLOR_MAGENTA);
-        out.print(player);
-        setWhite(out);
-    }
-
-
-    private static void printWhitePlayer(PrintStream out, String player, String color) {
-        out.print(color);
-        out.print(SET_TEXT_COLOR_BLUE);
-        out.print(player);
-        setWhite(out);
-    }
 }
+//
+//    private static void printEmpty(PrintStream out, String color) {
+//        //This is only to print blank players
+//        out.print(color);
+//        out.print(EMPTY);
+//        setWhite(out);
+//    }
+//
+//    private static void printBlackPlayer(PrintStream out, String player, String color) {
+//        out.print(color);
+//        out.print(SET_TEXT_COLOR_MAGENTA);
+//        out.print(player);
+//        setWhite(out);
+//    }
+//
+//
+//    private static void printWhitePlayer(PrintStream out, String player, String color) {
+//        out.print(color);
+//        out.print(SET_TEXT_COLOR_BLUE);
+//        out.print(player);
+//        setWhite(out);
+//    }
+//}

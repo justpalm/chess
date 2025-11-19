@@ -34,7 +34,6 @@ public class BlackChessBoardDrawing {
             BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_KING, BLACK_QUEEN, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
 
 
-
     public static void main() {
 
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
@@ -55,7 +54,7 @@ public class BlackChessBoardDrawing {
     private static void drawHeaders(PrintStream out) {
 
 
-        String[] headers = {EMPTY + "h", "g", "f", "e", "d", "c", "b", "a" + " \u2002" };
+        String[] headers = {EMPTY + "h", "g", "f", "e", "d", "c", "b", "a" + " \u2002"};
         for (int boardCol = 0; boardCol < (BOARD_SIZE); ++boardCol) {
             drawHeader(out, headers[boardCol]);
             out.print("\u2003 ");
@@ -85,81 +84,86 @@ public class BlackChessBoardDrawing {
         for (int boardRow = 1; boardRow < BOARD_SIZE + 1; ++boardRow) {
             out.print(SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " " + String.valueOf(boardRow) + " ");
             for (int boardCol = 1; boardCol < BOARD_SIZE + 1; ++boardCol) {
-
-                //This determines what the color of the square should be
-                switch (boardRow % 2) {
-                    case 0 -> {
-                        if (boardCol % 2 == 1) {
-                            colorSquare = SET_BG_COLOR_WHITE;
-                        } else {
-                            colorSquare = SET_BG_COLOR_BLACK;
-                        }
-                    }
-                    default -> {
-                        if (boardCol % 2 == 1) {
-                            colorSquare = SET_BG_COLOR_BLACK;
-                        } else {
-                            colorSquare = SET_BG_COLOR_WHITE;
-                        }
-                    }
-                }
-
-
-                switch (boardRow) {
-                    case 1:
-                        printWhitePlayer(out, row1.get(boardCol - 1), colorSquare);
-                        break;
-                    case 2:
-                        printWhitePlayer(out, row2.get(boardCol - 1), colorSquare);
-                        break;
-                    case 7:
-                        printBlackPlayer(out, row7.get(boardCol - 1), colorSquare);
-                        break;
-                    case 8:
-                        printBlackPlayer(out, row8.get(boardCol - 1), colorSquare);
-                        break;
-                    default:
-                        printEmpty(out, colorSquare);
-                        break;
-                }
+                WhiteChessBoardDrawing.boardprinting(out, boardRow, boardCol);
             }
+
+
+            //This determines what the color of the square should be
+//                switch (boardRow % 2) {
+//                    case 0 -> {
+//                        if (boardCol % 2 == 1) {
+//                            colorSquare = SET_BG_COLOR_WHITE;
+//                        } else {
+//                            colorSquare = SET_BG_COLOR_BLACK;
+//                        }
+//                    }
+//                    default -> {
+//                        if (boardCol % 2 == 1) {
+//                            colorSquare = SET_BG_COLOR_BLACK;
+//                        } else {
+//                            colorSquare = SET_BG_COLOR_WHITE;
+//                        }
+//                    }
+//                }
+//
+//
+//                switch (boardRow) {
+//                    case 1:
+//                        printWhitePlayer(out, row1.get(boardCol - 1), colorSquare);
+//                        break;
+//                    case 2:
+//                        printWhitePlayer(out, row2.get(boardCol - 1), colorSquare);
+//                        break;
+//                    case 7:
+//                        printBlackPlayer(out, row7.get(boardCol - 1), colorSquare);
+//                        break;
+//                    case 8:
+//                        printBlackPlayer(out, row8.get(boardCol - 1), colorSquare);
+//                        break;
+//                    default:
+//                        printEmpty(out, colorSquare);
+//                        break;
+//                }
+//            }
             out.print(SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " " + String.valueOf(boardRow) + " ");
             setBlack(out);
             out.println();
+        }
     }
-    }
-
-    private static void setWhite(PrintStream out) {
-        out.print(SET_BG_COLOR_WHITE);
-        out.print(SET_TEXT_COLOR_WHITE);
-    }
+//    }
+//
+//    private static void setWhite(PrintStream out) {
+//        out.print(SET_BG_COLOR_WHITE);
+//        out.print(SET_TEXT_COLOR_WHITE);
+//    }
 
     private static void setBlack(PrintStream out) {
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_BLACK);
     }
+}
 
-    private static void printEmpty(PrintStream out, String color) {
-        //This is only to print blank players
-        out.print(color);
-        out.print(EscapeSequences.EMPTY);
-        setWhite(out);
-    }
-
-    private static void printBlackPlayer(PrintStream out, String player, String color) {
-            out.print(color);
-            out.print(SET_TEXT_COLOR_MAGENTA);
-            out.print(player);
-            setWhite(out);
-    }
-
-
-    private static void printWhitePlayer(PrintStream out, String player, String color) {
-            out.print(color);
-            out.print(SET_TEXT_COLOR_BLUE);
-            out.print(player);
-            setWhite(out);
-        }
-    }
+//    private static void printEmpty(PrintStream out, String color) {
+//        //This is only to print blank players
+//        out.print(color);
+//        out.print(EscapeSequences.EMPTY);
+//        setWhite(out);
+//    }
+//
+//    private static void printBlackPlayer(PrintStream out, String player, String color) {
+//            out.print(color);
+//            out.print(SET_TEXT_COLOR_MAGENTA);
+//            out.print(player);
+//            setWhite(out);
+//    }
+//
+//
+//    private static void printWhitePlayer(PrintStream out, String player, String color) {
+//            out.print(color);
+//            out.print(SET_TEXT_COLOR_BLUE);
+//            out.print(player);
+//            setWhite(out);
+//        }
+//    }
 
 
