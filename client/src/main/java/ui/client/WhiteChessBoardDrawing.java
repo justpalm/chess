@@ -18,21 +18,21 @@ public class WhiteChessBoardDrawing {
     private static final int BOARD_SIZE = 8;
 
 
-    private static ChessGame.TeamColor PlayerColor = ChessGame.TeamColor.BLACK;
+    private static ChessGame.TeamColor playerColor = ChessGame.TeamColor.BLACK;
     static String colorSquare;
 
 
     //White Printing
-    private static ArrayList<String> row_1 = new ArrayList<>(Arrays.asList(
+    private static ArrayList<String> row1 = new ArrayList<>(Arrays.asList(
             WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_QUEEN, WHITE_KING, WHITE_BISHOP, WHITE_KNIGHT, WHITE_ROOK));
-    private static ArrayList<String> row_2 = new ArrayList<>(Arrays.asList(
+    private static ArrayList<String> row2 = new ArrayList<>(Arrays.asList(
             WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN));
 
 
     //Black Printing
-    private static ArrayList<String> row_7 = new ArrayList<>(Arrays.asList(
+    private static ArrayList<String> row7 = new ArrayList<>(Arrays.asList(
             BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN));
-    private static ArrayList<String> row_8 = new ArrayList<>(Arrays.asList(
+    private static ArrayList<String> row8 = new ArrayList<>(Arrays.asList(
             BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
 
 
@@ -107,16 +107,16 @@ public class WhiteChessBoardDrawing {
 
                 switch (boardRow) {
                     case 1:
-                        printWhitePlayer(out, row_1.get(boardCol - 1), colorSquare);
+                        printWhitePlayer(out, row1.get(boardCol - 1), colorSquare);
                         break;
                     case 2:
-                        printWhitePlayer(out, row_2.get(boardCol - 1), colorSquare);
+                        printWhitePlayer(out, row2.get(boardCol - 1), colorSquare);
                         break;
                     case 7:
-                        printBlackPlayer(out, row_7.get(boardCol - 1), colorSquare);
+                        printBlackPlayer(out, row7.get(boardCol - 1), colorSquare);
                         break;
                     case 8:
-                        printBlackPlayer(out, row_8.get(boardCol - 1), colorSquare);
+                        printBlackPlayer(out, row8.get(boardCol - 1), colorSquare);
                         break;
                     default:
                         printEmpty(out, colorSquare);

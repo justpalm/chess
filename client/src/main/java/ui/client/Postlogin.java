@@ -141,8 +141,9 @@ public class Postlogin implements Client{
             }
 
             GameData game = gameNumTogameId.get(Integer.valueOf(params[0]));
-            if (game == null)
+            if (game == null) {
                 throw new DataAccessException("Game number invalid, please consult the list of games");
+            }
 
             var joinGameRequest = new JoinGameRequest(authToken, teamColor, game.gameID());
             try {
@@ -182,9 +183,9 @@ public class Postlogin implements Client{
         }
 
         GameData game = gameNumTogameId.get(Integer.valueOf(params[1]));
-        if (game == null)
+        if (game == null) {
             throw new DataAccessException("Game number invalid, please consult the list of games");
-
+        }
 
         WhiteChessBoardDrawing.main();
         return String.format("Now observing game: '%s' !", game.gameName());
