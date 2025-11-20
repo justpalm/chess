@@ -5,7 +5,6 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 import static ui.EscapeSequences.*;
 
@@ -38,58 +37,58 @@ public class WhiteChessBoardDrawing {
             BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_KING, BLACK_QUEEN, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
 
 
-    String[] headers = {EMPTY + "a", "b", "c", "d", "e", "f", "g", "h" + " \u2003"};
+    private final String[] headers = {EMPTY + "a", "b", "c", "d", "e", "f", "g", "h" + " \u2003"};
 
 
 
 
-    //BLACK BOARD
+    public void main() {
 
 
 
-    public static void main() {
+        DrawHeaders drawHeaders = new DrawHeaders();
 
         PrintStream out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
 
         out.print(ERASE_SCREEN);
         out.print(SET_TEXT_FAINT);
-        drawHeaders(out);
+        DrawHeaders.draw(out, this.headers, BOARD_SIZE);
 
         drawChessBoard(out);
 
-        drawHeaders(out);
+        DrawHeaders.draw(out, this.headers, BOARD_SIZE);
 
         out.print(SET_BG_COLOR_BLACK);
         out.print(SET_TEXT_COLOR_WHITE);
     }
 
-    private static void drawHeaders(PrintStream out) {
-
-
-        String[] headers = {EMPTY + "a", "b", "c", "d", "e", "f", "g", "h" + " \u2003"};
-        for (int boardCol = 0; boardCol < (BOARD_SIZE); ++boardCol) {
-            drawHeader(out, headers[boardCol]);
-            out.print("\u2003 ");
-        }
-        setBlack(out);
-        out.println();
-    }
-
-    private static void drawHeader(PrintStream out, String headerText) {
-
-        out.print(SET_BG_COLOR_DARK_GREY);
-        printHeaderText(out, headerText);
-        out.print(SET_BG_COLOR_DARK_GREY);
-    }
-
-    private static void printHeaderText(PrintStream out, String player) {
-        out.print(SET_BG_COLOR_DARK_GREY);
-        out.print(SET_TEXT_COLOR_WHITE);
-
-        out.print(player);
-
-        setBlack(out);
-    }
+//    private static void drawHeaders(PrintStream out, String[] headers) {
+//
+//
+//
+//        for (int boardCol = 0; boardCol < (BOARD_SIZE); ++boardCol) {
+//            drawHeader(out, headers[boardCol]);
+//            out.print("\u2003 ");
+//        }
+//        setBlack(out);
+//        out.println();
+//    }
+//
+//    private static void drawHeader(PrintStream out, String headerText) {
+//
+//        out.print(SET_BG_COLOR_DARK_GREY);
+//        printHeaderText(out, headerText);
+//        out.print(SET_BG_COLOR_DARK_GREY);
+//    }
+//
+//    private static void printHeaderText(PrintStream out, String player) {
+//        out.print(SET_BG_COLOR_DARK_GREY);
+//        out.print(SET_TEXT_COLOR_WHITE);
+//
+//        out.print(player);
+//
+//        setBlack(out);
+//    }
 
     private static void drawChessBoard(PrintStream out) {
 

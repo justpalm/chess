@@ -156,7 +156,8 @@ public class Postlogin implements Client{
                 BlackChessBoardDrawing.main();
             }
             if (teamColor == ChessGame.TeamColor.WHITE) {
-                WhiteChessBoardDrawing.main();
+                var whiteChess = new WhiteChessBoardDrawing();
+                whiteChess.main();
             }
 
             return String.format("Game %s joined!", game.gameName());
@@ -187,7 +188,8 @@ public class Postlogin implements Client{
             throw new DataAccessException("Game number invalid, please consult the list of games");
         }
 
-        WhiteChessBoardDrawing.main();
+        var whiteChess = new WhiteChessBoardDrawing();
+        whiteChess.main();
         return String.format("Now observing game: '%s' !", game.gameName());
 
     }
