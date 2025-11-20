@@ -45,7 +45,7 @@ public class MainService {
             memoryGameData.clearGames();
 
         } catch (DataAccessException | UnauthorizedException e) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException("Error: " + e.getMessage());
         }
     }
 
