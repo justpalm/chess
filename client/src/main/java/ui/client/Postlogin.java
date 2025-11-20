@@ -153,7 +153,8 @@ public class Postlogin implements Client{
             }
 
             if (teamColor == ChessGame.TeamColor.BLACK) {
-                BlackChessBoardDrawing.main();
+                var blackChess = new BlackChessBoardDrawing();
+                blackChess.main();
             }
             if (teamColor == ChessGame.TeamColor.WHITE) {
                 var whiteChess = new WhiteChessBoardDrawing();

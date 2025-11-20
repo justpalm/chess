@@ -7,9 +7,9 @@ import static ui.EscapeSequences.SET_TEXT_COLOR_BLACK;
 
 public class DrawHeaders {
 
-    public static void draw(PrintStream out, String[] headers, int BOARD_SIZE) {
+    public static void draw(PrintStream out, String[] headers, int boardSize) {
 
-        for (int boardCol = 0; boardCol < (BOARD_SIZE); ++boardCol) {
+        for (int boardCol = 0; boardCol < (boardSize); ++boardCol) {
             drawHeader(out, headers[boardCol]);
             out.print("\u2003 ");
         }
