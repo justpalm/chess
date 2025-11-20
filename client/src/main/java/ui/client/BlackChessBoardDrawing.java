@@ -102,12 +102,7 @@ public class BlackChessBoardDrawing {
 
 
 
-//    }
-//
-//    private static void setWhite(PrintStream out) {
-//        out.print(SET_BG_COLOR_WHITE);
-//        out.print(SET_TEXT_COLOR_WHITE);
-//    }
+
 
     private static void setBlack(PrintStream out) {
         out.print(SET_BG_COLOR_BLACK);
@@ -115,27 +110,5 @@ public class BlackChessBoardDrawing {
     }
 }
 
-//    private static void printEmpty(PrintStream out, String color) {
-//        //This is only to print blank players
-//        out.print(color);
-//        out.print(EscapeSequences.EMPTY);
-//        setWhite(out);
-//    }
-//
-//    private static void printBlackPlayer(PrintStream out, String player, String color) {
-//            out.print(color);
-//            out.print(SET_TEXT_COLOR_MAGENTA);
-//            out.print(player);
-//            setWhite(out);
-//    }
-//
-//
-//    private static void printWhitePlayer(PrintStream out, String player, String color) {
-//            out.print(color);
-//            out.print(SET_TEXT_COLOR_BLUE);
-//            out.print(player);
-//            setWhite(out);
-//        }
-//    }
 
 
