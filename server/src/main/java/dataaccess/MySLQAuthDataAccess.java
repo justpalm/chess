@@ -34,7 +34,7 @@ public class MySLQAuthDataAccess implements AuthDAO {
         } catch (SQLException e) {
             throw new UnauthorizedException(((String.format("Unable to read data: %s", e.getMessage()))));
         } catch (DataAccessException e) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException(e.getMessage());
         }
     }
 
@@ -50,13 +50,13 @@ public class MySLQAuthDataAccess implements AuthDAO {
                     return (rs.getString("authToken"));
                 }
                 else {
-                    throw new UnauthorizedException("\"Error\" + No authToken found");
+                    throw new UnauthorizedException("No authToken found");
                 }
             }
         } catch (SQLException e) {
             throw new UnauthorizedException((String.format("Unable to read data: %s", e.getMessage())));
         } catch (DataAccessException e) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException(e.getMessage());
         }
     }
 
@@ -74,7 +74,7 @@ public class MySLQAuthDataAccess implements AuthDAO {
         } catch (SQLException e) {
             throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
         } catch (DataAccessException e) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException(e.getMessage());
         }
 
 
@@ -86,9 +86,9 @@ public class MySLQAuthDataAccess implements AuthDAO {
         try {
             executeUpdate(statement);
         } catch (SQLException e) {
-            throw new RuntimeException("Error" + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         } catch (DataAccessException e) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException(e.getMessage());
         }
     }
 
@@ -109,7 +109,7 @@ public class MySLQAuthDataAccess implements AuthDAO {
         } catch (SQLException e) {
             throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
         } catch (DataAccessException e) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException(e.getMessage());
         }
 
     }
@@ -132,7 +132,7 @@ public class MySLQAuthDataAccess implements AuthDAO {
             PreparedStatement ps = conn.prepareStatement(statement, RETURN_GENERATED_KEYS);
             cyclethrough(ps, params);
         } catch (SQLException e) {
-            throw new SQLException(String.format("unable to update database: %s, %s", statement, e.getMessage()));
+            throw new SQLException(String.format("Unable to update database: %s", e.getMessage()));
         } catch (DataAccessException e ) {
             throw  new DataAccessException(e.getMessage());
         }

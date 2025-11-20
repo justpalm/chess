@@ -40,9 +40,9 @@ public class MySQLGameDataAccess implements GameDAO{
                int id = executeUpdate(statement, null, null, gameName, json);
                return String.valueOf(id);
                 } catch (DataAccessException e) {
-                throw new DataAccessException("Error" + e.getMessage());
+                throw new DataAccessException(e.getMessage());
                 } catch (SQLException e) {
-                   throw new RuntimeException("Error" + e.getMessage());
+                   throw new RuntimeException(e.getMessage());
                }
         }
 
@@ -65,7 +65,7 @@ public class MySQLGameDataAccess implements GameDAO{
         } catch (SQLException e){
             throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
         } catch (DataAccessException e ) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException(e.getMessage());
         }
     }
 
@@ -98,7 +98,7 @@ public class MySQLGameDataAccess implements GameDAO{
         } catch (SQLException e){
             throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
         } catch (DataAccessException e ) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException(e.getMessage());
         }
         return listGames;
     }
@@ -126,9 +126,9 @@ public class MySQLGameDataAccess implements GameDAO{
         } catch (SQLException e) {
             throw new UnauthorizedException(((String.format("Unable to read data: %s", e.getMessage()))));
         } catch (DataAccessException e) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException(e.getMessage());
         } catch (AlreadyTakenException e) {
-            throw new AlreadyTakenException("Error" + e.getMessage());
+            throw new AlreadyTakenException(e.getMessage());
         }
     }
 
@@ -145,7 +145,7 @@ public class MySQLGameDataAccess implements GameDAO{
                     ps.setString(1, newUsername);
                     ps.executeUpdate();
                 } else {
-                    throw new AlreadyTakenException("Error: Username already filled");
+                    throw new AlreadyTakenException("Color already filled");
                 }
             }
 
@@ -157,7 +157,7 @@ public class MySQLGameDataAccess implements GameDAO{
                     ps.setString(1, newUsername);
                     ps.executeUpdate();
                 } else {
-                    throw new AlreadyTakenException("Error: Username already filled");
+                    throw new AlreadyTakenException("Color already filled");
                 }
             }
     }
@@ -169,7 +169,7 @@ public class MySQLGameDataAccess implements GameDAO{
         try {
             executeUpdate(statement);
         } catch (DataAccessException e) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException(e.getMessage());
         } catch (SQLException e) {
             throw new RuntimeException(((String.format("Unable to read data: %s", e.getMessage()))));
         }
@@ -195,7 +195,7 @@ public class MySQLGameDataAccess implements GameDAO{
                 }
                 return 0;
         } catch (SQLException e) {
-            throw new SQLException(String.format("\"Error\" + unable to update database: %s, %s", statement, e.getMessage()));
+            throw new SQLException(String.format("Unable to update database: %s", e.getMessage()));
         } catch (DataAccessException e) {
             throw new DataAccessException(e.getMessage());
         }
@@ -226,7 +226,7 @@ public class MySQLGameDataAccess implements GameDAO{
                 }
             }
         } catch (SQLException ex) {
-            throw new DataAccessException(String.format("\"Error\" + Unable to configure database: %s", ex.getMessage()));
+            throw new DataAccessException(String.format("Unable to configure database: %s", ex.getMessage()));
         }
     }
 }

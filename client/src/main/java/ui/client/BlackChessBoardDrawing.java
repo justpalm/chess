@@ -6,12 +6,14 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import ui.EscapeSequences;
-
 import static ui.EscapeSequences.*;
 
 
 public class BlackChessBoardDrawing {
+
+    //Create Printing Class
+    static BaseChessBoardDrawing baseChessBoardDrawing = new BaseChessBoardDrawing();
+
 
     // Board dimensions.
     private static final int BOARD_SIZE = 8;
@@ -84,52 +86,22 @@ public class BlackChessBoardDrawing {
         for (int boardRow = 1; boardRow < BOARD_SIZE + 1; ++boardRow) {
             out.print(SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " " + String.valueOf(boardRow) + " ");
             for (int boardCol = 1; boardCol < BOARD_SIZE + 1; ++boardCol) {
-                WhiteChessBoardDrawing.boardprinting(out, boardRow, boardCol);
+                boardPrinting(out, boardRow, boardCol);
             }
-
-
-            //This determines what the color of the square should be
-//                switch (boardRow % 2) {
-//                    case 0 -> {
-//                        if (boardCol % 2 == 1) {
-//                            colorSquare = SET_BG_COLOR_WHITE;
-//                        } else {
-//                            colorSquare = SET_BG_COLOR_BLACK;
-//                        }
-//                    }
-//                    default -> {
-//                        if (boardCol % 2 == 1) {
-//                            colorSquare = SET_BG_COLOR_BLACK;
-//                        } else {
-//                            colorSquare = SET_BG_COLOR_WHITE;
-//                        }
-//                    }
-//                }
-//
-//
-//                switch (boardRow) {
-//                    case 1:
-//                        printWhitePlayer(out, row1.get(boardCol - 1), colorSquare);
-//                        break;
-//                    case 2:
-//                        printWhitePlayer(out, row2.get(boardCol - 1), colorSquare);
-//                        break;
-//                    case 7:
-//                        printBlackPlayer(out, row7.get(boardCol - 1), colorSquare);
-//                        break;
-//                    case 8:
-//                        printBlackPlayer(out, row8.get(boardCol - 1), colorSquare);
-//                        break;
-//                    default:
-//                        printEmpty(out, colorSquare);
-//                        break;
-//                }
-//            }
-            out.print(SET_BG_COLOR_DARK_GREY + SET_TEXT_COLOR_WHITE + " " + String.valueOf(boardRow) + " ");
+            out.print(SET_BG_COLOR_DARK_GREY +SET_TEXT_COLOR_WHITE +" "+String.valueOf(boardRow)+" ");
             setBlack(out);
             out.println();
         }
     }
+
+
+
+    public static void boardPrinting(PrintStream out, int boardRow, int boardCol) {
+        baseChessBoardDrawing.processBoard(row1, row2, row7, row8, out, boardRow, boardCol, colorSquare);
+    }
+
+
+
 //    }
 //
 //    private static void setWhite(PrintStream out) {

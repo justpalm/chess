@@ -88,10 +88,12 @@ public class Prelogin implements Client{
         if (params.length == 2) {
             var loginRequest = new LoginRequest(params[0], params[1]);
             try {
-                sf.login(loginRequest);
+                var loginResult = sf.login(loginRequest);
+                authToken = loginResult.authToken();
             } catch (Exception e) {
                 throw new DataAccessException(e.getMessage());
             }
+
             return String.format("You signed in as %s.", loginRequest.username());
         }
         throw new DataAccessException("Expected: <username>, <password>");

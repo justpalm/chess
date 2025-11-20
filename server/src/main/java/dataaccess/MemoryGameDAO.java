@@ -46,7 +46,7 @@ public class MemoryGameDAO implements GameDAO {
             if (Objects.equals(theGame.whiteUsername(), null)) {
                 theGame = theGame.newUserWhite(newUsername);
             } else {
-                throw new AlreadyTakenException("Error: Username already filled");
+                throw new AlreadyTakenException("Error: Color already filled");
             }
         }
 
@@ -54,7 +54,7 @@ public class MemoryGameDAO implements GameDAO {
             if (Objects.equals(theGame.blackUsername(), null)) {
                 theGame = theGame.newUserBlack(newUsername);
             } else {
-                throw new AlreadyTakenException("Error: Username already filled");
+                throw new AlreadyTakenException("Error: Color already filled");
             }
         }
 

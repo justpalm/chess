@@ -37,19 +37,21 @@ public class Repl {
 
             try {
                 result = client.eval(line);
+
+                String[] tokens = line.toLowerCase().split(" ");
+
+                if (tokens[0].equals("logout")) {
+                    client = client.switchClient();
+                }
+
+                if (tokens[0].equals("login") | (tokens[0].equals("register"))) {
+                    client = client.switchClient();
+                }
+
                 if(!result.equals("quit")) {
                     System.out.print(client.bgTheme() + SET_TEXT_COLOR_BLACK + SET_TEXT_BOLD + result + "\n");
                 }
-                String[] tokens = line.toLowerCase().split(" ");
 
-                if (tokens[0].equals("login") | (tokens[0].equals("register"))) {
-                    System.out.println( SET_BG_COLOR_LIGHT_GREY + "We are logged in!");
-                    client = client.switchClient();
-                }
-                if (tokens[0].equals("logout")) {
-                    client = client.switchClient();
-                    System.out.println( SET_BG_COLOR_WHITE + "We are logged out.");
-                }
                 } catch (Exception e) {
                 var msg = e.getMessage().toString();
                 System.out.print(msg);

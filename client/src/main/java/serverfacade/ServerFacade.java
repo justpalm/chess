@@ -11,6 +11,7 @@ import java.net.http.*;
 import java.net.http.HttpRequest.BodyPublisher;
 import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.Map;
 
 
 public class ServerFacade {
@@ -119,9 +120,10 @@ public class ServerFacade {
         if (!isSuccessful(status)) {
             var body = response.body();
             if (body != null) {
-                throw new DataAccessException((String.format("Server error occurred: %s", body)));
+                ErrorResponse errorMessage = new Gson().fromJson(response.body(), ErrorResponse.class);
+                throw new DataAccessException((String.format(errorMessage.getMessage())));
             }
-
+            
             //Keep in mind that this is different
             throw new DataAccessException("other failure: " + status);
         }

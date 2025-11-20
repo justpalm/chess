@@ -19,7 +19,7 @@ public class MySQLUserDataAccess implements UserDAO{
         try {
             configureDatabase();
         } catch (Exception e) {
-            throw new RuntimeException("Error" + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
 
@@ -39,10 +39,10 @@ public class MySQLUserDataAccess implements UserDAO{
                 return null;
                 }
             } catch (DataAccessException e) {
-                throw new DataAccessException(String.format("Error: " + e.getMessage()));
+                throw new DataAccessException(String.format(e.getMessage()));
 
             } catch (SQLException e) {
-                throw new UnauthorizedException(String.format("Error: %s", e.getMessage()));
+                throw new UnauthorizedException(String.format(e.getMessage()));
             }
     }
 
@@ -55,9 +55,9 @@ public class MySQLUserDataAccess implements UserDAO{
             int id = executeUpdate(statement, username, hashedPassword, email);
             return new UserData(username, password, email);
         } catch (DataAccessException e) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException(e.getMessage());
         } catch (SQLException e) {
-            throw new AlreadyTakenException("Error" + e.getMessage());
+            throw new AlreadyTakenException(e.getMessage());
         }
     }
 
@@ -67,9 +67,9 @@ public class MySQLUserDataAccess implements UserDAO{
         try {
             executeUpdate(statement);
         } catch (DataAccessException e) {
-            throw new DataAccessException("Error" + e.getMessage());
+            throw new DataAccessException(e.getMessage());
         } catch (SQLException e) {
-            throw new RuntimeException("Error" + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
 
     }
@@ -81,7 +81,7 @@ public class MySQLUserDataAccess implements UserDAO{
                 return cyclethrough(ps, params);
             }
         } catch (SQLException e) {
-            throw new SQLException(String.format("unable to update database: %s, %s", statement, e.getMessage()));
+            throw new SQLException(String.format("Unable to update database: %s", e.getMessage()));
         }
     }
 

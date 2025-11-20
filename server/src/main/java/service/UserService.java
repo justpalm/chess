@@ -26,7 +26,7 @@ public class UserService {
         try {
             memoryUserData.createUser(registerRequest.username(), registerRequest.password(), registerRequest.email());
         } catch (AlreadyTakenException e ) {
-            throw new AlreadyTakenException("Error" + e.getMessage());
+            throw new AlreadyTakenException("Error: " + e.getMessage());
         }
         String newAuthToken;
         newAuthToken = memoryAuthData.createAuth(registerRequest.username());
@@ -51,7 +51,7 @@ public class UserService {
         try {
             authToken = this.memoryAuthData.createAuth(loginRequest.username());
         } catch (UnauthorizedException e) {
-            throw new UnauthorizedException("Error" + e.getMessage());
+            throw new UnauthorizedException("Error: " + e.getMessage());
         }
 
         return new LoginResult(loginRequest.username(), authToken);

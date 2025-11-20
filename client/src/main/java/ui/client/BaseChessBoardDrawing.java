@@ -74,9 +74,6 @@ public class BaseChessBoardDrawing {
                 printEmpty(out, colorSquare);
                 break;
         }
-    out.print(SET_BG_COLOR_DARK_GREY +SET_TEXT_COLOR_WHITE +" "+String.valueOf(boardRow)+" ");
-    setBlack(out);
-    out.println();
 }
 
 private static void setWhite(PrintStream out) {

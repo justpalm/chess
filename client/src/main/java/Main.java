@@ -1,6 +1,14 @@
+
+
+
 import chess.*;
 import dataaccess.exceptions.DataAccessException;
+import server.Server;
+import serverfacade.ServerFacade;
 import ui.Repl;
+import ui.client.BaseChessBoardDrawing;
+import ui.client.BlackChessBoardDrawing;
+import ui.client.WhiteChessBoardDrawing;
 
 public class Main {
 

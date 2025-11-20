@@ -12,12 +12,17 @@ import static ui.EscapeSequences.*;
 
 public class WhiteChessBoardDrawing {
 
+    //Create Printing Class
+    static BaseChessBoardDrawing baseChessBoardDrawing = new BaseChessBoardDrawing();
+
     // Board dimensions.
     private static final int BOARD_SIZE = 8;
 
 
     static String colorSquare;
 
+
+    //WHITE BOARD
 
     //White Printing
     private static ArrayList<String> row1 = new ArrayList<>(Arrays.asList(
@@ -31,6 +36,15 @@ public class WhiteChessBoardDrawing {
             BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN));
     private static ArrayList<String> row8 = new ArrayList<>(Arrays.asList(
             BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
+
+
+    String[] headers = {EMPTY + "a", "b", "c", "d", "e", "f", "g", "h" + " \u2003"};
+
+
+
+
+    //BLACK BOARD
+
 
 
     public static void main() {
@@ -93,11 +107,7 @@ public class WhiteChessBoardDrawing {
     }
 
     public static void boardprinting(PrintStream out, int boardRow, int boardCol) {
-        BaseChessBoardDrawing baseChessBoardDrawing = new BaseChessBoardDrawing();
-
         baseChessBoardDrawing.processBoard(row1, row2, row7, row8, out, boardRow, boardCol, colorSquare);
-
-
     }
 
     //        if (boardRow % 2 == 0) {
