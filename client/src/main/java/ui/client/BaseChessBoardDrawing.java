@@ -23,36 +23,17 @@ public class BaseChessBoardDrawing {
 
 
 
-        if (boardRow % 2 == 0) {
+        if (boardRow % 2 == 1) {
             if (boardCol % 2 == 1) {
                 colorSquare = SET_BG_COLOR_WHITE;
             } else {
                 colorSquare = SET_BG_COLOR_BLACK;
             }
         } else {
-            if (boardCol % 2 == 1) {
-                colorSquare = SET_BG_COLOR_BLACK;
-            } else {
+            if (boardCol % 2 == 0) {
                 colorSquare = SET_BG_COLOR_WHITE;
-            }
-        }
-
-
-
-        switch (boardRow % 2) {
-            case 0 -> {
-                if (boardCol % 2 == 1) {
-                    colorSquare = SET_BG_COLOR_WHITE;
-                } else {
-                    colorSquare = SET_BG_COLOR_BLACK;
-                }
-            }
-            default -> {
-                if (boardCol % 2 == 1) {
-                    colorSquare = SET_BG_COLOR_BLACK;
-                } else {
-                    colorSquare = SET_BG_COLOR_WHITE;
-                }
+            } else {
+                colorSquare = SET_BG_COLOR_BLACK;
             }
         }
 

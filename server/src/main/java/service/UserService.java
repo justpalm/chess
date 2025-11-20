@@ -26,7 +26,7 @@ public class UserService {
         try {
             memoryUserData.createUser(registerRequest.username(), registerRequest.password(), registerRequest.email());
         } catch (AlreadyTakenException e ) {
-            throw new AlreadyTakenException("Error: " + e.getMessage());
+            throw new AlreadyTakenException("Error: Username already taken");
         }
         String newAuthToken;
         newAuthToken = memoryAuthData.createAuth(registerRequest.username());

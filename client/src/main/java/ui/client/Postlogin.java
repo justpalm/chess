@@ -182,7 +182,7 @@ public class Postlogin implements Client{
                     "after a new game is created.");
         }
 
-        GameData game = gameNumTogameId.get(Integer.valueOf(params[1]));
+        GameData game = gameNumTogameId.get(Integer.valueOf(params[0]));
         if (game == null) {
             throw new DataAccessException("Game number invalid, please consult the list of games");
         }

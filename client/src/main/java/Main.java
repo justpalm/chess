@@ -19,6 +19,7 @@ public class Main {
 
     private static void runRepl() throws DataAccessException{
 
+
         repl = new Repl(String.format("http://localhost:%d", 8080));
         repl.run();
 

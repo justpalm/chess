@@ -26,7 +26,7 @@ public class WhiteChessBoardDrawing {
 
     //White Printing
     private static ArrayList<String> row1 = new ArrayList<>(Arrays.asList(
-            WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_QUEEN, WHITE_KING, WHITE_BISHOP, WHITE_KNIGHT, WHITE_ROOK));
+            WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_KING, WHITE_QUEEN, WHITE_BISHOP, WHITE_KNIGHT, WHITE_ROOK));
     private static ArrayList<String> row2 = new ArrayList<>(Arrays.asList(
             WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN, WHITE_PAWN));
 
@@ -35,7 +35,7 @@ public class WhiteChessBoardDrawing {
     private static ArrayList<String> row7 = new ArrayList<>(Arrays.asList(
             BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN, BLACK_PAWN));
     private static ArrayList<String> row8 = new ArrayList<>(Arrays.asList(
-            BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
+            BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_KING, BLACK_QUEEN, BLACK_BISHOP, BLACK_KNIGHT, BLACK_ROOK));
 
 
     String[] headers = {EMPTY + "a", "b", "c", "d", "e", "f", "g", "h" + " \u2003"};

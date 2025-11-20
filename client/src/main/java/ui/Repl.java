@@ -53,7 +53,7 @@ public class Repl {
                 }
 
                 } catch (Exception e) {
-                var msg = e.getMessage().toString();
+                var msg = e.getMessage();
                 System.out.print(msg);
             }
         }
