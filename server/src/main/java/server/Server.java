@@ -6,6 +6,7 @@ import dataaccess.exceptions.AlreadyTakenException;
 import dataaccess.exceptions.BadRequestException;
 import dataaccess.exceptions.DataAccessException;
 import dataaccess.exceptions.UnauthorizedException;
+import websocket.WebSocketHandler;
 import service.requestsandresults.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -16,6 +17,7 @@ import java.util.Map;
 public class Server {
 
     private final MainService mainService;
+    private final WebSocketHandler webSocketHandler;
     private final Javalin javalin;
 
     public Server() {
@@ -28,6 +30,7 @@ public class Server {
 
         this.mainService = new MainService(user, game, auth);
 
+        this.webSocketHandler = new WebSocketHandler();
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"))
                 .delete("/db", this::clear)
@@ -37,7 +40,12 @@ public class Server {
                 .delete("/session", this::logout)
                 .post("/game", this::createGame)
                 .put("/game", this::joinGame)
-                .get("/game", this::listGames);
+                .get("/game", this::listGames)
+                .ws("/ws", ws -> {
+                    ws.onConnect(webSocketHandler);
+                    ws.onMessage(webSocketHandler);
+                    ws.onClose(webSocketHandler);
+                });
     }
 
 

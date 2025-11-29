@@ -6,6 +6,8 @@ import model.GameData;
 import serverfacade.ServerFacade;
 import service.requestsandresults.*;
 
+import javax.xml.crypto.Data;
+
 import static ui.EscapeSequences.*;
 
 import java.util.Arrays;
@@ -21,8 +23,6 @@ public class Postlogin implements Client{
     public Postlogin(String authToken, ServerFacade serverFacade) {
         this.sf = serverFacade;
         this.authToken = authToken;
-
-
     }
 
 
@@ -47,6 +47,10 @@ public class Postlogin implements Client{
         } catch (Exception ex) {
             throw new DataAccessException(ex.getMessage());
         }
+    }
+
+    public Client gameplayClient() throws DataAccessException {
+        return new Gameplay(this.authToken, sf);
     }
 
     @Override
@@ -163,7 +167,7 @@ public class Postlogin implements Client{
 
             return String.format("Game %s joined!", game.gameName());
         }
-        throw new DataAccessException("Expected: <teamcolor> <gamenumber> ");
+        throw new DataAccessException("Expected: <team color> <game number> ");
     }
 
     private ChessGame.TeamColor setTeamColor (String input) throws DataAccessException{

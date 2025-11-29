@@ -1,8 +1,17 @@
 package ui.client;
 
 import dataaccess.exceptions.DataAccessException;
+import serverfacade.ServerFacade;
 
 public class Gameplay implements Client{
+
+    public Gameplay(String authToken, ServerFacade serverFacade) {
+        this.sf = serverFacade;
+        this.authToken = authToken;
+    }
+
+
+
     @Override
     public String help() {
         return "";
