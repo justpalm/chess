@@ -4,7 +4,12 @@ import com.google.gson.Gson;
 import dataaccess.exceptions.DataAccessException;
 import jakarta.websocket.*;
 import commands.UserGameCommand;
+import jdk.jshell.spi.ExecutionControl;
 import messages.ServerMessage;
+import service.requestsandresults.JoinGameRequest;
+import chess.ChessMove;
+import service.requestsandresults.LogoutRequest;
+import service.requestsandresults.LogoutResult;
 
 import java.io.IOException;
 import java.net.URI;
@@ -38,7 +43,7 @@ public class WebSocketFacade extends Endpoint {
                 }
             });
         } catch (DeploymentException | IOException | URISyntaxException ex) {
-            throw new ResponseException(ResponseException.Code.ServerError, ex.getMessage());
+            throw new DataAccessException(ex.getMessage());
         }
     }
 
@@ -46,6 +51,59 @@ public class WebSocketFacade extends Endpoint {
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
     }
+
+
+    public void connect(String authToken, int gameID) throws DataAccessException{
+//        throw new UnsupportedOperationException("Not implemented yet");
+        try {
+            var command = new UserGameCommand(UserGameCommand.CommandType.CONNECT,
+                    authToken, gameID);
+            //This is the part where we change it to int instead of string
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
+        } catch (IOException ex) {
+            throw new DataAccessException(ex.getMessage());
+        }
+    }
+
+    public void makeMove(String authToken, int gameID, ChessMove move) throws DataAccessException{
+//        throw new UnsupportedOperationException("Not implemented yet");
+        try {
+            var command = new UserGameCommand(UserGameCommand.CommandType.MAKE_MOVE,
+                    authToken, gameID);
+            //how does the double serialization work here?
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
+        } catch (IOException ex){
+            throw new DataAccessException(ex.getMessage());
+            }
+        }
+
+
+    public void leave(String authToken, int gameID) throws DataAccessException{
+//        throw new UnsupportedOperationException("Not implemented yet");
+        try {
+            var command = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, gameID);
+            //how does the double serialization work here?
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
+        } catch (IOException ex){
+            throw new DataAccessException(ex.getMessage());
+        }
+    }
+
+
+    public void resign(String authToken, int gameID) throws DataAccessException {
+//        throw new UnsupportedOperationException("Not implemented yet");
+        try {
+            var command = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, gameID);
+            //how does the double serialization work here?
+            this.session.getBasicRemote().sendText(new Gson().toJson(command));
+        } catch (IOException ex){
+            throw new DataAccessException(ex.getMessage());
+        }
+    }
+
+
+}
+
 
     public void enterPetShop(String visitorName) throws ResponseException {
         try {
@@ -64,6 +122,5 @@ public class WebSocketFacade extends Endpoint {
             throw new ResponseException(ResponseException.Code.ServerError, ex.getMessage());
         }
     }
-
-}
+    }
 

@@ -5,9 +5,10 @@ import serverfacade.ServerFacade;
 
 public class Gameplay implements Client{
 
-    public Gameplay(String authToken, ServerFacade serverFacade) {
+    public Gameplay(String authToken, int gameID, ServerFacade serverFacade) {
         this.sf = serverFacade;
         this.authToken = authToken;
+        this.gameID = gameID;
     }
 
 
