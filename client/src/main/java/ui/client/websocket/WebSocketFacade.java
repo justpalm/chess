@@ -3,13 +3,9 @@ package ui.client.websocket;
 import com.google.gson.Gson;
 import dataaccess.exceptions.DataAccessException;
 import jakarta.websocket.*;
-import commands.UserGameCommand;
-import jdk.jshell.spi.ExecutionControl;
-import messages.ServerMessage;
-import service.requestsandresults.JoinGameRequest;
+import websocket.commands.UserGameCommand;
+import websocket.messages.ServerMessage;
 import chess.ChessMove;
-import service.requestsandresults.LogoutRequest;
-import service.requestsandresults.LogoutResult;
 
 import java.io.IOException;
 import java.net.URI;
@@ -101,8 +97,6 @@ public class WebSocketFacade extends Endpoint {
         }
     }
 
-
-}
 
 
     public void enterPetShop(String visitorName) throws ResponseException {
