@@ -7,10 +7,10 @@ import dataaccess.exceptions.DataAccessException;
 import serverfacade.ServerFacade;
 import serverfacade.ServerFacade.*;
 import ui.client.*;
+import websocket.*;
 
 public class Repl {
     private final ServerFacade server;
-    private State state = State.SIGNEDOUT;
     Client client;
 
     public Repl (String serverUrl) throws DataAccessException{
@@ -45,6 +45,14 @@ public class Repl {
                 }
 
                 if (tokens[0].equals("login") | (tokens[0].equals("register"))) {
+                    client = client.switchClient();
+                }
+
+                if (tokens[0].equals("join")) {
+
+                }
+
+                if (tokens[0].equals("leave")){
                     client = client.switchClient();
                 }
 

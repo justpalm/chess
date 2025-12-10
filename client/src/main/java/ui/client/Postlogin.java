@@ -18,14 +18,15 @@ public class Postlogin implements Client{
 
     ServerFacade sf;
     String authToken;
+    String username;
+    Integer gameId;
     HashMap<Integer, GameData> gameNumTogameId = null;
 
-    public Postlogin(String authToken, ServerFacade serverFacade) {
+    public Postlogin(String authToken, String username, ServerFacade serverFacade) {
         this.sf = serverFacade;
+        this.username = username;
         this.authToken = authToken;
     }
-
-
 
 
     @Override
@@ -49,13 +50,17 @@ public class Postlogin implements Client{
         }
     }
 
-    public Client gameplayClient() throws DataAccessException {
-        return new Gameplay(this.authToken, sf);
-    }
-
     @Override
-    public Client switchClient() throws DataAccessException {
-        return new Prelogin(sf);
+    public Client switchClient(String mode) throws DataAccessException {
+        if (mode == "prelogin") {
+            return new Prelogin(this.sf);
+        }
+        if (mode == "gameplay") {
+            return new Gameplay(this.authToken, this.gameNumTogameId, this.gameId, this.sf);
+        }
+
+
+
     }
 
     @Override
@@ -148,6 +153,7 @@ public class Postlogin implements Client{
             if (game == null) {
                 throw new DataAccessException("Game number invalid, please consult the list of games");
             }
+            this.gameId = Integer.valueOf(params[0]);
 
             var joinGameRequest = new JoinGameRequest(authToken, teamColor, game.gameID());
             try {
@@ -169,6 +175,8 @@ public class Postlogin implements Client{
         }
         throw new DataAccessException("Expected: <team color> <game number> ");
     }
+
+
 
     private ChessGame.TeamColor setTeamColor (String input) throws DataAccessException{
         input = input.toLowerCase();

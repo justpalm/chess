@@ -1,10 +1,8 @@
 package ui.client;
 
 import dataaccess.exceptions.DataAccessException;
-import org.junit.jupiter.api.AfterEach;
 import serverfacade.ServerFacade;
 import service.requestsandresults.*;
-import ui.EscapeSequences;
 
 import java.util.Arrays;
 
@@ -14,6 +12,7 @@ public class Prelogin implements Client{
 
     ServerFacade sf;
     String authToken = null;
+    String username = "";
 
     public Prelogin(ServerFacade serverFacade) {
         this.sf = serverFacade;
@@ -40,9 +39,9 @@ public class Prelogin implements Client{
     }
 
 
-    public Client switchClient() {
+    public Client switchClient(String mode) {
 
-        return new Postlogin(authToken, sf);
+        return new Postlogin(authToken, username, sf);
 
     }
 
@@ -80,6 +79,7 @@ public class Prelogin implements Client{
             }
             authToken = registerResult.authToken();
             return String.format("Your signed in as '%s'", registerRequest.username());
+            this.username =
         }
         throw new DataAccessException("Expected: <username>, <password>, <email>");
     }

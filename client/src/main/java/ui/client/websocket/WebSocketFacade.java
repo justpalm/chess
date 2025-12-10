@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import dataaccess.exceptions.DataAccessException;
 import jakarta.websocket.*;
 import websocket.commands.UserGameCommand;
+import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
+import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 import chess.ChessMove;
 
@@ -11,9 +14,11 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+//Sends UserGameCommands
+//Receives Server messages back
+//It's asynchronus
 
-//SENDS MESSAGES FROM CLIENT TO SERVER
-//RESPONISBLE FOR OPENING A CONNECTION
+
 
 //need to extend Endpoint for websocket to work properly
 public class WebSocketFacade extends Endpoint {
@@ -34,8 +39,31 @@ public class WebSocketFacade extends Endpoint {
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
+                    //This recieves the Json string
+                    //Here you want to check the message type
+                    //
+
                     ServerMessage notification = new Gson().fromJson(message, ServerMessage.class);
+
+                    var type = notification.getServerMessageType();
+
+
+                    //Checking the notification type
+                    if (type == ServerMessage.ServerMessageType.ERROR) {
+                        notification = new Gson().fromJson(message, ErrorMessage.class);
+                    }
+
+                    else if (type == ServerMessage.ServerMessageType.LOAD_GAME) {
+                        notification = new Gson().fromJson(message, LoadGameMessage.class);
+                    }
+
+                    else if (type == ServerMessage.ServerMessageType.NOTIFICATION) {
+                        notification = new Gson().fromJson(message, NotificationMessage.class);
+
+                    }
+
                     notificationHandler.notify(notification);
+
                 }
             });
         } catch (DeploymentException | IOException | URISyntaxException ex) {
@@ -47,7 +75,6 @@ public class WebSocketFacade extends Endpoint {
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
     }
-
 
     public void connect(String authToken, int gameID) throws DataAccessException{
 //        throw new UnsupportedOperationException("Not implemented yet");
@@ -99,22 +126,7 @@ public class WebSocketFacade extends Endpoint {
 
 
 
-    public void enterPetShop(String visitorName) throws ResponseException {
-        try {
-            var action = new Action(Action.Type.ENTER, visitorName); //CLIENT TO SERVER MESSAGE, GAMECOMMAND
-            this.session.getBasicRemote().sendText(new Gson().toJson(action));
-        } catch (IOException ex) {
-            throw new ResponseException(ResponseException.Code.ServerError, ex.getMessage());
-        }
-    }
 
-    public void leavePetShop(String visitorName) throws ResponseException {
-        try {
-            var action = new Action(Action.Type.EXIT, visitorName);
-            this.session.getBasicRemote().sendText(new Gson().toJson(action));
-        } catch (IOException ex) {
-            throw new ResponseException(ResponseException.Code.ServerError, ex.getMessage());
-        }
-    }
+
     }
 

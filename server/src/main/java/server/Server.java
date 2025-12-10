@@ -11,6 +11,8 @@ import service.requestsandresults.*;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import service.MainService;
+import websocket.commands.UserGameCommand;
+
 import java.util.Map;
 
 
@@ -55,7 +57,6 @@ public class Server {
     }
 
 
-
     private void clear(Context ctx) throws DataAccessException{
         mainService.clear();
     }
@@ -76,7 +77,12 @@ public class Server {
             JoinGameRequest joinGameRequest = new Gson().fromJson(ctx.body(), JoinGameRequest.class);
             joinGameRequest = joinGameRequest.newAuthToken(ctx.header("Authorization"));
             JoinGameResult joinGameResult = mainService.joinGame(joinGameRequest);
-            ctx.json(new Gson().toJson(joinGameResult));
+
+            UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.CONNECT,
+                    joinGameRequest.authToken(), Integer.valueOf(joinGameRequest.gameID()));
+
+            ctx.json(new Gson().toJson(userGameCommand));
+
         } catch (Exception e) {
             exceptionHandler(e, ctx);
         }

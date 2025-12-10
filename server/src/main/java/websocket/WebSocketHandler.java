@@ -1,7 +1,8 @@
-package server.websocket;
+package websocket;
 
+import chess.ChessMove;
 import com.google.gson.Gson;
-import exception.ResponseException;
+import dataaccess.exceptions.UnauthorizedException;
 import io.javalin.websocket.WsCloseContext;
 import io.javalin.websocket.WsCloseHandler;
 import io.javalin.websocket.WsConnectContext;
@@ -10,9 +11,15 @@ import io.javalin.websocket.WsMessageContext;
 import io.javalin.websocket.WsMessageHandler;
 import org.eclipse.jetty.websocket.api.Session;
 import websocket.ConnectionManager;
+import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
+import websocket.messages.ErrorMessage;
+import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
-import
+
+
+//Getting UserGameCommands
+//Sending out Server Messages
 
 import java.io.IOException;
 
@@ -27,17 +34,28 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
     }
 
     @Override
-    public void handleMessage(WsMessageContext ctx) {
+    public void handleMessage(WsMessageContext ctx) throws IOException {
+        int gameId = -1;
+
         try {
             UserGameCommand userGameCommand = new Gson().fromJson(ctx.message(), UserGameCommand.class);
             switch (userGameCommand.getCommandType()) {
                 case CONNECT-> connect(userGameCommand.getAuthToken(), userGameCommand.getGameID(), ctx.session);
-                case MAKE_MOVE-> makeMove(action.visitorName(), ctx.session); //I need to know how to do this
                 case LEAVE-> leave(userGameCommand.getAuthToken(), userGameCommand.getGameID(), ctx.session);
-                case RESIGN-> resign(userGameCommand.getAuthToken(), userGameCommand.getGameID(), ctx.session;
+                case RESIGN-> resign(userGameCommand.getAuthToken(), userGameCommand.getGameID(), ctx.session);
+                case MAKE_MOVE -> {
+                    MakeMoveCommand makeMoveCommand = new Gson().fromJson(ctx.message(), MakeMoveCommand.class);
+                    makeMove(makeMoveCommand.getAuthToken(), makeMoveCommand.getGameID(),
+                            makeMoveCommand.getTheMove(), ctx.session);
+                }
             }
+//        } catch (Exception ex) { //Very unsure what this might be
+//            clientMessage(ctx.session, new ErrorMessage(ServerMessage.ServerMessageType.ERROR,
+//                    "Error: Unauthorized")); //Still not sure about this one
         } catch (IOException ex) {
             ex.printStackTrace();
+            clientMessage(ctx.session, new ErrorMessage(ServerMessage.ServerMessageType.ERROR,
+                    "Error: " + ex.getMessage()) );
         }
     }
 
@@ -46,55 +64,45 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         System.out.println("Websocket closed");
     }
 
+    private void clientMessage(Session session, ErrorMessage stringErrorMessage) throws IOException {
+        String errorMes = stringErrorMessage.getErrorMessage();
+        var errorMessage = new ErrorMessage(ServerMessage.ServerMessageType.ERROR, errorMes);
+        connections.clientMessage(session, errorMessage);
+    }
 
     private void connect(String authToken, Integer gameId, Session session) throws IOException{
-        connections.add(session);
+        connections.add(gameId, session);
 
         var message = String.format("%s joined the game!");
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+        var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+        connections.broadcast(session, notification);
+    }
 
-
+    private void makeMove(String authToken, Integer gameId, ChessMove move, Session session) throws IOException{
+        //get game
+        //get move
+        //change game
+        //update the game in the DAO
     }
 
 
-    private void makeMove() throws IOException{
-        connections.add(session):
-    }
+    private void leave(String authToken, String username, Integer gameId, Session session) throws IOException{
+        connections.remove(gameId, session);
 
-
-    private void leave(String authToken, Integer gameId, Session session) throws IOException{
-        connections.add(session):
+        var message = String.format("%s left the game", username);
+        var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+        connections.broadcast(session, notification);
     }
 
 
     private void resign(String authToken, Integer gameId, Session session) throws IOException{
-        connections.add(session):
-    }
+        connections.remove(gameId, session);
 
 
-
-
-    private void enter(String visitorName, Session session) throws IOException {
-        connections.add(session);
-        var message = String.format("%s is in the shop", visitorName);
-        var notification = new Notification(Notification.Type.ARRIVAL, message);
+        var message = String.format("%s resigned");
+        var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
         connections.broadcast(session, notification);
     }
 
-    private void exit(String visitorName, Session session) throws IOException {
-        var message = String.format("%s left the shop", visitorName);
-        var notification = new Notification(Notification.Type.DEPARTURE, message);
-        connections.broadcast(session, notification);
-        connections.remove(session);
-    }
 
-    public void makeNoise(String petName, String sound) throws ResponseException {
-        try {
-            var message = String.format("%s says %s", petName, sound);
-            var notification = new Notification(Notification.Type.NOISE, message);
-            connections.broadcast(null, notification);
-        } catch (Exception ex) {
-            throw new ResponseException(ResponseException.Code.ServerError, ex.getMessage());
-        }
-    }
 }

@@ -23,6 +23,9 @@ public class ServerFacade {
         serverUrl = url;
     }
 
+    public String getServerUrl() {
+        return serverUrl;
+    }
 
     public RegisterResult register(RegisterRequest registerRequest) throws UnauthorizedException, BadRequestException, DataAccessException {
         var request = buildRequest("POST", "/user", registerRequest);
@@ -69,7 +72,6 @@ public class ServerFacade {
         var response = sendRequest(request);
     }
 
-
     private HttpRequest buildRequestHeader(String method, String path, Object body, String authToken) {
         var request = HttpRequest.newBuilder()
                 .uri(URI.create(serverUrl + path))
@@ -79,7 +81,6 @@ public class ServerFacade {
         return request.build();
 
     }
-
 
     private HttpRequest buildRequest(String method, String path, Object body) {
         var request = HttpRequest.newBuilder()
@@ -94,8 +95,6 @@ public class ServerFacade {
     //I'm thinking we need to make a build request specifically for those that have a body and request
     //For example, Join Game, Create Game. For everything else the function above works
 
-
-
     private BodyPublisher makeRequestBody(Object request) {
         if (request != null) {
             return BodyPublishers.ofString(new Gson().toJson(request));
@@ -103,7 +102,6 @@ public class ServerFacade {
             return BodyPublishers.noBody();
         }
     }
-
 
     //I'm not sure about the handling of this error, but this is about what I would expect since
     //they don't want us to be verbose about the error is or what is happening
