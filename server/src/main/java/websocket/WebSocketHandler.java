@@ -120,13 +120,32 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
     private void makeMove(String authToken, Integer gameId, ChessMove move, Session session) throws IOException,
             DataAccessException, UnauthorizedException{
-        //validate authToken
 
         try {
-            String username = this.auth.getUsername(authToken);
-
 
             GameData data = this.game.getGame(String.valueOf(gameId));
+            String username = this.auth.getUsername(authToken);
+
+        //Validate if the game is over
+
+        if (GameOver(data.game())) {
+            var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, "Game " +
+                    "is already over");
+            connections.broadcast(gameId, session, notification);
+            connections.clientMessage(session, notification);
+            return;
+        }
+
+
+
+
+        //validate authToken
+
+
+
+
+
+
 
             //Validate they are a player
             if (!Objects.equals(username, data.blackUsername()) && !Objects.equals(username, data.whiteUsername()))
@@ -216,43 +235,15 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         }
     }
 
-    private boolean Checkmate(Integer gameId, Session session, ChessGame theGame, String message, int n) throws IOException {
-        if (theGame.isInCheckmate(ChessGame.TeamColor.WHITE)) {
-            message = "White is in checkmate! Game over!";
-            n += 1;
-        }
-        if (theGame.isInCheckmate(ChessGame.TeamColor.BLACK)) {
-            message = "Black is in checkmate! Game over!";
-            n += 1;
-        }
-
-        //Check
-        if (theGame.isInCheck(ChessGame.TeamColor.WHITE)) {
-            message = "White is in check! Gasp!";
-            n += 1;
-        }
-        if (theGame.isInCheck(ChessGame.TeamColor.BLACK)) {
-            message = "Black is in check! Gasp!";
-            n += 1;
+    private boolean GameOver(ChessGame theGame) throws IOException {
+        if (theGame.isInCheckmate(ChessGame.TeamColor.WHITE) | theGame.isInCheckmate(ChessGame.TeamColor.BLACK)) {
+            return true;
         }
 
         //Stalemate
-        if (theGame.isInStalemate(ChessGame.TeamColor.WHITE)) {
-            message = "White is in stalemate! Game over!";
-            n += 1;
+        if (theGame.isInStalemate(ChessGame.TeamColor.WHITE) | theGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
+            return true;
         }
-        if (theGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
-            message = "Black is in stalemate! Game over!";
-            n += 1;
-        }
-
-
-        if (n != 0) {
-            var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-            connections.broadcast(gameId, session, notification);
-            connections.clientMessage(session, notification);
-        }
-        return false;
     }
 
 
