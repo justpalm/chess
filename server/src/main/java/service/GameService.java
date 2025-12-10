@@ -2,6 +2,7 @@ package service;
 
 import dataaccess.*;
 import dataaccess.exceptions.*;
+import model.GameData;
 import service.requestsandresults.*;
 
 
@@ -69,7 +70,6 @@ public class GameService {
         return new ListGamesResult(memoryGameData.listGames());
 
     }
-
 
     //GameData updateGame method
 

@@ -1,7 +1,13 @@
 package websocket;
 
+import chess.ChessGame;
 import chess.ChessMove;
+import chess.InvalidMoveException;
 import com.google.gson.Gson;
+import dataaccess.AuthDAO;
+import dataaccess.GameDAO;
+import dataaccess.UserDAO;
+import dataaccess.exceptions.DataAccessException;
 import dataaccess.exceptions.UnauthorizedException;
 import io.javalin.websocket.WsCloseContext;
 import io.javalin.websocket.WsCloseHandler;
@@ -9,11 +15,12 @@ import io.javalin.websocket.WsConnectContext;
 import io.javalin.websocket.WsConnectHandler;
 import io.javalin.websocket.WsMessageContext;
 import io.javalin.websocket.WsMessageHandler;
+import model.GameData;
 import org.eclipse.jetty.websocket.api.Session;
-import websocket.ConnectionManager;
 import websocket.commands.MakeMoveCommand;
 import websocket.commands.UserGameCommand;
 import websocket.messages.ErrorMessage;
+import websocket.messages.LoadGameMessage;
 import websocket.messages.NotificationMessage;
 import websocket.messages.ServerMessage;
 
@@ -22,9 +29,20 @@ import websocket.messages.ServerMessage;
 //Sending out Server Messages
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsCloseHandler {
+    AuthDAO auth;
+    GameDAO game;
+    UserDAO user;
 
+    public WebSocketHandler(UserDAO user, GameDAO game, AuthDAO auth) {
+
+        this.auth = auth;
+        this.game = game;
+        this.user = user;
+
+    }
     private final ConnectionManager connections = new ConnectionManager();
 
     @Override
@@ -34,8 +52,11 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
     }
 
     @Override
-    public void handleMessage(WsMessageContext ctx) throws IOException {
+    public void handleMessage(WsMessageContext ctx) throws IOException, UnauthorizedException, DataAccessException {
         int gameId = -1;
+
+
+
 
         try {
             UserGameCommand userGameCommand = new Gson().fromJson(ctx.message(), UserGameCommand.class);
@@ -49,9 +70,9 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
                             makeMoveCommand.getTheMove(), ctx.session);
                 }
             }
-//        } catch (Exception ex) { //Very unsure what this might be
-//            clientMessage(ctx.session, new ErrorMessage(ServerMessage.ServerMessageType.ERROR,
-//                    "Error: Unauthorized")); //Still not sure about this one
+        } catch (UnauthorizedException ex) { //Very unsure what this might be
+            clientMessage(ctx.session, new ErrorMessage(ServerMessage.ServerMessageType.ERROR,
+                    "Error: Unauthorized")); //Still not sure about this one
         } catch (IOException ex) {
             ex.printStackTrace();
             clientMessage(ctx.session, new ErrorMessage(ServerMessage.ServerMessageType.ERROR,
@@ -70,28 +91,177 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         connections.clientMessage(session, errorMessage);
     }
 
-    private void connect(String authToken, Integer gameId, Session session) throws IOException{
+    private void connect(String authToken, Integer gameId, Session session) throws IOException, UnauthorizedException, DataAccessException {
+        //Validate GameID
+
+        try {
+            this.game.getGame(String.valueOf(gameId));
+
+        } catch (UnauthorizedException e) {
+            throw new UnauthorizedException(e.getMessage());
+        }
+
         connections.add(gameId, session);
+        try {
+            String username = this.auth.getUsername(authToken);
+            var message = String.format("%s joined the game!", username);
+            var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            connections.broadcast(gameId, session, notification);
 
-        var message = String.format("%s joined the game!");
-        var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-        connections.broadcast(session, notification);
+            //Send the game now
+            GameData gameData = this.game.getGame(String.valueOf(gameId));
+
+            var gameString = new LoadGameMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameData);
+            connections.clientMessage(session, gameString);
+        } catch (UnauthorizedException e) {
+            throw new UnauthorizedException(e.getMessage());
+        }
     }
 
-    private void makeMove(String authToken, Integer gameId, ChessMove move, Session session) throws IOException{
-        //get game
-        //get move
-        //change game
-        //update the game in the DAO
+    private void makeMove(String authToken, Integer gameId, ChessMove move, Session session) throws IOException,
+            DataAccessException, UnauthorizedException{
+        //validate authToken
+
+        try {
+            String username = this.auth.getUsername(authToken);
+
+
+            GameData data = this.game.getGame(String.valueOf(gameId));
+
+            //Validate they are a player
+            if (!Objects.equals(username, data.blackUsername()) && !Objects.equals(username, data.whiteUsername()))
+            {
+                throw new UnauthorizedException("Observer cannot make moves");
+            }
+
+
+
+
+            var theGame = data.game();
+
+            if (move == null) {
+                throw new UnauthorizedException("invalid move");
+            }
+
+            theGame.makeMove(move);
+
+            //Make new gameData
+
+            data = new GameData(String.valueOf(gameId), data.gameName(), data.whiteUsername(), data.blackUsername(), theGame);
+
+            this.game.updateGame(String.valueOf(gameId), data);
+
+            //Broadcast new game to client and everyone
+            var message = new Gson().toJson(data);
+            LoadGameMessage loadGameMessage = new LoadGameMessage(ServerMessage.ServerMessageType.LOAD_GAME, data);
+            connections.broadcast(gameId, session, loadGameMessage);
+            connections.clientMessage(session, loadGameMessage);
+
+            //Broadcast the move that was made
+//            if (move == null) {
+//                return;
+//            }
+            var startPosition = move.getStartPosition();
+            var endPosition = move.getEndPosition();
+
+            message = String.format("%s moved from %s to %s", username, startPosition.toString(),
+                    endPosition.toString());
+            NotificationMessage notificationMessage = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            connections.broadcast(gameId, session, notificationMessage);
+
+
+            //If the move caused the end of the game
+            int n = 0;
+
+
+            // Checkmate
+            if (theGame.isInCheckmate(ChessGame.TeamColor.WHITE)) {
+                message = "White is in checkmate! Game over!";
+                n += 1;
+            }
+            if (theGame.isInCheckmate(ChessGame.TeamColor.BLACK)) {
+                message = "Black is in checkmate! Game over!";
+                n += 1;
+            }
+
+            //Check
+            if (theGame.isInCheck(ChessGame.TeamColor.WHITE)) {
+                message = "White is in check! Gasp!";
+                n += 1;
+            }
+            if (theGame.isInCheck(ChessGame.TeamColor.BLACK)) {
+                message = "Black is in check! Gasp!";
+                n += 1;
+            }
+
+            //Stalemate
+            if (theGame.isInStalemate(ChessGame.TeamColor.WHITE)) {
+                message = "White is in stalemate! Game over!";
+                n += 1;
+            }
+            if (theGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
+                message = "Black is in stalemate! Game over!";
+                n += 1;
+            }
+
+
+            if (n != 0) {
+                var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                connections.broadcast(gameId, session, notification);
+                connections.clientMessage(session, notification);
+            }
+
+        } catch (UnauthorizedException | InvalidMoveException e) {
+            throw new UnauthorizedException(e.getMessage());
+        }
+    }
+
+    private boolean Checkmate(Integer gameId, Session session, ChessGame theGame, String message, int n) throws IOException {
+        if (theGame.isInCheckmate(ChessGame.TeamColor.WHITE)) {
+            message = "White is in checkmate! Game over!";
+            n += 1;
+        }
+        if (theGame.isInCheckmate(ChessGame.TeamColor.BLACK)) {
+            message = "Black is in checkmate! Game over!";
+            n += 1;
+        }
+
+        //Check
+        if (theGame.isInCheck(ChessGame.TeamColor.WHITE)) {
+            message = "White is in check! Gasp!";
+            n += 1;
+        }
+        if (theGame.isInCheck(ChessGame.TeamColor.BLACK)) {
+            message = "Black is in check! Gasp!";
+            n += 1;
+        }
+
+        //Stalemate
+        if (theGame.isInStalemate(ChessGame.TeamColor.WHITE)) {
+            message = "White is in stalemate! Game over!";
+            n += 1;
+        }
+        if (theGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
+            message = "Black is in stalemate! Game over!";
+            n += 1;
+        }
+
+
+        if (n != 0) {
+            var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            connections.broadcast(gameId, session, notification);
+            connections.clientMessage(session, notification);
+        }
+        return false;
     }
 
 
-    private void leave(String authToken, String username, Integer gameId, Session session) throws IOException{
+    private void leave(String authToken, Integer gameId, Session session) throws IOException{
         connections.remove(gameId, session);
 
-        var message = String.format("%s left the game", username);
+        var message = String.format("%s left the game");
         var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-        connections.broadcast(session, notification);
+        connections.broadcast(gameId, session, notification);
     }
 
 
@@ -101,7 +271,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
         var message = String.format("%s resigned");
         var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-        connections.broadcast(session, notification);
+        connections.broadcast(gameId, session, notification);
     }
 
 

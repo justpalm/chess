@@ -23,6 +23,7 @@ public class MemoryGameDAO implements GameDAO {
     return gameId;
     }
 
+
     @Override
     public GameData getGame(String gameId) throws UnauthorizedException {
         if (games.get(gameId) == null) {
@@ -68,6 +69,12 @@ public class MemoryGameDAO implements GameDAO {
     public Collection<GameData> listGames() {
 
         return games.values();
+    }
+
+    @Override
+    public void updateGame(String gameId, GameData gameData) throws DataAccessException, UnauthorizedException {
+            games.put(gameId, gameData);
+
     }
 
 

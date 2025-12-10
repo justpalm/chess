@@ -23,4 +23,6 @@ public interface GameDAO {
 
     Collection<GameData> listGames() throws DataAccessException, UnauthorizedException;
 
+    void updateGame (String gameId, GameData gameData) throws DataAccessException, UnauthorizedException;
+
 }

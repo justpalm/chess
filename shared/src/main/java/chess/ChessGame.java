@@ -155,6 +155,10 @@ public class ChessGame {
 
 
     public void makeMove(ChessMove move) throws InvalidMoveException {
+        if (move == null) {
+            return;
+        }
+
         Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
 
         if (validMoves.contains(move)) {

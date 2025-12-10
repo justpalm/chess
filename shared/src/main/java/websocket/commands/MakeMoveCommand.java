@@ -6,16 +6,16 @@ import java.util.Objects;
 
 public class MakeMoveCommand extends UserGameCommand {
 
-    private ChessMove TheMove;
+    private ChessMove move;
 
     public MakeMoveCommand(CommandType commandType, String authToken, Integer gameID, ChessMove move) {
 
         super(commandType, authToken, gameID);
-        TheMove = move;
+        this.move = move;
     }
 
     public ChessMove getTheMove() {
-        return TheMove;
+        return this.move;
     }
 
     @Override
@@ -27,11 +27,11 @@ public class MakeMoveCommand extends UserGameCommand {
             return false;
         }
         MakeMoveCommand that = (MakeMoveCommand) o;
-        return Objects.equals(TheMove, that.TheMove);
+        return Objects.equals(this.move, that.move);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), TheMove);
+        return Objects.hash(super.hashCode(), move);
     }
 }

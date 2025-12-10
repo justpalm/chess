@@ -103,6 +103,20 @@ public class MySQLGameDataAccess implements GameDAO{
         return listGames;
     }
 
+    @Override
+    public void updateGame(String gameId, GameData gameData) throws DataAccessException, UnauthorizedException {
+        try {
+            var statement = "UPDATE GameData SET game = ? WHERE gameID = ?";
+            String gameString = new Gson().toJson(gameData.game());
+            executeUpdate(statement, gameString, Integer.parseInt(gameId));
+        } catch (SQLException e){
+            throw new UnauthorizedException(String.format("Unable to read data: %s", e.getMessage()));
+        } catch (DataAccessException e ) {
+            throw new DataAccessException(e.getMessage());
+        }
+    }
+
+
 
     @Override
     public void joinGame(String newUsername, ChessGame.TeamColor playerColor, String gameId) throws

@@ -32,7 +32,7 @@ public class Server {
 
         this.mainService = new MainService(user, game, auth);
 
-        this.webSocketHandler = new WebSocketHandler();
+        this.webSocketHandler = new WebSocketHandler(user, game, auth);
 
         javalin = Javalin.create(config -> config.staticFiles.add("web"))
                 .delete("/db", this::clear)
@@ -77,12 +77,6 @@ public class Server {
             JoinGameRequest joinGameRequest = new Gson().fromJson(ctx.body(), JoinGameRequest.class);
             joinGameRequest = joinGameRequest.newAuthToken(ctx.header("Authorization"));
             JoinGameResult joinGameResult = mainService.joinGame(joinGameRequest);
-
-            UserGameCommand userGameCommand = new UserGameCommand(UserGameCommand.CommandType.CONNECT,
-                    joinGameRequest.authToken(), Integer.valueOf(joinGameRequest.gameID()));
-
-            ctx.json(new Gson().toJson(userGameCommand));
-
         } catch (Exception e) {
             exceptionHandler(e, ctx);
         }
