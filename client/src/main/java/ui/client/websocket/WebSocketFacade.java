@@ -24,9 +24,9 @@ import java.net.URISyntaxException;
 public class WebSocketFacade extends Endpoint {
 
     Session session;
-    NotificationHandler notificationHandler;
+    ui.client.websocket.NotificationHandler notificationHandler;
 
-    public WebSocketFacade(String url, NotificationHandler notificationHandler) throws DataAccessException {
+    public WebSocketFacade(String url, ui.client.websocket.NotificationHandler notificationHandler) throws DataAccessException {
         try {
             url = url.replace("http", "ws");
             URI socketURI = new URI(url + "/ws");

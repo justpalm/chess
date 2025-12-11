@@ -6,7 +6,6 @@ import static ui.EscapeSequences.*;
 import serverfacade.ServerFacade;
 import serverfacade.ServerFacade.*;
 import ui.client.*;
-import websocket.*;
 
 public class Repl {
     Client client;

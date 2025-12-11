@@ -1,6 +1,5 @@
 package ui.client;
 
-import chess.ChessGame;
 import dataaccess.exceptions.DataAccessException;
 import model.GameData;
 import serverfacade.ServerFacade;
@@ -8,8 +7,6 @@ import ui.EscapeSequences;
 import ui.client.websocket.NotificationHandler;
 import ui.client.websocket.WebSocketFacade;
 import websocket.messages.ServerMessage;
-import ui.EscapeSequences.*;
-import websocket.*;
 
 import java.util.Arrays;
 import java.util.HashMap;
