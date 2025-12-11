@@ -59,7 +59,7 @@ public class Postlogin implements Client{
             return new Gameplay(this.authToken, this.gameNumTogameId, this.gameId, this.sf);
         }
 
-
+        return null;
 
     }
 
