@@ -1,5 +1,7 @@
 package chess;
 
+import dataaccess.exceptions.UnauthorizedException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -15,6 +17,7 @@ public class ChessGame {
     ChessBoard chessBoard = new ChessBoard();
     ChessPosition whiteKing;
     ChessPosition blackKing;
+    private boolean finished;
 
 
     public ChessGame() {
@@ -22,6 +25,18 @@ public class ChessGame {
         currentTeam = TeamColor.WHITE;
         whiteKing = new ChessPosition(1,4);
         blackKing = new ChessPosition(8,5);
+        finished = false;
+    }
+
+    public boolean CheckisFinished() {
+        return finished;
+    }
+
+    public void IsFinished() throws UnauthorizedException {
+        if(finished) {
+            throw new UnauthorizedException("Game already finished");
+        }
+        this.finished = true;
     }
 
     /**

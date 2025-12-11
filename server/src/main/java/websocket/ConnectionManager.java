@@ -35,10 +35,7 @@ public class ConnectionManager {
 
         var list = listConnections.get(gameId);
         list.remove(session);
-
         listConnections.put(gameId, list);
-
-
 
     }
 
@@ -71,6 +68,13 @@ public class ConnectionManager {
                     importantSes.getRemote().sendString(msg);
                     }
                 }
+
+        if (notification.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION) {
+            String msg = new Gson().toJson(notification, NotificationMessage.class);
+                if (importantSes.isOpen()) {
+                    importantSes.getRemote().sendString(msg);
+            }
+        }
 
 
         if (notification.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME) {

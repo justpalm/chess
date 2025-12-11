@@ -55,9 +55,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
     public void handleMessage(WsMessageContext ctx) throws IOException, UnauthorizedException, DataAccessException {
         int gameId = -1;
 
-
-
-
         try {
             UserGameCommand userGameCommand = new Gson().fromJson(ctx.message(), UserGameCommand.class);
             switch (userGameCommand.getCommandType()) {
@@ -96,7 +93,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
         try {
             this.game.getGame(String.valueOf(gameId));
-
         } catch (UnauthorizedException e) {
             throw new UnauthorizedException(e.getMessage());
         }
@@ -123,40 +119,48 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
         try {
 
-            GameData data = this.game.getGame(String.valueOf(gameId));
+            GameData gameData = this.game.getGame(String.valueOf(gameId));
             String username = this.auth.getUsername(authToken);
+            ChessGame.TeamColor teamcolor = null;
+            var game = gameData.game();
+
+            if (Objects.equals(username, gameData.whiteUsername())) {
+                teamcolor = ChessGame.TeamColor.WHITE;
+            }
+
+            if (Objects.equals(username, gameData.blackUsername())) {
+                teamcolor = ChessGame.TeamColor.BLACK;
+            }
+
+
+            if (teamcolor != null) {
+                //Make sure it's a move for the right team
+                var chessboard = game.getBoard();
+                var piece = chessboard.getPiece(move.getStartPosition());
+                if (piece.getTeamColor() != teamcolor){
+                    throw new UnauthorizedException("Move for the wrong team");
+                }
+            }
+
 
         //Validate if the game is over
 
-        if (GameOver(data.game())) {
-            var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, "Game " +
+        if (gameData.game().CheckisFinished()) {
+            var notification = new ErrorMessage(ServerMessage.ServerMessageType.ERROR, "Game " +
                     "is already over");
-            connections.broadcast(gameId, session, notification);
             connections.clientMessage(session, notification);
             return;
         }
 
 
 
-
-        //validate authToken
-
-
-
-
-
-
-
             //Validate they are a player
-            if (!Objects.equals(username, data.blackUsername()) && !Objects.equals(username, data.whiteUsername()))
+            if (!Objects.equals(username, gameData.blackUsername()) && !Objects.equals(username, gameData.whiteUsername()))
             {
                 throw new UnauthorizedException("Observer cannot make moves");
             }
 
-
-
-
-            var theGame = data.game();
+            var theGame = gameData.game();
 
             if (move == null) {
                 throw new UnauthorizedException("invalid move");
@@ -164,105 +168,183 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
             theGame.makeMove(move);
 
-            //Make new gameData
-
-            data = new GameData(String.valueOf(gameId), data.gameName(), data.whiteUsername(), data.blackUsername(), theGame);
-
-            this.game.updateGame(String.valueOf(gameId), data);
-
-            //Broadcast new game to client and everyone
-            var message = new Gson().toJson(data);
-            LoadGameMessage loadGameMessage = new LoadGameMessage(ServerMessage.ServerMessageType.LOAD_GAME, data);
-            connections.broadcast(gameId, session, loadGameMessage);
-            connections.clientMessage(session, loadGameMessage);
-
-            //Broadcast the move that was made
-//            if (move == null) {
-//                return;
-//            }
-            var startPosition = move.getStartPosition();
-            var endPosition = move.getEndPosition();
-
-            message = String.format("%s moved from %s to %s", username, startPosition.toString(),
-                    endPosition.toString());
-            NotificationMessage notificationMessage = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-            connections.broadcast(gameId, session, notificationMessage);
-
-
             //If the move caused the end of the game
             int n = 0;
 
 
-            // Checkmate
+            String overMessage = "";
             if (theGame.isInCheckmate(ChessGame.TeamColor.WHITE)) {
-                message = "White is in checkmate! Game over!";
+                overMessage = "White is in checkmate! Game over!";
+                theGame.IsFinished();
                 n += 1;
             }
             if (theGame.isInCheckmate(ChessGame.TeamColor.BLACK)) {
-                message = "Black is in checkmate! Game over!";
+                overMessage = "Black is in checkmate! Game over!";
+                theGame.IsFinished();
                 n += 1;
             }
 
             //Check
             if (theGame.isInCheck(ChessGame.TeamColor.WHITE)) {
-                message = "White is in check! Gasp!";
+                overMessage = "White is in check! Gasp!";
                 n += 1;
             }
             if (theGame.isInCheck(ChessGame.TeamColor.BLACK)) {
-                message = "Black is in check! Gasp!";
+                overMessage = "Black is in check! Gasp!";
                 n += 1;
             }
 
             //Stalemate
             if (theGame.isInStalemate(ChessGame.TeamColor.WHITE)) {
-                message = "White is in stalemate! Game over!";
+                overMessage = "White is in stalemate! Game over!";
+                theGame.IsFinished();
                 n += 1;
             }
             if (theGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
-                message = "Black is in stalemate! Game over!";
+                overMessage = "Black is in stalemate! Game over!";
+                theGame.IsFinished();
                 n += 1;
             }
 
+            gameData = new GameData(String.valueOf(gameId), gameData.gameName(), gameData.whiteUsername(),
+                    gameData.blackUsername(), theGame);
 
+            this.game.updateGame(String.valueOf(gameId), gameData);
+
+            LoadGameMessage loadGameMessage = new LoadGameMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameData);
+            connections.broadcast(gameId, session, loadGameMessage);
+            connections.clientMessage(session, loadGameMessage);
+
+            //Here's announcing the move
+            var startPosition = move.getStartPosition();
+            var endPosition = move.getEndPosition();
+
+            String message = String.format("%s moved from %s to %s", username, startPosition.toString(),
+                    endPosition.toString());
+            NotificationMessage notificationMessage = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            connections.broadcast(gameId, session, notificationMessage);
+
+
+            //Here's announcing if there's anything exciting going on!
             if (n != 0) {
-                var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, overMessage);
                 connections.broadcast(gameId, session, notification);
                 connections.clientMessage(session, notification);
             }
+
+
 
         } catch (UnauthorizedException | InvalidMoveException e) {
             throw new UnauthorizedException(e.getMessage());
         }
     }
 
-    private boolean GameOver(ChessGame theGame) throws IOException {
-        if (theGame.isInCheckmate(ChessGame.TeamColor.WHITE) | theGame.isInCheckmate(ChessGame.TeamColor.BLACK)) {
-            return true;
-        }
+//    private void update(Integer gameId, Session session, GameData data) throws DataAccessException, UnauthorizedException, IOException {
+//        this.game.updateGame(String.valueOf(gameId), data);
+//
+//        //Broadcast new game to client and everyone
+//        var message = new Gson().toJson(data);
+//        LoadGameMessage loadGameMessage = new LoadGameMessage(ServerMessage.ServerMessageType.LOAD_GAME, data);
+//        connections.broadcast(gameId, session, loadGameMessage);
+//        connections.clientMessage(session, loadGameMessage);
+//    }
 
-        //Stalemate
-        if (theGame.isInStalemate(ChessGame.TeamColor.WHITE) | theGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
-            return true;
+
+    private void leave(String authToken, Integer gameId, Session session) throws IOException, UnauthorizedException {
+
+
+        try {
+
+            GameData newData;
+
+            GameData data = this.game.getGame(String.valueOf(gameId));
+            String username = this.auth.getUsername(authToken);
+
+            if (username.equals(data.whiteUsername())) {
+
+                newData = new GameData(String.valueOf(gameId), data.gameName(),null,
+                        data.blackUsername(), data.game());
+            }
+
+
+            else if (username.equals(data.blackUsername())) {
+
+                newData = new GameData(String.valueOf(gameId), data.gameName(), data.whiteUsername(),
+                        null, data.game());
+            }
+
+            else {
+                // This means they are an observer
+
+                var message = String.format("%s left the game", username);
+                var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+                connections.broadcast(gameId, session, notification);
+                connections.remove(gameId, session);
+                return;
+            }
+
+
+
+            var message = String.format("%s left the game", username);
+            var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            connections.broadcast(gameId, session, notification);
+            connections.remove(gameId, session);
+
+            //update the DAO
+            this.game.updateGame(String.valueOf(gameId), newData);
+
+
+        } catch (Exception e) {
+            throw new UnauthorizedException(e.getMessage());
         }
     }
 
 
-    private void leave(String authToken, Integer gameId, Session session) throws IOException{
-        connections.remove(gameId, session);
-
-        var message = String.format("%s left the game");
-        var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-        connections.broadcast(gameId, session, notification);
-    }
+    private void resign(String authToken, Integer gameId, Session session) throws IOException, UnauthorizedException{
 
 
-    private void resign(String authToken, Integer gameId, Session session) throws IOException{
-        connections.remove(gameId, session);
+
+        try {
+            GameData newData;
+            GameData data = this.game.getGame(String.valueOf(gameId));
+            String username = this.auth.getUsername(authToken);
+
+            var game = data.game();
+
+            //No observers
+            if (!Objects.equals(username, data.blackUsername()) && !Objects.equals(username, data.whiteUsername())) {
+                throw new UnauthorizedException("Observer can't resign");
+            }
 
 
-        var message = String.format("%s resigned");
-        var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-        connections.broadcast(gameId, session, notification);
+
+            game.IsFinished();
+
+            newData = new GameData(String.valueOf(gameId), data.gameName(), data.whiteUsername(),
+                    data.blackUsername(), game);
+
+            var message = String.format("%s resigned", username);
+            var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+            connections.broadcast(gameId, session, notification);
+            connections.clientMessage(session, notification);
+            connections.remove(gameId, session);
+
+            //update the DAO
+            this.game.updateGame(String.valueOf(gameId), newData);
+
+
+        } catch (Exception e) {
+            throw new UnauthorizedException(e.getMessage());
+        }
+
+//           connections.remove(gameId, session);
+//           var username = this.auth.getUsername(authToken);
+//           var message = String.format("%s resigned", username);
+//           var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
+//           connections.broadcast(gameId, session, notification);
+//       } catch (Exception e) {
+//           throw new UnauthorizedException(e.getMessage());
+//       }
     }
 
 
