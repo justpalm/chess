@@ -28,11 +28,11 @@ public class ChessGame {
         finished = false;
     }
 
-    public boolean CheckisFinished() {
+    public boolean checkIsFinished() {
         return finished;
     }
 
-    public void IsFinished() throws UnauthorizedException {
+    public void isFinished() throws UnauthorizedException {
         if(finished) {
             throw new UnauthorizedException("Game already finished");
         }

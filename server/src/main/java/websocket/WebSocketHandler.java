@@ -145,7 +145,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
         //Validate if the game is over
 
-        if (gameData.game().CheckisFinished()) {
+        if (gameData.game().checkIsFinished()) {
             var notification = new ErrorMessage(ServerMessage.ServerMessageType.ERROR, "Game " +
                     "is already over");
             connections.clientMessage(session, notification);
@@ -175,12 +175,12 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             String overMessage = "";
             if (theGame.isInCheckmate(ChessGame.TeamColor.WHITE)) {
                 overMessage = "White is in checkmate! Game over!";
-                theGame.IsFinished();
+                theGame.isFinished();
                 n += 1;
             }
             if (theGame.isInCheckmate(ChessGame.TeamColor.BLACK)) {
                 overMessage = "Black is in checkmate! Game over!";
-                theGame.IsFinished();
+                theGame.isFinished();
                 n += 1;
             }
 
@@ -197,12 +197,12 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             //Stalemate
             if (theGame.isInStalemate(ChessGame.TeamColor.WHITE)) {
                 overMessage = "White is in stalemate! Game over!";
-                theGame.IsFinished();
+                theGame.isFinished();
                 n += 1;
             }
             if (theGame.isInStalemate(ChessGame.TeamColor.BLACK)) {
                 overMessage = "Black is in stalemate! Game over!";
-                theGame.IsFinished();
+                theGame.isFinished();
                 n += 1;
             }
 
@@ -239,15 +239,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
         }
     }
 
-//    private void update(Integer gameId, Session session, GameData data) throws DataAccessException, UnauthorizedException, IOException {
-//        this.game.updateGame(String.valueOf(gameId), data);
-//
-//        //Broadcast new game to client and everyone
-//        var message = new Gson().toJson(data);
-//        LoadGameMessage loadGameMessage = new LoadGameMessage(ServerMessage.ServerMessageType.LOAD_GAME, data);
-//        connections.broadcast(gameId, session, loadGameMessage);
-//        connections.clientMessage(session, loadGameMessage);
-//    }
 
 
     private void leave(String authToken, Integer gameId, Session session) throws IOException, UnauthorizedException {
@@ -318,7 +309,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
 
 
-            game.IsFinished();
+            game.isFinished();
 
             newData = new GameData(String.valueOf(gameId), data.gameName(), data.whiteUsername(),
                     data.blackUsername(), game);
@@ -337,14 +328,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             throw new UnauthorizedException(e.getMessage());
         }
 
-//           connections.remove(gameId, session);
-//           var username = this.auth.getUsername(authToken);
-//           var message = String.format("%s resigned", username);
-//           var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-//           connections.broadcast(gameId, session, notification);
-//       } catch (Exception e) {
-//           throw new UnauthorizedException(e.getMessage());
-//       }
     }
 
 

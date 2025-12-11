@@ -69,15 +69,6 @@ public class UserService {
     }
 
 
-    public String retrieveUsername(String authToken) throws UnauthorizedException{
-        try {
-            return memoryAuthData.getUsername(authToken);
-        } catch (UnauthorizedException | DataAccessException e) {
-            throw new UnauthorizedException(e.getMessage());
-        }
-    }
-
-
 }
 
 

@@ -116,7 +116,7 @@ public class WebSocketFacade extends Endpoint {
     public void resign(String authToken, int gameID) throws DataAccessException {
 //        throw new UnsupportedOperationException("Not implemented yet");
         try {
-            var command = new UserGameCommand(UserGameCommand.CommandType.LEAVE, authToken, gameID);
+            var command = new UserGameCommand(UserGameCommand.CommandType.RESIGN, authToken, gameID);
             //how does the double serialization work here?
             this.session.getBasicRemote().sendText(new Gson().toJson(command));
         } catch (IOException ex){
