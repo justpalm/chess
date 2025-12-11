@@ -26,8 +26,8 @@ public class Gameplay implements Client, NotificationHandler{
     public Gameplay(String authToken, HashMap<Integer, GameData> gameList, Integer gameId, ServerFacade serverFacade) throws DataAccessException{
         this.sf = serverFacade;
         this.authToken = authToken;
-        this.game = game;
-        this.ws = new WebSocketFacade(sf.getServerUrl(), new NotificationHandler())
+//        new NotificationHandler();
+//        this.ws = new WebSocketFacade(sf.getServerUrl(), NotificationHandler)
 
     }
 
@@ -72,9 +72,10 @@ public class Gameplay implements Client, NotificationHandler{
     }
 
     public String leave() throws DataAccessException{
-        ws.leave(this.authToken, this.username, this.gameId, ws);
-        sf.
-        return
+//        ws.leave(this.authToken, this.username, this.gameId, ws);
+//        sf.
+//        return
+        return "hello";
 
     }
 
@@ -84,8 +85,7 @@ public class Gameplay implements Client, NotificationHandler{
     }
 
     public String resign(String... params) {
-
-
+        return "resigned";
     }
 
 
