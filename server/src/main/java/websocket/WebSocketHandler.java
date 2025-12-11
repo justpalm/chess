@@ -116,9 +116,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
 
     private void makeMove(String authToken, Integer gameId, ChessMove move, Session session) throws IOException,
             DataAccessException, UnauthorizedException{
-
         try {
-
             GameData gameData = this.game.getGame(String.valueOf(gameId));
             String username = this.auth.getUsername(authToken);
             ChessGame.TeamColor teamcolor = null;
@@ -132,7 +130,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
                 teamcolor = ChessGame.TeamColor.BLACK;
             }
 
-
             if (teamcolor != null) {
                 //Make sure it's a move for the right team
                 var chessboard = game.getBoard();
@@ -142,7 +139,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
                 }
             }
 
-
         //Validate if the game is over
 
         if (gameData.game().checkIsFinished()) {
@@ -151,9 +147,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             connections.clientMessage(session, notification);
             return;
         }
-
-
-
             //Validate they are a player
             if (!Objects.equals(username, gameData.blackUsername()) && !Objects.equals(username, gameData.whiteUsername()))
             {
@@ -171,7 +164,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             //If the move caused the end of the game
             int n = 0;
 
-
             String overMessage = "";
             if (theGame.isInCheckmate(ChessGame.TeamColor.WHITE)) {
                 overMessage = "White is in checkmate! Game over!";
@@ -183,7 +175,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
                 theGame.isFinished();
                 n += 1;
             }
-
             //Check
             if (theGame.isInCheck(ChessGame.TeamColor.WHITE)) {
                 overMessage = "White is in check! Gasp!";
@@ -193,7 +184,6 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
                 overMessage = "Black is in check! Gasp!";
                 n += 1;
             }
-
             //Stalemate
             if (theGame.isInStalemate(ChessGame.TeamColor.WHITE)) {
                 overMessage = "White is in stalemate! Game over!";
@@ -205,16 +195,12 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
                 theGame.isFinished();
                 n += 1;
             }
-
             gameData = new GameData(String.valueOf(gameId), gameData.gameName(), gameData.whiteUsername(),
                     gameData.blackUsername(), theGame);
-
             this.game.updateGame(String.valueOf(gameId), gameData);
-
             LoadGameMessage loadGameMessage = new LoadGameMessage(ServerMessage.ServerMessageType.LOAD_GAME, gameData);
             connections.broadcast(gameId, session, loadGameMessage);
             connections.clientMessage(session, loadGameMessage);
-
             //Here's announcing the move
             var startPosition = move.getStartPosition();
             var endPosition = move.getEndPosition();
@@ -223,23 +209,16 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
                     endPosition.toString());
             NotificationMessage notificationMessage = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
             connections.broadcast(gameId, session, notificationMessage);
-
-
             //Here's announcing if there's anything exciting going on!
             if (n != 0) {
                 var notification = new NotificationMessage(ServerMessage.ServerMessageType.NOTIFICATION, overMessage);
                 connections.broadcast(gameId, session, notification);
                 connections.clientMessage(session, notification);
             }
-
-
-
         } catch (UnauthorizedException | InvalidMoveException e) {
             throw new UnauthorizedException(e.getMessage());
         }
     }
-
-
 
     private void leave(String authToken, Integer gameId, Session session) throws IOException, UnauthorizedException {
 
