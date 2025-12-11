@@ -3,18 +3,16 @@ package ui;
 import java.util.Scanner;
 import static ui.EscapeSequences.*;
 
-import dataaccess.exceptions.DataAccessException;
 import serverfacade.ServerFacade;
 import serverfacade.ServerFacade.*;
 import ui.client.*;
 import websocket.*;
 
 public class Repl {
-    private final ServerFacade server;
     Client client;
 
-    public Repl (String serverUrl) throws DataAccessException{
-        server = new ServerFacade(serverUrl);
+    public Repl (String serverUrl) {
+        ServerFacade server = new ServerFacade(serverUrl);
         client = new Prelogin(server);
 //        server.clear();
     }
@@ -41,19 +39,19 @@ public class Repl {
                 String[] tokens = line.toLowerCase().split(" ");
 
                 if (tokens[0].equals("logout")) {
-                    client = client.switchClient();
+                    client = client.switchClient("help");
                 }
 
                 if (tokens[0].equals("login") | (tokens[0].equals("register"))) {
-                    client = client.switchClient();
+                    client = client.switchClient("help");
                 }
 
                 if (tokens[0].equals("join")) {
-
+                    client = client.switchClient("gameplay");
                 }
 
                 if (tokens[0].equals("leave")){
-                    client = client.switchClient();
+                    client = client.switchClient("help");
                 }
 
                 if(!result.equals("quit")) {
