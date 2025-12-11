@@ -121,15 +121,12 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             String username = this.auth.getUsername(authToken);
             ChessGame.TeamColor teamcolor = null;
             var game = gameData.game();
-
             if (Objects.equals(username, gameData.whiteUsername())) {
                 teamcolor = ChessGame.TeamColor.WHITE;
             }
-
             if (Objects.equals(username, gameData.blackUsername())) {
                 teamcolor = ChessGame.TeamColor.BLACK;
             }
-
             if (teamcolor != null) {
                 //Make sure it's a move for the right team
                 var chessboard = game.getBoard();
@@ -138,9 +135,7 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
                     throw new UnauthorizedException("Move for the wrong team");
                 }
             }
-
         //Validate if the game is over
-
         if (gameData.game().checkIsFinished()) {
             var notification = new ErrorMessage(ServerMessage.ServerMessageType.ERROR, "Game " +
                     "is already over");
@@ -152,13 +147,10 @@ public class WebSocketHandler implements WsConnectHandler, WsMessageHandler, WsC
             {
                 throw new UnauthorizedException("Observer cannot make moves");
             }
-
             var theGame = gameData.game();
-
             if (move == null) {
                 throw new UnauthorizedException("invalid move");
             }
-
             theGame.makeMove(move);
 
             //If the move caused the end of the game
