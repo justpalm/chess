@@ -79,7 +79,6 @@ public class Prelogin implements Client{
             }
             authToken = registerResult.authToken();
             return String.format("Your signed in as '%s'", registerRequest.username());
-            this.username =
         }
         throw new DataAccessException("Expected: <username>, <password>, <email>");
     }
