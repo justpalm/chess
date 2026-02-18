@@ -19,12 +19,12 @@ public class Main {
 
     private static void runRepl() throws DataAccessException{
 
-//        var b = new BlackChessBoardDrawing();
-//        var w = new WhiteChessBoardDrawing();
-//
-//        b.main();
-//        w.main();
-//
+        var b = new BlackChessBoardDrawing();
+        var w = new WhiteChessBoardDrawing();
+
+        b.main();
+        w.main();
+
         repl = new Repl(String.format("http://localhost:%d", 8080));
         repl.run();
 
